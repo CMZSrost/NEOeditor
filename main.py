@@ -25,22 +25,23 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         if self.sender() == self.treeWidget_file:
             path = os.path.join(self.db.projectPath, self.db.fileTree.getFilePath(idx))
             if os.path.isfile(path):
-                self.tabFactory(path,'file')
+                fileName, fileExtension = os.path.splitext(os.path.basename(path))
+                tab = self.tabFactory(fileName,self.fileEditor,'filetab')
+                self.db.loadFile(path, tab.findChild(QTreeWidget, 'treeWidget'))
+
             elif os.path.isdir(path):
                 self.treeWidget_file.setExpanded(idx, not self.treeWidget_file.isExpanded(idx))
 
-    def tabFactory(self, path, type):
-        if type == 'file':
-            fileName, fileExtension = os.path.splitext(os.path.basename(path))
-            pos = self.fileEditor.findChild(QWidget, fileName)
-            if pos is not None:
-                self.fileEditor.setCurrentWidget(pos)
-                return
-            self.templateTab.setupUi(self.AllTemplateTab)
-            pos = self.AllTemplateTab.findChild(QWidget, 'filetab')
-            self.fileEditor.addTab(pos, fileName)
-            self.AllTemplateTab.clear()
-            self.db.loadFile(path, pos.findChild(QTreeWidget, 'treeWidget'))
+    def tabFactory(self, tabName,tabParent, type):
+        self.AllTemplateTab.clear()
+        pos = tabParent.findChild(QWidget, tabName)
+        if pos is not None:
+            tabParent.setCurrentWidget(pos)
+            return
+        self.templateTab.setupUi(self.AllTemplateTab)
+        pos = self.AllTemplateTab.findChild(QWidget, type)
+        tabParent.addTab(pos, tabName)
+        return pos
 
 
     def filterFile(self, name):

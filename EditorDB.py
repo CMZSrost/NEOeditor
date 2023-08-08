@@ -5,6 +5,8 @@ from PyQt5.QtWidgets import QTreeWidget,QTreeWidgetItem
 
 from sourceTree import sourceTree
 import xml.etree.ElementTree as ET
+import lxml.etree as etree
+from xmlIter import fast_iter
 
 
 
@@ -39,21 +41,5 @@ class EditorDB:
         print(filepath)
         if os.path.isfile(filepath):
             if filepath.endswith(".xml"):
-                with open(filepath,encoding='utf-8') as f:
-                    text = re.sub(u"[\x00-\x08\x0b-\x0c\x0e-\x1f]+", u"", f.read())
-                root = ET.fromstring(text)
-                rootitem = QTreeWidgetItem()
-                rootitem.setText(0, root.tag)
-                treeView.addTopLevelItem(rootitem)
-                def loadXML(item:QTreeWidgetItem,element:ET.Element):
-                    for child in element:
-                        childitem = QTreeWidgetItem()
-                        print([child.tag,child.attrib])
-                        childitem.setText(0, child.tag)
-                        if child.text is not None:
-                            childitem.setText(1, child.text)
-                        if child.attrib is not None:
-                            childitem.setText(2, str(child.attrib))
-                        item.addChild(childitem)
-                        loadXML(childitem, child)
-                loadXML(rootitem,root)
+                xmliter = etree.iterparse(filepath, events=('start','end'), encoding='UTF-8')
+                treeView.addTopLevelItem(fast_iter(xmliter))
