@@ -9,8 +9,6 @@ import lxml.etree as etree
 from xmlIter import fast_iter
 
 
-
-
 class EditorDB:
     def __init__(self,lang="Chinese",**kwargs):
         self.language = lang
