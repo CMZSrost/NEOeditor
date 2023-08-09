@@ -9,18 +9,23 @@ class sourceTree:
         self.treeWidget:QTreeWidget = treeWidget
 
     def loadFolder(self, dirPath):
-        root = QTreeWidgetItem()
-        root.setText(0, os.path.basename(dirPath))
-        self.treeWidget.addTopLevelItem(root)
+        if os.path.isdir(dirPath):
+            root = QTreeWidgetItem()
+            root.setText(0, os.path.basename(dirPath))
+            self.treeWidget.addTopLevelItem(root)
 
-        def loadFile(dirPath,parent:QTreeWidgetItem):
-            for file in os.listdir(dirPath):
-                child = QTreeWidgetItem()
-                child.setText(0, file)
-                parent.addChild(child)
-                if os.path.isdir(os.path.join(dirPath,file)):
-                    loadFile(os.path.join(dirPath,file),child)
-        loadFile(dirPath,root)
+            def loadFile(dirPath,parent:QTreeWidgetItem):
+                for file in os.listdir(dirPath):
+                    child = QTreeWidgetItem()
+                    child.setText(0, file)
+                    parent.addChild(child)
+                    if os.path.isdir(os.path.join(dirPath,file)):
+                        loadFile(os.path.join(dirPath,file),child)
+            loadFile(dirPath,root)
+        else:
+            root = QTreeWidgetItem()
+            root.setText(0, os.path.basename(dirPath))
+            self.treeWidget.addTopLevelItem(root)
 
     def getFilePath(self,idx:QModelIndex):
         #获取对应位置item

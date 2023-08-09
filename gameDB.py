@@ -89,19 +89,29 @@ class gameDB:
     def setupTable(self, table: QTableWidget):
         if table.rowCount() != 0:
             return
+        table.setColumnCount(len(self.column))
         table.setHorizontalHeaderLabels(self.column)
         self.table = table
         self.loadData()
-
 
     def __setitem__(self, key, value):
         if isinstance(key, tuple) and isinstance(key[0], int) and len(key) == 2:
             column = key[1]
             if isinstance(column, str):
                 column = self.column.index(column)
+            if column == -1 or key[0] < 0:
+                return None
+            if key[0] >= self.data.shape[0]:
+                self.data = np.append(self.data, np.zeros((1, len(self.column))), axis=0)
+                self.table.setRowCount(self.data.shape[0])
             self.data[key[0]][column] = value
             self.table.setItem(key[0], column, QTableWidgetItem(str(value)))
         elif isinstance(key, int) and isinstance(value, list) and len(value) == len(self.column):
+            if key < 0:
+                return None
+            if key >= self.data.shape[0]:
+                self.data = np.append(self.data, np.zeros((1, len(self.column))), axis=0)
+                self.table.setRowCount(self.data.shape[0])
             self.data[key] = value
             for i in range(len(value)):
                 self.table.setItem(key, i, QTableWidgetItem(str(value[i])))
@@ -111,13 +121,16 @@ class gameDB:
             column = key[1]
             if isinstance(column, str):
                 column = self.column.index(column)
-            return self.data[key[0]][column]
+            if column != -1 and 0 <= key[0] <= self.data.shape[0]:
+                return self.data[key[0]][column]
         elif isinstance(key, int):
-            return self.data[key]
+            if 0 <= key <= self.data.shape[0]:
+                return self.data[key]
         return None
 
     def loadData(self):
         if hasattr(self, 'table'):
+            self.table.setRowCount(self.data.shape[0])
             for i in range(self.data.shape[0]):
                 for j in range(self.data.shape[1]):
                     self.table.setItem(i, j, QTableWidgetItem(str(self.data[i][j])))

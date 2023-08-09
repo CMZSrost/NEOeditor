@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from PyQt5.QtWidgets import QTreeWidgetItem
+from PyQt5.QtCore import Qt
 from collections import deque
 
 
@@ -22,9 +23,10 @@ def fast_iter(context):
             item = stack.pop()
             item.setText(0, elem.tag)
             if elem.text is not None:
+                item.setFlags(Qt.ItemFlag(63))
                 item.setText(1, elem.text)
             if elem.attrib is not None:
-                item.setText(2, str(elem.attrib))
+                item.setText(2, '\n'.join(f'{k}="{v}"' for k, v in elem.attrib.items()))
             if len(stack) == 0:
                 root = item
             else:stack[-1].addChild(item)

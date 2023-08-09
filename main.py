@@ -25,10 +25,15 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         if self.sender() == self.treeWidget_file:
             path = os.path.join(self.db.projectPath, self.db.fileTree.getFilePath(idx))
             if os.path.isfile(path):
-                fileName, fileExtension = os.path.splitext(os.path.basename(path))
-                tab = self.tabFactory(fileName,self.fileEditor,'filetab')
-                self.db.loadFile(path, tab.findChild(QTreeWidget, 'treeWidget'))
-
+                fileName = os.path.basename(path)
+                if fileName.endswith('xml'):
+                    tab = self.tabFactory(fileName,self.fileEditor,'filetab')
+                    self.db.loadFile(path, tab.findChild(QTreeWidget, 'treeWidget'))
+                elif fileName.endswith('php'):
+                    tab = self.tabFactory(fileName,self.fileEditor,'datatab')
+                    self.db.loadPhp(path, tab.findChild(QTableWidget, 'tableWidget'))
+                    # with open(path, 'r', encoding='utf-8') as f:
+                    #     tab.findChild(QTextEdit, 'textEdit').setText(f.read())
             elif os.path.isdir(path):
                 self.treeWidget_file.setExpanded(idx, not self.treeWidget_file.isExpanded(idx))
 
