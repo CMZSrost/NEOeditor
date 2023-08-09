@@ -23,6 +23,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QSplitter" name="splitter">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -40,14 +46,14 @@
          </property>
          <widget class="QTabWidget" name="tabWidget">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="maximumSize">
            <size>
-            <width>300</width>
+            <width>250</width>
             <height>16777215</height>
            </size>
           </property>
@@ -55,7 +61,7 @@
            <enum>Qt::DefaultContextMenu</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tab_file">
            <attribute name="title">
@@ -65,7 +71,7 @@
             <item>
              <widget class="QLineEdit" name="lineEdit_file">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -75,10 +81,13 @@
             <item>
              <widget class="QTreeWidget" name="treeWidget_file">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="itemsExpandable">
+               <bool>true</bool>
               </property>
               <property name="headerHidden">
                <bool>true</bool>
@@ -101,11 +110,30 @@
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
-             <widget class="QLineEdit" name="lineEdit_data"/>
+             <widget class="QLineEdit" name="lineEdit_data">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QTreeWidget" name="treeWidget_data">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="itemsExpandable">
+               <bool>false</bool>
+              </property>
               <property name="headerHidden">
+               <bool>true</bool>
+              </property>
+              <property name="expandsOnDoubleClick">
                <bool>true</bool>
               </property>
               <column>
@@ -120,18 +148,30 @@
          </widget>
          <widget class="QTabWidget" name="fileEditor">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="tabsClosable">
+           <bool>true</bool>
+          </property>
+          <property name="movable">
+           <bool>true</bool>
+          </property>
          </widget>
          <widget class="QTabWidget" name="elemEditor">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="tabsClosable">
+           <bool>true</bool>
+          </property>
+          <property name="movable">
+           <bool>true</bool>
           </property>
          </widget>
         </widget>
@@ -214,8 +254,8 @@
    <slot>filterFile(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>706</x>
-     <y>95</y>
+     <x>257</x>
+     <y>107</y>
     </hint>
     <hint type="destinationlabel">
      <x>716</x>
@@ -230,12 +270,60 @@
    <slot>doubleClick(QModelIndex)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>464</x>
-     <y>387</y>
+     <x>257</x>
+     <y>483</y>
     </hint>
     <hint type="destinationlabel">
      <x>536</x>
      <y>695</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>treeWidget_data</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>main</receiver>
+   <slot>doubleClick(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>142</x>
+     <y>306</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>55</x>
+     <y>622</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>elemEditor</sender>
+   <signal>tabCloseRequested(int)</signal>
+   <receiver>main</receiver>
+   <slot>removeDataTab(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>913</x>
+     <y>439</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1040</x>
+     <y>728</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fileEditor</sender>
+   <signal>tabCloseRequested(int)</signal>
+   <receiver>main</receiver>
+   <slot>removeFileTab(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>583</x>
+     <y>510</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>559</x>
+     <y>813</y>
     </hint>
    </hints>
   </connection>
@@ -245,5 +333,7 @@
   <slot>saveProject()</slot>
   <slot>filterFile(QString)</slot>
   <slot>doubleClick(QModelIndex)</slot>
+  <slot>removeDataTab(int)</slot>
+  <slot>removeFileTab(int)</slot>
  </slots>
 </ui>

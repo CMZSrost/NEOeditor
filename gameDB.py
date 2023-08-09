@@ -3,96 +3,27 @@ from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
 
 class gameDB:
-    def __init__(self, type):
+    def __init__(self, type, column: list, data: np.array):
         self.type = type
-        self.column = ['modid', 'modstr']
-        self.column.extend(self.getcolumn(type))
-        self.map = dict(zip(self.column, range(len(self.column))))
-        self.data = np.array([], dtype=str)
+        self.column = column
+        self.data = data
 
-    def getcolumn(self, type):
-        if type == 'encounters':
-            return ['id', 'strName', 'strDesc', 'strImg', 'nTreasureID', 'nRemoveTreasureID', 'aConditions',
-                    'aPreConditions', 'fPrice', 'aResponses', 'aMinimapHexes', 'bRemoveCreatures', 'bRemoveUsed',
-                    'nItemsID', 'nCreatureID', 'ptCreatureHex', 'ptTeleport', 'ptEditor', 'nType', 'fLootChance',
-                    'fAccidentChance', 'fCreatureChance', 'vAccidents', 'vLoot']
-        elif type == 'encountertriggers':
-            return ['id', 'strName', 'nEncounterID', 'fChance', 'bLocBased', 'bDateBased', 'bHexBased', 'bUnique',
-                    'bAIPassable', 'aArea', 'dateMin', 'dateMax', 'aHexTypes']
-        elif type == 'factions':
-            return ['id', 'strName', 'dictFactions']
-        elif type == 'forbiddenhexes':
-            return ['id', 'nX', 'nY', 'strName']
-        elif type == 'gamevars':
-            return ['strName', 'strType', 'strValue']
-        elif type == 'headlines':
-            return ['id', 'strHeadline']
-        elif type == 'hextypes':
-            return ['id', 'strName', 'strDesc', 'nTerrainCost', 'nVizLimiter', 'nVizIncrease', 'nTreasureID',
-                    'bPassable', 'nScavengeInitialID', 'nScavengeItemsIDPerHour', 'nCampItems', 'vLightLevels',
-                    'nDefaultCampID', 'nMinRange', 'nMaxRange', 'vCondIDs']
-        elif type == 'ingredients':
-            return ['nID', 'strName', 'strRequiredProps', 'strForbidProps']
-        elif type == 'itemprops':
-            return ['nID', 'strPropertyName']
-        elif type == 'itemtypes':
-            return ['id', 'nGroupID', 'nSubgroupID', 'strName', 'strDesc', 'strDescAlt', 'nCondID', 'vImageList',
-                    'vSpriteList', 'vImageUsage', 'fWeight', 'fMonetaryValue', 'fMonetaryValueAlt', 'fDurability',
-                    'fDegradePerHour', 'fEquipDegradePerHour', 'fDegradePerUse', 'vDegradeTreasureIDs',
-                    'aEquipConditions', 'aPossessConditions', 'aUseConditions', 'aCapacities', 'vEquipSlots',
-                    'vUseSlots', 'bSocketLocked', 'vProperties', 'aContentIDs', 'nFormatID', 'nTreasureID',
-                    'nComponentID', 'bMirrored', 'nSlotDepth', 'strChargeProfiles', 'aAttackModes', 'nStackLimit',
-                    'aSwitchIDs', 'aSounds']
-        elif type == 'maps':
-            return ['id', 'strName', 'strDef']
-        elif type == 'recipes':
-            return ['nID', 'strName', 'strSecretName', 'strTools', 'strConsumed', 'strDestroyed', 'nTreasureID',
-                    'fHours', 'nReverse', 'nHiddenID', 'bIdentify', 'bTransferComponents', 'vAlsoTry',
-                    'nTempTreasureID', 'bDegradeOutput', 'strType', 'bScrap']
-        elif type == 'treasuretable':
-            return ['id', 'strName', 'aTreasures', 'bNested', 'bSuppress', 'bIdentify']
-        elif type == 'attackmodes':
-            return ["id", "strName", "strNotes", "nRange", "fDamageCut", "fDamageBlunt", "strChargeProfiles",
-                    "nPenetration", "nType", "strSnd", "bTransfer", "vAttackerConditions", "strIMG", "fMorale",
-                    "strWieldPhrase", "vAttackPhrases"]
-        elif type == 'barterhexes':
-            return ['id', 'nX', 'nY', 'bBuys', 'nRestockTreasureID']
-        elif type == 'battlemoves':
-            return ['id', 'strID', 'strName', 'strNotes', 'strSuccess', 'strFail', 'strPopUp', 'vChanceType',
-                    'vUsConditions', 'vThemConditions', 'vPairConditions', 'vUsFailConditions', 'vThemFailConditions',
-                    'vPairFailConditions', 'vUsPreConditions', 'vThemPreConditions', 'nSeeThem', 'nSeeUs',
-                    'bAllOutOfRange', 'bInAttackRange', 'nMinCharges', 'nMinRange', 'nMaxRange', 'nAttackModeType',
-                    'vHexTypes', 'fChance', 'fPriority', 'fDetect', 'fOrder', 'fFatigue', 'bApproach', 'bOffense',
-                    'bFallBack', 'bRetreat', 'bPosition', 'bPassive']
-        elif type == 'camptypes':
-            return ['id', 'strDesc', 'vImageList', 'aCapacities', 'nTreasureID', 'm_fAlertness', 'm_fVisibility',
-                    'WetTempAdjustMod', 'm_fHealPerHourMod', 'fSleepQuality']
-        elif type == 'chargeprofiles':
-            return ['nID', 'strName', 'strItemID', 'fPerUse', 'fPerHour', 'fPerHourEquipped', 'fPerHex', 'bDegrade']
-        elif type == 'conditions':
-            return ['id', 'strName', 'strDesc', 'aFieldNames', 'aModifiers', 'aEffects', 'bFatal', 'vIDNext',
-                    'fDuration', 'bPermanent', 'vChanceNext', 'bStackable', 'bDisplay', 'bDisplayOther',
-                    'bDisplayGameOver', 'nColor', 'bResetTimer', 'bRemoveAll', 'bRemovePostCombat', 'nTransferRange',
-                    'aThresholds']
-        elif type == 'containertypes':
-            return ['id', 'strName']
-        elif type == 'creatures':
-            return ['id', 'strName', 'strNamePublic', 'strNotes', 'strImg', 'vEncounterIDs', 'nMovesPerTurn',
-                    'nTreasureID', 'nFaction', 'vAttackModes', 'vBaseConditions', 'nCorpseID', 'vActivities']
-        elif type == 'creaturesources':
-            return ['id', 'strName', 'nX', 'nY', 'nCreatureID', 'nMin', 'nMax', 'fWeight']
-        elif type == 'datafiles':
-            return ['id', 'strName', 'strDesc', 'fValue', 'strImg']
-        elif type == 'dmcplaces':
-            return ['id', 'strImg', 'nEncounterID', 'nX', 'nY']
+    def sort(self, column: list[str]):
+        order = [self.data[:,self.column.index(i)] for i in column if i in self.column]
+        ind = np.lexsort(tuple(order), axis=0)
+        self.data = self.data[ind,:]
 
-    def setupTable(self, table: QTableWidget):
-        if table.rowCount() != 0:
+    def setupTable(self, table: QTableWidget, modinfo=None):
+        if table.columnCount() != 0:
             return
         table.setColumnCount(len(self.column))
         table.setHorizontalHeaderLabels(self.column)
+        print(self.data[0])
+        print(self.column)
         self.table = table
-        self.loadData()
+        self.loadData(modinfo)
+        self.table.horizontalHeader().stretchLastSection()
+        self.table.resizeColumnsToContents()
 
     def __setitem__(self, key, value):
         if isinstance(key, tuple) and isinstance(key[0], int) and len(key) == 2:
@@ -128,7 +59,7 @@ class gameDB:
                 return self.data[key]
         return None
 
-    def loadData(self):
+    def loadData(self, modinfo=None):
         if hasattr(self, 'table'):
             self.table.setRowCount(self.data.shape[0])
             for i in range(self.data.shape[0]):

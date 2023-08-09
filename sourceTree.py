@@ -27,6 +27,16 @@ class sourceTree:
             root.setText(0, os.path.basename(dirPath))
             self.treeWidget.addTopLevelItem(root)
 
+    def loadData(self, top, lst):
+        topItem = QTreeWidgetItem()
+        topItem.setText(0, top)
+        self.treeWidget.addTopLevelItem(topItem)
+        for i in lst:
+            Item = QTreeWidgetItem()
+            Item.setText(0, i)
+            topItem.addChild(Item)
+
+
     def getFilePath(self,idx:QModelIndex):
         #获取对应位置item
         item = self.treeWidget.itemFromIndex(idx)
@@ -38,7 +48,6 @@ class sourceTree:
         return path
 
     def filterFile(self,name):
-        #遍历所有item
         it = QTreeWidgetItemIterator(self.treeWidget.topLevelItem(0))
         while it.value():
             it.value().setHidden(True)
