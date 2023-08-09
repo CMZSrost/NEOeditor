@@ -31,3 +31,31 @@ def fast_iter(context):
             # 重置元素，清空元素内部数据
             elem.clear()
     return root
+
+def get_info(context):
+    """
+    读取xml数据，并释放空间
+    :params context: etree.iterparse生成的迭代器
+    :params func:处理xml数据的func
+    """
+    # 事件、元素
+    stack = deque()
+    res = []
+    maxlen=0
+    for event, elem in context:
+        if event == 'start':
+            # 将元素压入栈
+            stack.append(elem.attrib.values())
+            maxlen=max(maxlen,len(stack))
+        if event == 'end':
+            # 处理xml数据
+            if len(stack) == maxlen and elem.tag == "column":
+                # print(stack[-1])
+                if stack[-1][0] not in res:
+                    res.extend(stack[-1])
+            stack.pop()
+
+            # 重置元素，清空元素内部数据
+            elem.clear()
+    res = "'"+"','".join(res)+"'"
+    print(f'[{res}]')
