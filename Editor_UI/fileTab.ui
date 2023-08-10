@@ -7,14 +7,20 @@
     <x>0</x>
     <y>0</y>
     <width>941</width>
-    <height>720</height>
+    <height>662</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>TabWidget</string>
   </property>
   <property name="currentIndex">
-   <number>0</number>
+   <number>1</number>
   </property>
   <property name="tabsClosable">
    <bool>true</bool>
@@ -27,6 +33,9 @@
     <string>文件</string>
    </attribute>
    <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLineEdit" name="lineEdit_2"/>
+    </item>
     <item>
      <widget class="QTreeWidget" name="treeWidget">
       <property name="sizeAdjustPolicy">
@@ -96,7 +105,10 @@
    </attribute>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QTableWidget" name="tableWidget">
+     <widget class="QLineEdit" name="lineEdit"/>
+    </item>
+    <item>
+     <widget class="NewTable" name="tableWidget">
       <property name="editTriggers">
        <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
       </property>
@@ -147,7 +159,7 @@
    <attribute name="title">
     <string>详情</string>
    </attribute>
-   <layout class="QVBoxLayout" name="verticalLayout_4">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
@@ -161,9 +173,9 @@
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
@@ -181,7 +193,7 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
            <widget class="QLabel" name="label_2">
             <property name="text">
@@ -199,7 +211,7 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
            <widget class="QLabel" name="label_3">
             <property name="text">
@@ -276,6 +288,53 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>NewTable</class>
+   <extends>QTableWidget</extends>
+   <header>dataTableUI</header>
+   <slots>
+    <slot>showinfo(int,int)</slot>
+    <slot>findText(QString)</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>tableWidget</sender>
+   <signal>cellClicked(int,int)</signal>
+   <receiver>tableWidget</receiver>
+   <slot>showinfo(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>278</x>
+     <y>323</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>439</x>
+     <y>522</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>tableWidget</receiver>
+   <slot>findText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>118</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>124</x>
+     <y>80</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>showInfo(int,int)</slot>
+ </slots>
 </ui>

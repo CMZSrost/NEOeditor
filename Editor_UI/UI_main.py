@@ -87,27 +87,33 @@ class Ui_main(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.treeWidget_data.sizePolicy().hasHeightForWidth())
         self.treeWidget_data.setSizePolicy(sizePolicy)
-        self.treeWidget_data.setItemsExpandable(False)
+        self.treeWidget_data.setItemsExpandable(True)
         self.treeWidget_data.setHeaderHidden(True)
-        self.treeWidget_data.setExpandsOnDoubleClick(True)
+        self.treeWidget_data.setExpandsOnDoubleClick(False)
         self.treeWidget_data.setObjectName("treeWidget_data")
         self.verticalLayout_3.addWidget(self.treeWidget_data)
         self.tabWidget.addTab(self.tab_elem, "")
-        self.fileEditor = QtWidgets.QTabWidget(self.splitter)
+        self.fileEditor = tabEditor(self.splitter)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.fileEditor.sizePolicy().hasHeightForWidth())
         self.fileEditor.setSizePolicy(sizePolicy)
+        self.fileEditor.setTabPosition(QtWidgets.QTabWidget.North)
+        self.fileEditor.setTabShape(QtWidgets.QTabWidget.Triangular)
+        self.fileEditor.setUsesScrollButtons(True)
+        self.fileEditor.setDocumentMode(False)
         self.fileEditor.setTabsClosable(True)
         self.fileEditor.setMovable(True)
+        self.fileEditor.setTabBarAutoHide(False)
         self.fileEditor.setObjectName("fileEditor")
-        self.elemEditor = QtWidgets.QTabWidget(self.splitter)
+        self.elemEditor = tabEditor(self.splitter)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.elemEditor.sizePolicy().hasHeightForWidth())
         self.elemEditor.setSizePolicy(sizePolicy)
+        self.elemEditor.setTabShape(QtWidgets.QTabWidget.Triangular)
         self.elemEditor.setTabsClosable(True)
         self.elemEditor.setMovable(True)
         self.elemEditor.setObjectName("elemEditor")
@@ -142,12 +148,14 @@ class Ui_main(object):
 
         self.retranslateUi(main)
         self.tabWidget.setCurrentIndex(1)
+        self.elemEditor.setCurrentIndex(-1)
         self.loadProjectAction.triggered.connect(main.loadProject) # type: ignore
         self.lineEdit_file.textChanged['QString'].connect(main.filterFile) # type: ignore
         self.treeWidget_file.doubleClicked['QModelIndex'].connect(main.doubleClick) # type: ignore
         self.treeWidget_data.doubleClicked['QModelIndex'].connect(main.doubleClick) # type: ignore
         self.elemEditor.tabCloseRequested['int'].connect(main.removeDataTab) # type: ignore
         self.fileEditor.tabCloseRequested['int'].connect(main.removeFileTab) # type: ignore
+        self.lineEdit_data.textChanged['QString'].connect(main.filterFile) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(main)
 
     def retranslateUi(self, main):
@@ -163,3 +171,4 @@ class Ui_main(object):
         self.newProjectAction.setText(_translate("main", "新建项目"))
         self.loadProjectAction.setText(_translate("main", "导入项目"))
         self.saveProjectAction.setText(_translate("main", "保存项目"))
+from tabEditor import tabEditor
