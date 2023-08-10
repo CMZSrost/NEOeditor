@@ -8,23 +8,7 @@ class gameDB:
         self.column = column
         self.data = data
 
-    def sort(self, column: list[str]):
-        order = [self.data[:, self.column.index(i)] for i in column if i in self.column]
-        ind = np.lexsort(tuple(order), axis=0)
-        self.data = self.data[ind, :]
 
-
-
-    def setupTable(self, table: QTableWidget, modinfo: str):
-        if table.columnCount() != 0:
-            return
-        table.setColumnCount(len(self.column))
-        table.setHorizontalHeaderLabels(self.column)
-        self.table = table
-        self.loadData(self.filterData(modinfo, False))
-        self.table.horizontalHeader().stretchLastSection()
-        self.table.resizeColumnsToContents()
-        self.table.setObjectName(modinfo + '_' + self.type)
 
     def __setitem__(self, key, value):
         if isinstance(key, tuple) and isinstance(key[0], int) and len(key) == 2:
@@ -59,27 +43,6 @@ class gameDB:
             if 0 <= key <= self.data.shape[0]:
                 return self.data[key]
         return None
-
-    def loadData(self,ind):
-        if hasattr(self, 'table'):
-            self.table.setRowCount(self.data.shape[0])
-            for i in range(self.data.shape[0]):
-                if i not in ind:
-                    self.table.hideRow(i)
-                    continue
-                for j in range(self.data.shape[1]):
-                    self.table.setItem(i, j, QTableWidgetItem(str(self.data[i][j])))
-
-    def filterData(self, modinfo:str, reverse=True):
-        if modinfo == 'total':
-            ind = np.full(self.data.shape[0],True)
-        else:
-            ind = self.data[:, self.column.index('modinfo')] == modinfo
-        if reverse:
-            ind = ~ind
-        ind = np.where(ind)[0]
-        return ind
-
 
 
     def __len__(self):

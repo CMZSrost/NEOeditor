@@ -61,7 +61,7 @@
            <enum>Qt::DefaultContextMenu</enum>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tab_file">
            <attribute name="title">
@@ -159,6 +159,9 @@
           <property name="tabShape">
            <enum>QTabWidget::Triangular</enum>
           </property>
+          <property name="elideMode">
+           <enum>Qt::ElideNone</enum>
+          </property>
           <property name="usesScrollButtons">
            <bool>true</bool>
           </property>
@@ -187,6 +190,9 @@
           </property>
           <property name="currentIndex">
            <number>-1</number>
+          </property>
+          <property name="elideMode">
+           <enum>Qt::ElideNone</enum>
           </property>
           <property name="tabsClosable">
            <bool>true</bool>
@@ -242,6 +248,9 @@
   <action name="loadProjectAction">
    <property name="text">
     <string>导入项目</string>
+   </property>
+   <property name="statusTip">
+    <string>导入文件目录并编码数据</string>
    </property>
   </action>
   <action name="saveProjectAction">

@@ -101,6 +101,7 @@ class Ui_main(object):
         self.fileEditor.setSizePolicy(sizePolicy)
         self.fileEditor.setTabPosition(QtWidgets.QTabWidget.North)
         self.fileEditor.setTabShape(QtWidgets.QTabWidget.Triangular)
+        self.fileEditor.setElideMode(QtCore.Qt.ElideNone)
         self.fileEditor.setUsesScrollButtons(True)
         self.fileEditor.setDocumentMode(False)
         self.fileEditor.setTabsClosable(True)
@@ -114,6 +115,7 @@ class Ui_main(object):
         sizePolicy.setHeightForWidth(self.elemEditor.sizePolicy().hasHeightForWidth())
         self.elemEditor.setSizePolicy(sizePolicy)
         self.elemEditor.setTabShape(QtWidgets.QTabWidget.Triangular)
+        self.elemEditor.setElideMode(QtCore.Qt.ElideNone)
         self.elemEditor.setTabsClosable(True)
         self.elemEditor.setMovable(True)
         self.elemEditor.setObjectName("elemEditor")
@@ -147,7 +149,7 @@ class Ui_main(object):
         self.menubar.addAction(self.menu_3.menuAction())
 
         self.retranslateUi(main)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.elemEditor.setCurrentIndex(-1)
         self.loadProjectAction.triggered.connect(main.loadProject) # type: ignore
         self.lineEdit_file.textChanged['QString'].connect(main.filterFile) # type: ignore
@@ -170,5 +172,6 @@ class Ui_main(object):
         self.menu_3.setTitle(_translate("main", "功能"))
         self.newProjectAction.setText(_translate("main", "新建项目"))
         self.loadProjectAction.setText(_translate("main", "导入项目"))
+        self.loadProjectAction.setStatusTip(_translate("main", "导入文件目录并编码数据"))
         self.saveProjectAction.setText(_translate("main", "保存项目"))
 from tabEditor import tabEditor

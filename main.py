@@ -1,5 +1,7 @@
 import sys
 import os
+
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 from Editor_UI import UI_main, UI_fileTab
 from EditorDB import EditorDB
@@ -10,7 +12,8 @@ class mainUI(QMainWindow, UI_main.Ui_main):
     def __init__(self):
         super(mainUI, self).__init__()
         self.setupUi(self)
-        self.db = EditorDB(fileTreeWidget=self.treeWidget_file, dataTreeWidget=self.treeWidget_data)
+        self.db = EditorDB(fileTreeWidget=self.treeWidget_file, dataTreeWidget=self.treeWidget_data,
+                           statusBar=self.statusbar)
         self.AllTemplateTab = QTabWidget()
         self.templateTab = UI_fileTab.Ui_templateTab()
 
@@ -27,7 +30,9 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                 if fileName.endswith('xml'):
                     tab = self.tabFactory(fileName, self.fileEditor, 'filetab')
                     if tab:
-                        self.db.loadFile(path, tab.findChild(QTreeWidget, 'treeWidget'))
+                        tree = tab.findChild(QTreeWidget, 'treeWidget')
+                        tree.sortByColumn(3, Qt.AscendingOrder)
+                        self.db.loadFile(path, tree)
                 elif fileName.endswith('php'):
                     tab = self.tabFactory(fileName, self.fileEditor, 'datatab')
                     if tab:
@@ -46,8 +51,10 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                 tab = self.tabFactory('_'.join(datapath), self.elemEditor, 'datatab')
                 if tab:
                     table = tab.findChild(NewTable, 'tableWidget')
+                    table.setup(self.db.gameDB[datapath[1]], datapath[0])
                     table.cellChanged['int', 'int'].connect(self.elemEditor.itemChange)
-                    self.db.gameDB[datapath[1]].setupTable(table, datapath[0])
+                    self.elemEditor.setCurrentIndex(self.elemEditor.count() - 1)
+                    self.elemEditor.tabText(self.elemEditor.count() - 1).replace('*', '')
 
     def tabFactory(self, tabName, tabParent: QTabWidget, type):
         self.AllTemplateTab.clear()
@@ -71,6 +78,8 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         self.fileEditor.removeTab(idx)
 
     def removeDataTab(self, idx):
+        if self.elemEditor.tabText(idx).find('*') != -1:
+            print(idx)
         self.elemEditor.removeTab(idx)
 
 

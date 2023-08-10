@@ -5,18 +5,31 @@ import os
 from PyQt5.QtWidgets import QTreeWidgetItem
 from PyQt5.QtCore import Qt
 from collections import deque
+from lxml import etree
+from lxml.etree import iterparse
 
-
-def fast_iter(context):
+def fast_iter(context:iterparse):
     stack = deque()
+    flag = True
     for event, elem in context:
+        if flag:
+            comment = elem.xpath('//comment()')
+            flag = False
         if event == 'start':
             # 将元素压入栈
             item = QTreeWidgetItem()
             stack.append(item)
-        if event == 'end':
+            while len(comment) > 0 and elem.sourceline >= comment[0].sourceline and len(stack) > 0:
+                com = QTreeWidgetItem()
+                com.setText(0, '<!---->')
+                com.setText(1, comment[0].text)
+                com.setData(3, 0, comment[0].sourceline)
+                comment.pop(0)
+                stack[-1].addChild(com)
+        elif event == 'end':
             item = stack.pop()
             item.setText(0, elem.tag)
+            item.setData(3, 0, elem.sourceline)
             if elem.text is not None:
                 item.setFlags(Qt.ItemFlag(63))
                 item.setText(1, elem.text)
@@ -52,29 +65,20 @@ def get_info(context):
 
 def data_iter(context, modinfo):
     DBdict = {}
-    pos = -1
-    table = {}
     for event, elem in context:
-        if event == 'start':
-            if elem.tag == "table":
-                pos = elem.attrib.values()[0]
-                if DBdict.get(pos) is None:
-                    DBdict[pos] = []
-                typelist = getColumn(pos)
-                table = {}
-                for i in typelist:
-                    table[i] = ''
-                table['modinfo'] = f'{modinfo[0]}_{modinfo[1]}'
-                table["filepath"] = modinfo[2]
-        elif event == 'end':
-            if elem.tag == "column":
-                name = elem.attrib.values()[0]
-                if name in table.keys():
-                    table[name] = elem.text
-            elif elem.tag == "table":
-                DBdict[pos].append(list(table.values()))
-                table.clear()
-            elem.clear()
+        if elem.tag == "table":
+            pos = elem.attrib.values()[0]
+            typelist = getColumn(pos)
+            if DBdict.get(pos) is None:
+                DBdict[pos] = []
+
+            table = {i: '' for i in typelist}
+            table['modinfo'] = f'{modinfo[0]}_{modinfo[1]}'
+            table["filepath"] = modinfo[2]
+            table.update({i.attrib.values()[0]: i.text for i in elem.xpath('column')})
+
+            DBdict[pos].append([table[i] for i in typelist])
+            table.clear()
     return DBdict
 
 def getColumn(type):

@@ -30,7 +30,7 @@ class Ui_templateTab(object):
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.verticalLayout.addWidget(self.lineEdit_2)
         self.treeWidget = QtWidgets.QTreeWidget(self.filetab)
-        self.treeWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
+        self.treeWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.treeWidget.setEditTriggers(QtWidgets.QAbstractItemView.DoubleClicked|QtWidgets.QAbstractItemView.EditKeyPressed)
         self.treeWidget.setTabKeyNavigation(True)
         self.treeWidget.setDragEnabled(False)
@@ -41,8 +41,10 @@ class Ui_templateTab(object):
         self.treeWidget.setAutoExpandDelay(0)
         self.treeWidget.setUniformRowHeights(False)
         self.treeWidget.setAllColumnsShowFocus(True)
+        self.treeWidget.setWordWrap(True)
         self.treeWidget.setExpandsOnDoubleClick(False)
         self.treeWidget.setObjectName("treeWidget")
+        self.treeWidget.header().setCascadingSectionResizes(True)
         self.treeWidget.header().setHighlightSections(False)
         self.verticalLayout.addWidget(self.treeWidget)
         templateTab.addTab(self.filetab, "")
@@ -54,6 +56,7 @@ class Ui_templateTab(object):
         self.lineEdit.setObjectName("lineEdit")
         self.verticalLayout_2.addWidget(self.lineEdit)
         self.tableWidget = NewTable(self.datatab)
+        self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.AnyKeyPressed|QtWidgets.QAbstractItemView.DoubleClicked|QtWidgets.QAbstractItemView.EditKeyPressed)
         self.tableWidget.setDragEnabled(False)
         self.tableWidget.setDragDropOverwriteMode(False)
@@ -61,6 +64,7 @@ class Ui_templateTab(object):
         self.tableWidget.setDefaultDropAction(QtCore.Qt.CopyAction)
         self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.tableWidget.setTextElideMode(QtCore.Qt.ElideNone)
         self.tableWidget.setWordWrap(True)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(0)
@@ -125,7 +129,7 @@ class Ui_templateTab(object):
         self.tableWidget_2.setDefaultDropAction(QtCore.Qt.CopyAction)
         self.tableWidget_2.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.tableWidget_2.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
-        self.tableWidget_2.setWordWrap(False)
+        self.tableWidget_2.setWordWrap(True)
         self.tableWidget_2.setColumnCount(2)
         self.tableWidget_2.setObjectName("tableWidget_2")
         self.tableWidget_2.setRowCount(0)
@@ -142,8 +146,8 @@ class Ui_templateTab(object):
 
         self.retranslateUi(templateTab)
         templateTab.setCurrentIndex(1)
-        self.tableWidget.cellClicked['int','int'].connect(self.tableWidget.showinfo) # type: ignore
         self.lineEdit.textChanged['QString'].connect(self.tableWidget.findText) # type: ignore
+        self.tableWidget.itemChanged['QTableWidgetItem*'].connect(self.tableWidget.fresh) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(templateTab)
 
     def retranslateUi(self, templateTab):
@@ -153,7 +157,10 @@ class Ui_templateTab(object):
         self.treeWidget.headerItem().setText(0, _translate("templateTab", "属性"))
         self.treeWidget.headerItem().setText(1, _translate("templateTab", "值"))
         self.treeWidget.headerItem().setText(2, _translate("templateTab", "属性注释"))
+        self.treeWidget.headerItem().setText(3, _translate("templateTab", "行数"))
+        self.treeWidget.headerItem().setText(4, _translate("templateTab", "注释"))
         templateTab.setTabText(templateTab.indexOf(self.filetab), _translate("templateTab", "文件"))
+        self.tableWidget.setStatusTip(_translate("templateTab", "双击编辑数据"))
         self.tableWidget.setSortingEnabled(True)
         templateTab.setTabText(templateTab.indexOf(self.datatab), _translate("templateTab", "数据"))
         self.label.setText(_translate("templateTab", "modName:"))

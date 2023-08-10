@@ -39,7 +39,7 @@
     <item>
      <widget class="QTreeWidget" name="treeWidget">
       <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustIgnored</enum>
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
       </property>
       <property name="editTriggers">
        <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
@@ -74,9 +74,15 @@
       <property name="allColumnsShowFocus">
        <bool>true</bool>
       </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
       <property name="expandsOnDoubleClick">
        <bool>false</bool>
       </property>
+      <attribute name="headerCascadingSectionResizes">
+       <bool>true</bool>
+      </attribute>
       <attribute name="headerHighlightSections">
        <bool>false</bool>
       </attribute>
@@ -95,6 +101,16 @@
         <string>属性注释</string>
        </property>
       </column>
+      <column>
+       <property name="text">
+        <string>行数</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>注释</string>
+       </property>
+      </column>
      </widget>
     </item>
    </layout>
@@ -109,6 +125,12 @@
     </item>
     <item>
      <widget class="NewTable" name="tableWidget">
+      <property name="statusTip">
+       <string>双击编辑数据</string>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
+      </property>
       <property name="editTriggers">
        <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
       </property>
@@ -129,6 +151,9 @@
       </property>
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <property name="textElideMode">
+       <enum>Qt::ElideNone</enum>
       </property>
       <property name="sortingEnabled">
        <bool>true</bool>
@@ -256,7 +281,7 @@
        <enum>QAbstractItemView::SelectRows</enum>
       </property>
       <property name="wordWrap">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="columnCount">
        <number>2</number>
@@ -296,27 +321,12 @@
    <slots>
     <slot>showinfo(int,int)</slot>
     <slot>findText(QString)</slot>
+    <slot>fresh(QTableWidgetItem*)</slot>
    </slots>
   </customwidget>
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>tableWidget</sender>
-   <signal>cellClicked(int,int)</signal>
-   <receiver>tableWidget</receiver>
-   <slot>showinfo(int,int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>278</x>
-     <y>323</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>439</x>
-     <y>522</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>lineEdit</sender>
    <signal>textChanged(QString)</signal>
@@ -325,11 +335,27 @@
    <hints>
     <hint type="sourcelabel">
      <x>118</x>
-     <y>54</y>
+     <y>346</y>
     </hint>
     <hint type="destinationlabel">
      <x>124</x>
-     <y>80</y>
+     <y>372</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableWidget</sender>
+   <signal>itemChanged(QTableWidgetItem*)</signal>
+   <receiver>tableWidget</receiver>
+   <slot>fresh(QTableWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>403</x>
+     <y>448</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>665</x>
+     <y>493</y>
     </hint>
    </hints>
   </connection>

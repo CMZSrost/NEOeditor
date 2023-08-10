@@ -1,8 +1,9 @@
 import json
 import os
+from time import time
 
 import numpy as np
-from PyQt5.QtWidgets import QTreeWidget, QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QTreeWidget, QTableWidget, QTableWidgetItem, QStatusBar, QLabel
 
 from sourceTree import sourceTree
 from gameDB import gameDB
@@ -18,6 +19,8 @@ class EditorDB:
             self.projectPath = config["projectPath"]
         self.fileTree = sourceTree(kwargs["fileTreeWidget"])
         self.dataTree = sourceTree(kwargs["dataTreeWidget"])
+        self.statusBar: QStatusBar = kwargs["statusBar"]
+        self.statusBar.showMessage('waiting for project', 0)
         self.gameDB = {}
 
     def loadPath(self, path: str):
@@ -29,6 +32,7 @@ class EditorDB:
         self.modsPath = path + "/Mods"
 
     def loadProject(self, path):
+        start = time()
         self.loadPath(path)
         self.gameData = dict()
         modslist: list[str] = self.loadPhp(self.getModsPath)
@@ -41,35 +45,36 @@ class EditorDB:
             self.fileTree.loadFolder(i)
         typelist = [os.path.splitext(i)[-2] for i in os.listdir(self.dataPath)]
         self.dataTree.loadData('total', typelist)
+        step = time()
+        print(f'Project loaded in {step - start} seconds')
         self.loadData(self.dataPath, ['-', 'game', ''])
         self.loadMods()
         for i in self.gameData.keys():
             self.gameDB[i] = gameDB(i, getColumn(i), self.gameData[i])
+        self.statusBar.showMessage(f'Project loaded in {np.round(time() - start,3)} seconds')
 
     def loadMods(self):
         for modid, modstr in enumerate(self.getMods):
             self.loadData(os.path.join(self.projectPath, modstr[1]), [modid, modstr[0], ''])
 
     def loadData(self, dirpath, modinfo):
-        DBdict = {}
+        start = time()
+        DBdict = set()
         if os.path.isdir(dirpath):
             for root, dirs, files in os.walk(dirpath):
                 for file in files:
                     if os.path.basename(file).endswith('.xml'):
-                        xmliter = etree.iterparse(os.path.join(root, file), events=('start', 'end'), encoding='UTF-8')
+                        xmliter = etree.iterparse(os.path.join(root, file), events=('end',), encoding='UTF-8')
                         modinfo[2] = (os.path.join(root, file).replace(self.projectPath,'').replace('\\','/'))
                         tempDB = data_iter(xmliter, modinfo)
+                        DBdict.update(tempDB.keys())
                         for i in tempDB.keys():
-                            if i in DBdict.keys():
-                                DBdict[i] = np.vstack((DBdict[i], tempDB[i]))
+                            if i in self.gameData.keys():
+                                self.gameData[i] = np.vstack((self.gameData[i], tempDB[i]))
                             else:
-                                DBdict[i] = np.array(tempDB[i], dtype=str)
-        self.dataTree.loadData(f'{modinfo[0]}_{modinfo[1]}', list(DBdict.keys()))
-        for i in DBdict.keys():
-            if i in self.gameData.keys():
-                self.gameData[i] = np.vstack((self.gameData[i], DBdict[i]))
-            else:
-                self.gameData[i] = np.array(DBdict[i], dtype=str)
+                                self.gameData[i] = np.array(tempDB[i], dtype=str)
+        self.dataTree.loadData(f'{modinfo[0]}_{modinfo[1]}', list(DBdict))
+        print(f'{modinfo[1]} loaded in {time() - start} seconds')
 
     def loadFile(self, filepath, treeView: QTreeWidget):
         if os.path.isfile(filepath):
@@ -79,6 +84,9 @@ class EditorDB:
             if filepath.endswith(".xml") and os.path.split(filepath)[0].endswith('data'):
                 xmliter = etree.iterparse(filepath, events=('start', 'end'), encoding='UTF-8')
                 treeView.addTopLevelItem(get_info(xmliter))
+            for i in [1,2,3]:
+                treeView.resizeColumnToContents(i)
+
 
     def loadPhp(self, filepath, tableView: QTableWidget = None):
         if os.path.isfile(filepath):
@@ -101,7 +109,6 @@ class EditorDB:
                         item = list(zip(item[::2], item[1::2]))
                     tableView.setRowCount(len(item))
                     for cnt, value in enumerate(item):
-                        print(cnt, value)
                         tableView.setItem(cnt, 0, QTableWidgetItem(str(cnt)))
                         if tableView.columnCount() == 3:
                             tableView.setItem(cnt, 1, QTableWidgetItem(value[0]))
