@@ -20,7 +20,7 @@
    <string>TabWidget</string>
   </property>
   <property name="currentIndex">
-   <number>1</number>
+   <number>0</number>
   </property>
   <property name="tabsClosable">
    <bool>true</bool>
@@ -39,7 +39,7 @@
     <item>
      <widget class="QTreeWidget" name="treeWidget">
       <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustToContents</enum>
+       <enum>QAbstractScrollArea::AdjustIgnored</enum>
       </property>
       <property name="editTriggers">
        <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
@@ -156,7 +156,7 @@
        <enum>Qt::ElideNone</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -319,8 +319,8 @@
    <extends>QTableWidget</extends>
    <header>dataTableUI</header>
    <slots>
-    <slot>showinfo(int,int)</slot>
-    <slot>findText(QString)</slot>
+    <slot>show_info(int,int)</slot>
+    <slot>find_text(QString)</slot>
     <slot>fresh(QTableWidgetItem*)</slot>
    </slots>
   </customwidget>
@@ -331,11 +331,11 @@
    <sender>lineEdit</sender>
    <signal>textChanged(QString)</signal>
    <receiver>tableWidget</receiver>
-   <slot>findText(QString)</slot>
+   <slot>find_text(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>118</x>
-     <y>346</y>
+     <x>120</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel">
      <x>124</x>

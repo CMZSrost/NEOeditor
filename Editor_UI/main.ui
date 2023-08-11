@@ -61,7 +61,7 @@
            <enum>Qt::DefaultContextMenu</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tab_file">
            <attribute name="title">
@@ -79,7 +79,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QTreeWidget" name="treeWidget_file">
+             <widget class="sourceTree" name="treeWidget_file">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -120,7 +120,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QTreeWidget" name="treeWidget_data">
+             <widget class="sourceTree" name="treeWidget_data">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -266,6 +266,14 @@
    <header>tabEditor</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>sourceTree</class>
+   <extends>QTreeWidget</extends>
+   <header>sourceTree</header>
+   <slots>
+    <slot>filter_file(QString)</slot>
+   </slots>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
@@ -273,7 +281,7 @@
    <sender>loadProjectAction</sender>
    <signal>triggered()</signal>
    <receiver>main</receiver>
-   <slot>loadProject()</slot>
+   <slot>load_project()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -286,26 +294,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>lineEdit_file</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>main</receiver>
-   <slot>filterFile(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>113</x>
-     <y>84</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>716</x>
-     <y>688</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>treeWidget_file</sender>
    <signal>doubleClicked(QModelIndex)</signal>
    <receiver>main</receiver>
-   <slot>doubleClick(QModelIndex)</slot>
+   <slot>double_click(QModelIndex)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>113</x>
@@ -321,7 +313,7 @@
    <sender>treeWidget_data</sender>
    <signal>doubleClicked(QModelIndex)</signal>
    <receiver>main</receiver>
-   <slot>doubleClick(QModelIndex)</slot>
+   <slot>double_click(QModelIndex)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>142</x>
@@ -337,7 +329,7 @@
    <sender>elemEditor</sender>
    <signal>tabCloseRequested(int)</signal>
    <receiver>main</receiver>
-   <slot>removeDataTab(int)</slot>
+   <slot>remove_data_tab(int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>913</x>
@@ -353,7 +345,7 @@
    <sender>fileEditor</sender>
    <signal>tabCloseRequested(int)</signal>
    <receiver>main</receiver>
-   <slot>removeFileTab(int)</slot>
+   <slot>remove_file_tab(int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>583</x>
@@ -366,29 +358,45 @@
    </hints>
   </connection>
   <connection>
-   <sender>lineEdit_data</sender>
+   <sender>lineEdit_file</sender>
    <signal>textChanged(QString)</signal>
-   <receiver>main</receiver>
-   <slot>filterFile(QString)</slot>
+   <receiver>treeWidget_file</receiver>
+   <slot>filter_file(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>167</x>
-     <y>89</y>
+     <x>156</x>
+     <y>95</y>
     </hint>
     <hint type="destinationlabel">
-     <x>137</x>
-     <y>662</y>
+     <x>157</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_data</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>treeWidget_data</receiver>
+   <slot>filter_file(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>92</x>
+     <y>91</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>92</x>
+     <y>177</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
-  <slot>loadProject()</slot>
-  <slot>saveProject()</slot>
-  <slot>filterFile(QString)</slot>
-  <slot>doubleClick(QModelIndex)</slot>
-  <slot>removeDataTab(int)</slot>
-  <slot>removeFileTab(int)</slot>
-  <slot>showinfo(int,int)</slot>
+  <slot>load_project()</slot>
+  <slot>save_project()</slot>
+  <slot>filter_file(QString)</slot>
+  <slot>double_click(QModelIndex)</slot>
+  <slot>remove_data_tab(int)</slot>
+  <slot>remove_file_tab(int)</slot>
+  <slot>show_info(int,int)</slot>
  </slots>
 </ui>

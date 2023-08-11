@@ -57,7 +57,7 @@ class Ui_main(object):
         self.lineEdit_file.setSizePolicy(sizePolicy)
         self.lineEdit_file.setObjectName("lineEdit_file")
         self.verticalLayout.addWidget(self.lineEdit_file)
-        self.treeWidget_file = QtWidgets.QTreeWidget(self.tab_file)
+        self.treeWidget_file = sourceTree(self.tab_file)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -81,7 +81,7 @@ class Ui_main(object):
         self.lineEdit_data.setSizePolicy(sizePolicy)
         self.lineEdit_data.setObjectName("lineEdit_data")
         self.verticalLayout_3.addWidget(self.lineEdit_data)
-        self.treeWidget_data = QtWidgets.QTreeWidget(self.tab_elem)
+        self.treeWidget_data = sourceTree(self.tab_elem)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -149,15 +149,15 @@ class Ui_main(object):
         self.menubar.addAction(self.menu_3.menuAction())
 
         self.retranslateUi(main)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         self.elemEditor.setCurrentIndex(-1)
-        self.loadProjectAction.triggered.connect(main.loadProject) # type: ignore
-        self.lineEdit_file.textChanged['QString'].connect(main.filterFile) # type: ignore
-        self.treeWidget_file.doubleClicked['QModelIndex'].connect(main.doubleClick) # type: ignore
-        self.treeWidget_data.doubleClicked['QModelIndex'].connect(main.doubleClick) # type: ignore
-        self.elemEditor.tabCloseRequested['int'].connect(main.removeDataTab) # type: ignore
-        self.fileEditor.tabCloseRequested['int'].connect(main.removeFileTab) # type: ignore
-        self.lineEdit_data.textChanged['QString'].connect(main.filterFile) # type: ignore
+        self.loadProjectAction.triggered.connect(main.load_project) # type: ignore
+        self.treeWidget_file.doubleClicked['QModelIndex'].connect(main.double_click) # type: ignore
+        self.treeWidget_data.doubleClicked['QModelIndex'].connect(main.double_click) # type: ignore
+        self.elemEditor.tabCloseRequested['int'].connect(main.remove_data_tab) # type: ignore
+        self.fileEditor.tabCloseRequested['int'].connect(main.remove_file_tab) # type: ignore
+        self.lineEdit_file.textChanged['QString'].connect(self.treeWidget_file.filter_file) # type: ignore
+        self.lineEdit_data.textChanged['QString'].connect(self.treeWidget_data.filter_file) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(main)
 
     def retranslateUi(self, main):
@@ -174,4 +174,5 @@ class Ui_main(object):
         self.loadProjectAction.setText(_translate("main", "导入项目"))
         self.loadProjectAction.setStatusTip(_translate("main", "导入文件目录并编码数据"))
         self.saveProjectAction.setText(_translate("main", "保存项目"))
+from sourceTree import sourceTree
 from tabEditor import tabEditor

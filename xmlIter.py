@@ -5,7 +5,6 @@ import os
 from PyQt5.QtWidgets import QTreeWidgetItem
 from PyQt5.QtCore import Qt
 from collections import deque
-from lxml import etree
 from lxml.etree import iterparse
 
 def fast_iter(context:iterparse):
@@ -68,7 +67,7 @@ def data_iter(context, modinfo):
     for event, elem in context:
         if elem.tag == "table":
             pos = elem.attrib.values()[0]
-            typelist = getColumn(pos)
+            typelist = get_column(pos)
             if DBdict.get(pos) is None:
                 DBdict[pos] = []
 
@@ -81,7 +80,7 @@ def data_iter(context, modinfo):
             table.clear()
     return DBdict
 
-def getColumn(type):
+def get_column(type):
     with open(os.path.join(os.getcwd(), 'templateFile', 'typelistTemplate.json'), 'r', encoding='utf-8') as f:
         column = ['modinfo']
         column.extend(json.load(f)[type])

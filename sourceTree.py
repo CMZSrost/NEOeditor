@@ -1,58 +1,54 @@
-import os
+from os.path import join, isdir, basename
+from os import listdir
 
 from PyQt5.QtCore import QModelIndex
-from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem,QTreeWidgetItemIterator
+from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QTreeWidgetItemIterator
 
 
-class sourceTree:
-    def __init__(self, treeWidget):
-        self.treeWidget:QTreeWidget = treeWidget
+class sourceTree(QTreeWidget):
+    def __init__(self, parent=None):
+        super().__init__()
+        self.self = parent
 
-    def loadFolder(self, dirPath):
-        if os.path.isdir(dirPath):
-            root = QTreeWidgetItem()
-            root.setText(0, os.path.basename(dirPath))
-            self.treeWidget.addTopLevelItem(root)
-
-            def loadFile(dirPath,parent:QTreeWidgetItem):
-                for file in os.listdir(dirPath):
-                    child = QTreeWidgetItem()
-                    child.setText(0, file)
-                    parent.addChild(child)
-                    if os.path.isdir(os.path.join(dirPath,file)):
-                        loadFile(os.path.join(dirPath,file),child)
-            loadFile(dirPath,root)
+    def add_node(self, data, parent=None):
+        node = QTreeWidgetItem()
+        node.setText(0, data)
+        if parent:
+            parent.addChild(node)
         else:
-            root = QTreeWidgetItem()
-            root.setText(0, os.path.basename(dirPath))
-            self.treeWidget.addTopLevelItem(root)
+            self.addTopLevelItem(node)
+        return node
 
-    def loadData(self, top, lst):
-        topItem = QTreeWidgetItem()
-        topItem.setText(0, top)
-        self.treeWidget.addTopLevelItem(topItem)
+    def load_folder(self, dirPath):
+        def load_file(fPath, parent: QTreeWidgetItem):
+            for file in listdir(fPath):
+                child = self.add_node(file, parent)
+                if isdir(join(fPath, file)):
+                    load_file(join(fPath, file), child)
+
+        root = self.add_node(basename(dirPath))
+        if isdir(dirPath):
+            load_file(dirPath, root)
+
+    def load_data(self, top, lst):
+        topItem = self.add_node(top)
         for i in lst:
-            Item = QTreeWidgetItem()
-            Item.setText(0, i)
-            topItem.addChild(Item)
+            self.add_node(i, topItem)
 
-
-    def getFilePath(self,idx:QModelIndex):
-        #获取对应位置item
-        item = self.treeWidget.itemFromIndex(idx)
+    def get_file_path(self, idx: QModelIndex):
+        item = self.itemFromIndex(idx)
         path = item.text(0)
         while item.parent() is not None:
-            print(path)
             item = item.parent()
-            path = os.path.join(item.text(0), path)
-        return path
+            path = join(item.text(0), path)
+        return path.replace('\\', '/')
 
-    def filterFile(self,name):
-        it = QTreeWidgetItemIterator(self.treeWidget.topLevelItem(0))
+    def filter_file(self, name):
+        it = QTreeWidgetItemIterator(self.topLevelItem(0))
         while it.value():
             it.value().setHidden(True)
             it += 1
-        it = QTreeWidgetItemIterator(self.treeWidget.topLevelItem(0))
+        it = QTreeWidgetItemIterator(self.topLevelItem(0))
         while it.value():
             item = it.value()
             if item.text(0).find(name) != -1:
@@ -60,5 +56,4 @@ class sourceTree:
                 while item.parent() is not None:
                     item.parent().setHidden(False)
                     item = item.parent()
-                print(item.text(0))
             it += 1

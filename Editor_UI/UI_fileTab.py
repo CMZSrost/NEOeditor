@@ -30,7 +30,7 @@ class Ui_templateTab(object):
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.verticalLayout.addWidget(self.lineEdit_2)
         self.treeWidget = QtWidgets.QTreeWidget(self.filetab)
-        self.treeWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.treeWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
         self.treeWidget.setEditTriggers(QtWidgets.QAbstractItemView.DoubleClicked|QtWidgets.QAbstractItemView.EditKeyPressed)
         self.treeWidget.setTabKeyNavigation(True)
         self.treeWidget.setDragEnabled(False)
@@ -145,8 +145,8 @@ class Ui_templateTab(object):
         templateTab.addTab(self.tab, "")
 
         self.retranslateUi(templateTab)
-        templateTab.setCurrentIndex(1)
-        self.lineEdit.textChanged['QString'].connect(self.tableWidget.findText) # type: ignore
+        templateTab.setCurrentIndex(0)
+        self.lineEdit.textChanged['QString'].connect(self.tableWidget.find_text) # type: ignore
         self.tableWidget.itemChanged['QTableWidgetItem*'].connect(self.tableWidget.fresh) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(templateTab)
 
@@ -161,7 +161,7 @@ class Ui_templateTab(object):
         self.treeWidget.headerItem().setText(4, _translate("templateTab", "注释"))
         templateTab.setTabText(templateTab.indexOf(self.filetab), _translate("templateTab", "文件"))
         self.tableWidget.setStatusTip(_translate("templateTab", "双击编辑数据"))
-        self.tableWidget.setSortingEnabled(True)
+        self.tableWidget.setSortingEnabled(False)
         templateTab.setTabText(templateTab.indexOf(self.datatab), _translate("templateTab", "数据"))
         self.label.setText(_translate("templateTab", "modName:"))
         self.label_4.setText(_translate("templateTab", "TextLabel"))
