@@ -6,6 +6,8 @@ import numpy as np
 from PyQt5.QtWidgets import QTreeWidget, QTableWidget, QTableWidgetItem, QStatusBar
 
 import lxml.etree as etree
+
+from sourceTree import sourceTree
 from xmlIter import fast_iter, data_iter
 
 
@@ -15,8 +17,9 @@ class EditorDB:
             config = json.load(f)
             self.language = config["language"]
             self.projectPath = config["projectPath"]
-        self.fileTree = kwargs["fileTreeWidget"]
-        self.dataTree = kwargs["dataTreeWidget"]
+        self.fileTree:sourceTree = kwargs["fileTreeWidget"]
+        self.dataTree:sourceTree = kwargs["dataTreeWidget"]
+        self.proxy = kwargs["proxy"]
         self.statusBar: QStatusBar = kwargs["statusBar"]
         self.statusBar.showMessage('waiting for project', 0)
         self.Path, self.getMods, self.gameData = {}, {}, {}
@@ -51,28 +54,38 @@ class EditorDB:
         self.statusBar.showMessage(f'Project loaded in {np.round(time() - start, 3)} seconds')
 
     def load_mods(self):
-        self.load_data(self.Path['data'], ['-', 'game', ''])
+        kwargs = {'gameData': self.gameData,
+                  'dataTree': self.dataTree,
+                  'projectPath': self.Path['project'],
+                  'dirPath': self.Path['data'],
+                  'modInfo': ['-', 'data']}
+        self.dataTree.add_node('-_data')
+        self.proxy.load_data(**kwargs)
         for modID, modStr in enumerate(self.getMods):
-            self.load_data(os.path.join(self.Path['project'], modStr[1]), [modID, modStr[0], ''])
+            kwargs['dirPath'] = os.path.join(self.Path['project'], modStr[1])
+            kwargs['modInfo'] = [modID, modStr[0]]
+            self.dataTree.add_node(f'{modID}_{modStr[0]}')
+            self.proxy.load_data(**kwargs)
 
-    def load_data(self, dirPath, modInfo):
-        start = time()
-        db_dict = set()
-        if os.path.isdir(dirPath):
-            for root, dirs, files in os.walk(dirPath):
-                for file in files:
-                    if os.path.basename(file).endswith('.xml'):
-                        xmlIter = etree.iterparse(os.path.join(root, file), events=('end',), encoding='UTF-8')
-                        modInfo[2] = (os.path.join(root, file).replace(self.Path['project'], '').replace('\\', '/'))
-                        tempDB = data_iter(xmlIter, modInfo)
-                        db_dict.update(tempDB.keys())
-                        for i in tempDB.keys():
-                            if i in self.gameData.keys():
-                                self.gameData[i] = np.vstack((self.gameData[i], tempDB[i]))
-                            else:
-                                self.gameData[i] = np.array(tempDB[i], dtype=str)
-        self.dataTree.load_data(f'{modInfo[0]}_{modInfo[1]}', list(db_dict))
-        print(f'{modInfo[1]} loaded in {time() - start} seconds')
+
+    # def load_data(self, dirPath, modInfo):
+    #     start = time()
+    #     db_dict = set()
+    #     if os.path.isdir(dirPath):
+    #         for root, dirs, files in os.walk(dirPath):
+    #             for file in files:
+    #                 if os.path.basename(file).endswith('.xml'):
+    #                     xmlIter = etree.iterparse(os.path.join(root, file), events=('end',), encoding='UTF-8')
+    #                     modInfo[2] = (os.path.join(root, file).replace(self.Path['project'], '').replace('\\', '/'))
+    #                     tempDB = data_iter(xmlIter, modInfo)
+    #                     db_dict.update(tempDB.keys())
+    #                     for i in tempDB.keys():
+    #                         if i in self.gameData.keys():
+    #                             self.gameData[i] = np.vstack((self.gameData[i], tempDB[i]))
+    #                         else:
+    #                             self.gameData[i] = np.array(tempDB[i], dtype=str)
+    #     print(f'{modInfo[1]} loaded in {time() - start} seconds')
+    #     return modInfo, db_dict
 
     @staticmethod
     def load_file(filepath, treeView: QTreeWidget):

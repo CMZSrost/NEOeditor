@@ -1,26 +1,47 @@
 import sys
 import os
 
-from PyQt5.QtCore import Qt
+import numpy as np
+from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import *
 from Editor_UI import UI_main, UI_fileTab
 from EditorDB import EditorDB
 from dataTableUI import NewTable
+from threadProxy import threadProxy
 
 
 class mainUI(QMainWindow, UI_main.Ui_main):
     def __init__(self):
         super(mainUI, self).__init__()
         self.setupUi(self)
+        self.proxy = threadProxy()
         self.db = EditorDB(fileTreeWidget=self.treeWidget_file,
                            dataTreeWidget=self.treeWidget_data,
+                           proxy=self.proxy,
                            statusBar=self.statusbar)
         self.templateTab = UI_fileTab.Ui_templateTab()
+        self.proxy.loadingStatusSign.connect(self.loaded)
+
 
     def load_project(self):
         path = QFileDialog.getExistingDirectory(self, "选择文件夹", self.db.projectPath)
         if os.path.isdir(path):
             self.db.load_project(path)
+            self.treeWidget_file.setEnabled(True)
+            self.lineEdit_file.setEnabled(True)
+
+    def loaded(self, flag):
+        print(flag)
+        if flag == 0:
+            for i in self.db.gameData:
+                self.db.gameData[i] = self.db.gameData[i][np.argsort(self.db.gameData[i][:, 0]),:]
+
+            self.treeWidget_data.setEnabled(True)
+            self.lineEdit_data.setEnabled(True)
+            self.treeWidget_data.setRootIsDecorated(True)
+        else:
+            self.treeWidget_data.setEnabled(False)
+            self.lineEdit_data.setEnabled(False)
 
     @staticmethod
     def expand_node(tree, idx):
@@ -49,6 +70,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                 self.treeWidget_file.setExpanded(idx, not self.treeWidget_file.isExpanded(idx))
 
         elif self.sender() == self.treeWidget_data:
+
             pathList = os.path.split(self.db.dataTree.get_file_path(idx))
             if len(pathList) == 1:
                 self.treeWidget_data.setExpanded(idx, not self.treeWidget_data.isExpanded(idx))

@@ -10,6 +10,10 @@ class sourceTree(QTreeWidget):
         super().__init__()
         self.self = parent
 
+    def get_top_item(self, name):
+        namelist = [self.topLevelItem(i).text(0) for i in range(self.topLevelItemCount())]
+        return self.topLevelItem(namelist.index(name))
+
     def add_node(self, data, parent=None):
         node = QTreeWidgetItem()
         node.setText(0, data)
@@ -57,3 +61,4 @@ class sourceTree(QTreeWidget):
                     item.parent().setHidden(False)
                     item = item.parent()
             it += 1
+

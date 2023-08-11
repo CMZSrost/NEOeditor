@@ -62,7 +62,7 @@ def get_info(context):
     print(f'[{res}]')
 
 
-def data_iter(context, modinfo):
+def data_iter(context, modInfo, filePath):
     DBdict = {}
     for event, elem in context:
         if elem.tag == "table":
@@ -72,8 +72,8 @@ def data_iter(context, modinfo):
                 DBdict[pos] = []
 
             table = {i: '' for i in typelist}
-            table['modinfo'] = f'{modinfo[0]}_{modinfo[1]}'
-            table["filepath"] = modinfo[2]
+            table['modinfo'] = f'{modInfo[0]}_{modInfo[1]}'
+            table["filepath"] = filePath
             table.update({i.attrib.values()[0]: i.text for i in elem.xpath('column')})
 
             DBdict[pos].append([table[i] for i in typelist])
