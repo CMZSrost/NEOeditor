@@ -9,6 +9,7 @@ class NewTable(QTableWidget):
         self.parent = parent
         self.data, self.column = None, []
         self.loaded = self.ptr = 0
+        self.editQueue = []
 
     def show_info(self, i, j):
         item = self.item(i, j)
@@ -35,9 +36,7 @@ class NewTable(QTableWidget):
 
         proxyFunc(data=self.data, table=self)
 
-    def load_line(self, i):
-        for j in range(self.data.shape[1]):
-            self.setItem(i, j, QTableWidgetItem(str(self.data[i][j])))
+
 
     def fresh(self, item):
         self.resizeColumnToContents(item.column())

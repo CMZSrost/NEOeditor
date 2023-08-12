@@ -22,7 +22,7 @@ class threadProxy(QObject):
         self.gen_worker(load_dat, emit=self.in_loading, mutex=self.loadMutex, **kwargs)
 
     def setup_data(self, **kwargs):
-        self.gen_worker(setup_dat, emit=self.in_loading, **kwargs)
+        self.gen_worker(setup_dat, **kwargs)
 
     def gen_worker(self, func, emit=None, mutex=None, **kwargs):
         worker = func(emit=emit, mutex=mutex, **kwargs)
@@ -80,7 +80,7 @@ class setup_dat(QRunnable):
     def __init__(self, emit, mutex, **kwargs):
         super(setup_dat, self).__init__()
         self.table = kwargs['table']
-        self.data = kwargs['data']
+        self.data:np.ndarray = kwargs['data']
         self.emit = emit
         self.mutex = mutex
 
@@ -93,5 +93,4 @@ class setup_dat(QRunnable):
                 self.table.setItem(i, j, item)
         self.table.resizeColumnsToContents()
         self.table.resizeRowsToContents()
-        self.emit(-1)
         print(f'data setup in {time() - start} seconds')

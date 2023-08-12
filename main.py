@@ -30,15 +30,14 @@ class mainUI(QMainWindow, UI_main.Ui_main):
 
     def loaded(self, flag):
         if flag == 0:
-            # for i in self.db.gameData:
-            #     self.db.gameData[i] = self.db.gameData[i][np.argsort(self.db.gameData[i][:, 0]),:]
-
             self.treeWidget_data.setEnabled(True)
             self.lineEdit_data.setEnabled(True)
             self.treeWidget_data.setRootIsDecorated(True)
         else:
             self.treeWidget_data.setEnabled(False)
             self.lineEdit_data.setEnabled(False)
+
+
 
     @staticmethod
     def expand_node(tree, idx):
