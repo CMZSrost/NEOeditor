@@ -1,4 +1,6 @@
 from PyQt5.QtCore import QThread, pyqtSignal, QThreadPool, QRunnable, QObject, QMutex
+from PyQt5.QtQml import qmlRegisterType
+from PyQt5.QtWidgets import QTableWidgetItem
 from time import time
 import numpy as np
 import os.path
@@ -14,14 +16,20 @@ class threadProxy(QObject):
         self.pool = QThreadPool()
         self.pool.setMaxThreadCount(max_thread)
         self.loadingNum = 0
-        self.mutex = QMutex()
+        self.loadMutex = QMutex()
 
     def load_data(self, **kwargs):
-        worker = load_dat(emit=self.inLoading, mutex=self.mutex, **kwargs)
-        self.pool.start(worker)
-        self.inLoading(1)
+        self.gen_worker(load_dat, emit=self.in_loading, mutex=self.loadMutex, **kwargs)
 
-    def inLoading(self, i):
+    def setup_data(self, **kwargs):
+        self.gen_worker(setup_dat, emit=self.in_loading, **kwargs)
+
+    def gen_worker(self, func, emit=None, mutex=None, **kwargs):
+        worker = func(emit=emit, mutex=mutex, **kwargs)
+        self.pool.start(worker)
+        self.in_loading(1)
+
+    def in_loading(self, i):
         self.loadingNum += i
         self.loadingStatusSign['int'].emit(self.loadingNum)
 
@@ -37,12 +45,11 @@ class load_dat(QRunnable):
         self.modInfo = kwargs['modInfo']
         self.emit = emit
         self.mutex = mutex
-        print(f'loading data init {self.modInfo[1]}')
 
     def run(self):
         start = time()
-        print(f'loading {self.modInfo[1]}')
-        db_dict = set()
+        db = {}
+        modInfoStr = f'{self.modInfo[0]}_{self.modInfo[1]}'
         if os.path.isdir(self.dirPath):
             for root, dirs, files in os.walk(self.dirPath):
                 for file in files:
@@ -53,18 +60,38 @@ class load_dat(QRunnable):
                             os.path.join(root, file).replace(self.projectPath, '').replace('\\', '/'))  # data/或Mods/...
                         tempDB = data_iter(xmlIter, self.modInfo, filePath)
 
-                        db_dict.update(tempDB.keys())
-                        self.mutex.lock()
                         for i in tempDB.keys():
-                            if i in self.gameData.keys():
-                                self.gameData[i] = np.vstack((self.gameData[i], tempDB[i]))
+                            if i in db.keys():
+                                db[i] = np.vstack((db[i], tempDB[i]))
                             else:
-                                self.gameData[i] = np.array(tempDB[i], dtype=str)
-                        self.mutex.unlock()
+                                db[i] = np.array(tempDB[i], dtype=str)
         self.mutex.lock()
-        for i in db_dict:
-            root = self.dataTree.get_top_item(f'{self.modInfo[0]}_{self.modInfo[1]}')
+        self.gameData[modInfoStr] = db
+        for i in db.keys():
+            root = self.dataTree.get_top_item(modInfoStr)
             self.dataTree.add_node(i, root)
         self.mutex.unlock()
         self.emit(-1)
         print(f'{self.modInfo[1]} loaded in {time() - start} seconds')
+
+
+class setup_dat(QRunnable):
+
+    def __init__(self, emit, mutex, **kwargs):
+        super(setup_dat, self).__init__()
+        self.table = kwargs['table']
+        self.data = kwargs['data']
+        self.emit = emit
+        self.mutex = mutex
+
+    def run(self):
+        start = time()
+        m, n = self.data.shape
+        for i in range(m):
+            for j in range(n):
+                item = QTableWidgetItem(self.data[i, j])
+                self.table.setItem(i, j, item)
+        self.table.resizeColumnsToContents()
+        self.table.resizeRowsToContents()
+        self.emit(-1)
+        print(f'data setup in {time() - start} seconds')

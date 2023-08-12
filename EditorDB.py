@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QTreeWidget, QTableWidget, QTableWidgetItem, QStatus
 import lxml.etree as etree
 
 from sourceTree import sourceTree
-from xmlIter import fast_iter, data_iter
+from xmlIter import fast_iter
 
 
 class EditorDB:
@@ -59,33 +59,16 @@ class EditorDB:
                   'projectPath': self.Path['project'],
                   'dirPath': self.Path['data'],
                   'modInfo': ['-', 'data']}
+        self.gameData['-_data'] = {}
         self.dataTree.add_node('-_data')
         self.proxy.load_data(**kwargs)
         for modID, modStr in enumerate(self.getMods):
+            self.gameData[f'{modID}_{modStr[0]}'] = {}
             kwargs['dirPath'] = os.path.join(self.Path['project'], modStr[1])
             kwargs['modInfo'] = [modID, modStr[0]]
             self.dataTree.add_node(f'{modID}_{modStr[0]}')
             self.proxy.load_data(**kwargs)
 
-
-    # def load_data(self, dirPath, modInfo):
-    #     start = time()
-    #     db_dict = set()
-    #     if os.path.isdir(dirPath):
-    #         for root, dirs, files in os.walk(dirPath):
-    #             for file in files:
-    #                 if os.path.basename(file).endswith('.xml'):
-    #                     xmlIter = etree.iterparse(os.path.join(root, file), events=('end',), encoding='UTF-8')
-    #                     modInfo[2] = (os.path.join(root, file).replace(self.Path['project'], '').replace('\\', '/'))
-    #                     tempDB = data_iter(xmlIter, modInfo)
-    #                     db_dict.update(tempDB.keys())
-    #                     for i in tempDB.keys():
-    #                         if i in self.gameData.keys():
-    #                             self.gameData[i] = np.vstack((self.gameData[i], tempDB[i]))
-    #                         else:
-    #                             self.gameData[i] = np.array(tempDB[i], dtype=str)
-    #     print(f'{modInfo[1]} loaded in {time() - start} seconds')
-    #     return modInfo, db_dict
 
     @staticmethod
     def load_file(filepath, treeView: QTreeWidget):

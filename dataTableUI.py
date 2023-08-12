@@ -11,10 +11,15 @@ class NewTable(QTableWidget):
         self.loaded = self.ptr = 0
 
     def show_info(self, i, j):
-        print(f'{i},{j}:\t{self.sender().item(i, j).data(0)}')
+        item = self.item(i, j)
+        if item:
+            data = item.data(0)
+            print(f'{i},{j}:\t{data}')
+        else:
+            print(f'{i},{j}:\tit is None')
         # pass
 
-    def setup(self, data, modInfo: str, typ: str):
+    def setup(self, data, modInfo: str, typ: str, proxyFunc):
         if self.columnCount() != 0:
             return
         self.column, self.data = get_column(typ), data
@@ -26,40 +31,13 @@ class NewTable(QTableWidget):
 
         self.setHorizontalHeaderLabels(self.column)
         self.horizontalHeader().stretchLastSection()
-        self.verticalScrollBar().valueChanged['int'].connect(self.load)
+        # self.verticalScrollBar().valueChanged['int'].connect(self.load)
 
-        for i in range(self.data.shape[0]):
-            self.hideRow(i)
-
-        self.load_data(35)
+        proxyFunc(data=self.data, table=self)
 
     def load_line(self, i):
         for j in range(self.data.shape[1]):
             self.setItem(i, j, QTableWidgetItem(str(self.data[i][j])))
-
-    def load(self, value):
-        ind = value + 35
-        if ind - self.loaded >= 10:
-            self.load_data(ind)
-
-    def load_data(self, ind):
-        modInfo = self.objectName().rsplit('_', 1)[0]
-        print(modInfo)
-        while self.loaded < ind and self.ptr < self.data.shape[0]:
-            if self.data[self.ptr, 0] == modInfo or modInfo == 'total':
-                self.load_line(self.ptr)
-                self.showRow(self.ptr)
-                self.loaded += 1
-            else:
-                self.hideRow(self.ptr)
-            self.ptr += 1
-
-        if self.ptr == self.data.shape[0]:
-            self.setSortingEnabled(True)
-            self.horizontalHeader().setSortIndicatorShown(True)
-
-        self.resizeColumnsToContents()
-        self.resizeRowsToContents()
 
     def fresh(self, item):
         self.resizeColumnToContents(item.column())

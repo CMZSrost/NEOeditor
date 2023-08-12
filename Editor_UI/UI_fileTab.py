@@ -145,9 +145,10 @@ class Ui_templateTab(object):
         templateTab.addTab(self.tab, "")
 
         self.retranslateUi(templateTab)
-        templateTab.setCurrentIndex(0)
+        templateTab.setCurrentIndex(1)
         self.lineEdit.textChanged['QString'].connect(self.tableWidget.find_text) # type: ignore
         self.tableWidget.itemChanged['QTableWidgetItem*'].connect(self.tableWidget.fresh) # type: ignore
+        self.tableWidget.cellClicked['int','int'].connect(self.tableWidget.show_info) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(templateTab)
 
     def retranslateUi(self, templateTab):

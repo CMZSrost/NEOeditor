@@ -9,7 +9,6 @@ from EditorDB import EditorDB
 from dataTableUI import NewTable
 from threadProxy import threadProxy
 
-
 class mainUI(QMainWindow, UI_main.Ui_main):
     def __init__(self):
         super(mainUI, self).__init__()
@@ -22,7 +21,6 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         self.templateTab = UI_fileTab.Ui_templateTab()
         self.proxy.loadingStatusSign.connect(self.loaded)
 
-
     def load_project(self):
         path = QFileDialog.getExistingDirectory(self, "选择文件夹", self.db.projectPath)
         if os.path.isdir(path):
@@ -31,10 +29,9 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             self.lineEdit_file.setEnabled(True)
 
     def loaded(self, flag):
-        print(flag)
         if flag == 0:
-            for i in self.db.gameData:
-                self.db.gameData[i] = self.db.gameData[i][np.argsort(self.db.gameData[i][:, 0]),:]
+            # for i in self.db.gameData:
+            #     self.db.gameData[i] = self.db.gameData[i][np.argsort(self.db.gameData[i][:, 0]),:]
 
             self.treeWidget_data.setEnabled(True)
             self.lineEdit_data.setEnabled(True)
@@ -84,7 +81,12 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                 tab = self.tab_factory('_'.join(pathList), self.elemEditor, 'datatab')
                 if tab:
                     table = tab.findChild(NewTable, 'tableWidget')
-                    table.setup(self.db.gameData[typ], modInfo, typ)
+                    if modInfo == 'total':
+                        gameData = np.vstack([self.db.gameData[i][typ] for i in self.db.gameData.keys() if
+                                               typ in self.db.gameData[i].keys()])
+                    else:
+                        gameData = self.db.gameData[modInfo][typ]
+                    table.setup(gameData, modInfo, typ, self.proxy.setup_data)
                     table.cellChanged['int', 'int'].connect(self.elemEditor.item_change)
 
     def tab_factory(self, tabName, tabParent: QTabWidget, typ):

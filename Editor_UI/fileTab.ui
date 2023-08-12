@@ -20,7 +20,7 @@
    <string>TabWidget</string>
   </property>
   <property name="currentIndex">
-   <number>0</number>
+   <number>1</number>
   </property>
   <property name="tabsClosable">
    <bool>true</bool>
@@ -334,12 +334,12 @@
    <slot>find_text(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>120</x>
-     <y>63</y>
+     <x>90</x>
+     <y>40</y>
     </hint>
     <hint type="destinationlabel">
-     <x>124</x>
-     <y>372</y>
+     <x>90</x>
+     <y>71</y>
     </hint>
    </hints>
   </connection>
@@ -350,12 +350,28 @@
    <slot>fresh(QTableWidgetItem*)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>403</x>
-     <y>448</y>
+     <x>90</x>
+     <y>71</y>
     </hint>
     <hint type="destinationlabel">
-     <x>665</x>
-     <y>493</y>
+     <x>90</x>
+     <y>71</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableWidget</sender>
+   <signal>cellClicked(int,int)</signal>
+   <receiver>tableWidget</receiver>
+   <slot>show_info(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>524</x>
+     <y>539</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>666</x>
+     <y>520</y>
     </hint>
    </hints>
   </connection>
