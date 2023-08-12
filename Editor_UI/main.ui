@@ -252,6 +252,7 @@
     <property name="title">
      <string>功能</string>
     </property>
+    <addaction name="reloadAction"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -274,6 +275,14 @@
   <action name="saveProjectAction">
    <property name="text">
     <string>保存项目</string>
+   </property>
+  </action>
+  <action name="reloadAction">
+   <property name="text">
+    <string>刷新</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
    </property>
   </action>
  </widget>

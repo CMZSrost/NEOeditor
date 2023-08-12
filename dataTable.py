@@ -1,3 +1,4 @@
+import numpy as np
 from PyQt5.Qt import QTableWidget, QTabWidget
 from PyQt5.QtWidgets import QTableWidgetItem
 from xmlIter import get_column
@@ -7,9 +8,9 @@ class dataTable(QTableWidget):
     def __init__(self, parent: QTabWidget = None):
         super(dataTable, self).__init__(parent)
         self.parent = parent
-        self.data, self.column = None, []
+        self.data = np.array([])
+        self.column = []
         self.loaded = self.ptr = 0
-        self.editQueue = []
 
     def show_info(self, i, j):
         item = self.item(i, j)
@@ -32,10 +33,21 @@ class dataTable(QTableWidget):
 
         self.setHorizontalHeaderLabels(self.column)
         self.horizontalHeader().stretchLastSection()
-        # self.verticalScrollBar().valueChanged['int'].connect(self.load)
 
         proxyFunc(data=self.data, table=self)
 
+    def update_data(self, gameData):
+        temp = []
+        modInfo, typ = self.objectName().split(':')
+        for i in range(self.rowCount()):
+            temp.append([self.item(i, j).data(0) for j in range(self.columnCount())])
+        self.data = np.array(temp, dtype=str)
+        if modInfo == 'total':
+            for modName, modData in gameData.items():
+                data = self.data[np.where(self.data[:, 0] == modName)]
+                modData[typ] = data
+        else:
+            gameData[modInfo][typ] = self.data
 
 
     def fresh(self, item):

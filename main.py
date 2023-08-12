@@ -109,7 +109,13 @@ class mainUI(QMainWindow, UI_main.Ui_main):
 
     def remove_data_tab(self, idx):
         if self.elemEditor.tabText(idx).find('*') != -1:
-            print(idx)
+            reply = QMessageBox.question(self, '数据未保存', '你想保存数据吗',
+                                         QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Yes)
+            if reply == QMessageBox.Yes:
+                currentTab = self.elemEditor.widget(idx)
+                currentTab.findChild(dataTable, currentTab.objectName()).update_data(self.db.gameData)
+            elif reply == QMessageBox.Cancel:
+                return
         self.elemEditor.removeTab(idx)
 
 
