@@ -55,7 +55,7 @@ class Ui_templateTab(object):
         self.lineEdit = QtWidgets.QLineEdit(self.datatab)
         self.lineEdit.setObjectName("lineEdit")
         self.verticalLayout_2.addWidget(self.lineEdit)
-        self.tableWidget = NewTable(self.datatab)
+        self.tableWidget = dataTable(self.datatab)
         self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.AnyKeyPressed|QtWidgets.QAbstractItemView.DoubleClicked|QtWidgets.QAbstractItemView.EditKeyPressed)
         self.tableWidget.setDragEnabled(False)
@@ -66,14 +66,14 @@ class Ui_templateTab(object):
         self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.tableWidget.setTextElideMode(QtCore.Qt.ElideNone)
         self.tableWidget.setWordWrap(True)
-        self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(0)
+        self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setRowCount(0)
         self.tableWidget.horizontalHeader().setCascadingSectionResizes(True)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(120)
+        self.tableWidget.horizontalHeader().setMinimumSectionSize(1)
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
         self.tableWidget.verticalHeader().setVisible(False)
-        self.tableWidget.verticalHeader().setStretchLastSection(False)
         self.verticalLayout_2.addWidget(self.tableWidget)
         templateTab.addTab(self.datatab, "")
         self.tab = QtWidgets.QWidget()
@@ -146,9 +146,6 @@ class Ui_templateTab(object):
 
         self.retranslateUi(templateTab)
         templateTab.setCurrentIndex(1)
-        self.lineEdit.textChanged['QString'].connect(self.tableWidget.find_text) # type: ignore
-        self.tableWidget.itemChanged['QTableWidgetItem*'].connect(self.tableWidget.fresh) # type: ignore
-        self.tableWidget.cellClicked['int','int'].connect(self.tableWidget.show_info) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(templateTab)
 
     def retranslateUi(self, templateTab):
@@ -162,7 +159,7 @@ class Ui_templateTab(object):
         self.treeWidget.headerItem().setText(4, _translate("templateTab", "注释"))
         templateTab.setTabText(templateTab.indexOf(self.filetab), _translate("templateTab", "文件"))
         self.tableWidget.setStatusTip(_translate("templateTab", "双击编辑数据"))
-        self.tableWidget.setSortingEnabled(False)
+        self.tableWidget.setSortingEnabled(True)
         templateTab.setTabText(templateTab.indexOf(self.datatab), _translate("templateTab", "数据"))
         self.label.setText(_translate("templateTab", "modName:"))
         self.label_4.setText(_translate("templateTab", "TextLabel"))
@@ -175,4 +172,4 @@ class Ui_templateTab(object):
         item = self.tableWidget_2.horizontalHeaderItem(1)
         item.setText(_translate("templateTab", "值"))
         templateTab.setTabText(templateTab.indexOf(self.tab), _translate("templateTab", "详情"))
-from dataTableUI import NewTable
+from dataTable import dataTable

@@ -3,6 +3,7 @@ import os
 from time import time
 
 import numpy as np
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTreeWidget, QTableWidget, QTableWidgetItem, QStatusBar
 
 import lxml.etree as etree
@@ -72,6 +73,7 @@ class EditorDB:
 
     @staticmethod
     def load_file(filepath, treeView: QTreeWidget):
+        treeView.sortByColumn(3, Qt.AscendingOrder)
         if os.path.isfile(filepath):
             if filepath.endswith(".xml"):
                 xmlIter = etree.iterparse(filepath, events=('start', 'end'), encoding='UTF-8')

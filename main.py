@@ -4,10 +4,13 @@ import os
 import numpy as np
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import *
+
+import sourceTree
 from Editor_UI import UI_main, UI_fileTab
 from EditorDB import EditorDB
-from dataTableUI import NewTable
+from dataTable import dataTable
 from threadProxy import threadProxy
+
 
 class mainUI(QMainWindow, UI_main.Ui_main):
     def __init__(self):
@@ -37,70 +40,69 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             self.treeWidget_data.setEnabled(False)
             self.lineEdit_data.setEnabled(False)
 
-
-
     @staticmethod
     def expand_node(tree, idx):
         tree.setExpanded(idx, not tree.isExpanded(idx))
 
+    def get_chlid(self, tab, path, **kwargs):
+        if tab:
+            classType = kwargs['classType']
+            className = kwargs['className']
+            func = kwargs['func']
+            child = tab.findChild(classType, className)
+            func(path, child)
+
     def double_click(self, idx):
-        if self.sender() == self.treeWidget_file:
-            filePath = self.db.fileTree.get_file_path(idx)
-            path = os.path.join(self.db.projectPath, filePath)
+        if isinstance(self.sender(), sourceTree.sourceTree):
+            pathList = os.path.split(self.sender().get_file_path(idx))
+            path = os.path.join(self.db.projectPath, *pathList)
             if os.path.isfile(path):
-                fileName = os.path.basename(path)
-                if fileName.endswith('xml'):
-                    tab = self.tab_factory(filePath, self.fileEditor, 'filetab')
-                    if tab:
-                        tree = tab.findChild(QTreeWidget, 'treeWidget')
-                        tree.sortByColumn(3, Qt.AscendingOrder)
-                        self.db.load_file(path, tree)
+                tempMap = {'xml': {'tabName': 'filetab', 'classType': QTreeWidget,
+                                   'className': 'treeWidget', 'func': self.db.load_file},
+                           'php': {'tabName': 'datatab', 'classType': QTableWidget,
+                                   'className': 'tableWidget', 'func': self.db.load_php}}
+                kwargs = tempMap[pathList[-1].split('.')[-1]]
+                self.get_chlid(self.tab_factory(pathList, self.fileEditor, kwargs['tabName']), path, **kwargs)
 
-                elif fileName.endswith('php'):
-                    tab = self.tab_factory(fileName, self.fileEditor, 'datatab')
-                    if tab:
-                        table = tab.findChild(QTableWidget, 'tableWidget')
-                        self.db.load_php(path, table)
+            elif os.path.isdir(path) or len(pathList) == 1 or pathList[0] == '':
+                self.expand_node(self.sender(), idx)
 
-            elif os.path.isdir(path):
-                self.treeWidget_file.setExpanded(idx, not self.treeWidget_file.isExpanded(idx))
-
-        elif self.sender() == self.treeWidget_data:
-
-            pathList = os.path.split(self.db.dataTree.get_file_path(idx))
-            if len(pathList) == 1:
-                self.treeWidget_data.setExpanded(idx, not self.treeWidget_data.isExpanded(idx))
-                return
-            modInfo, typ = pathList[0], pathList[1]
-
-            if modInfo == '':
-                self.treeWidget_data.setExpanded(idx, not self.treeWidget_data.isExpanded(idx))
-                return
             else:
-                tab = self.tab_factory('_'.join(pathList), self.elemEditor, 'datatab')
+                [modInfo, typ] = pathList
+                tab = self.tab_factory(pathList, self.elemEditor, 'datatab')
                 if tab:
-                    table = tab.findChild(NewTable, 'tableWidget')
+                    table = tab.findChild(dataTable, 'tableWidget')
                     if modInfo == 'total':
                         gameData = np.vstack([self.db.gameData[i][typ] for i in self.db.gameData.keys() if
-                                               typ in self.db.gameData[i].keys()])
+                                              typ in self.db.gameData[i].keys()])
                     else:
                         gameData = self.db.gameData[modInfo][typ]
                     table.setup(gameData, modInfo, typ, self.proxy.setup_data)
                     table.cellChanged['int', 'int'].connect(self.elemEditor.item_change)
 
-    def tab_factory(self, tabName, tabParent: QTabWidget, typ):
+    def tab_factory(self, pathList, tabParent: QTabWidget, typ):
         templateTab = QTabWidget()
-        fileName = os.path.basename(tabName)
-        tablist = [tabParent.tabText(i) for i in range(tabParent.count())]
-        if tabName in tablist:
-            tabParent.setCurrentIndex(tablist.index(tabName))
+        objName = f'{os.path.join(*pathList[:-1])}:{pathList[-1]}'
+        objList = [tabParent.tabText(i) for i in range(tabParent.count())]
+        check = self.check_object_name(objName, objList)
+        if check != -1:
+            tabParent.setCurrentIndex(check)
             return
         self.templateTab.setupUi(templateTab)
         pos = templateTab.findChild(QWidget, typ)
-        pos.setObjectName(tabParent.objectName() + '_' + fileName)
-        tabParent.addTab(pos, tabName)
+        pos.setObjectName(objName)
+        tabParent.addTab(pos, objName)
         templateTab.clear()
         return pos
+
+    def check_object_name(self, objName, objList):
+        if objName in objList:
+            return objList.index(objName)
+        if objName.startswith('total'):
+            for i in objList:
+                if ~i.startswith('total') and i.endswith(objName.split(':')[1]):
+                    return objList.index(i)
+        return -1
 
     def remove_file_tab(self, idx):
         self.fileEditor.removeTab(idx)

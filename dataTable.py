@@ -3,9 +3,9 @@ from PyQt5.QtWidgets import QTableWidgetItem
 from xmlIter import get_column
 
 
-class NewTable(QTableWidget):
+class dataTable(QTableWidget):
     def __init__(self, parent: QTabWidget = None):
-        super(NewTable, self).__init__(parent)
+        super(dataTable, self).__init__(parent)
         self.parent = parent
         self.data, self.column = None, []
         self.loaded = self.ptr = 0
@@ -24,7 +24,7 @@ class NewTable(QTableWidget):
         if self.columnCount() != 0:
             return
         self.column, self.data = get_column(typ), data
-        self.setObjectName(modInfo + '_' + typ)
+        self.setObjectName(modInfo + ':' + typ)
         print(data.shape)
 
         self.setRowCount(self.data.shape[0])

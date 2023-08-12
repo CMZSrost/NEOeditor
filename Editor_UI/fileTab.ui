@@ -124,7 +124,7 @@
      <widget class="QLineEdit" name="lineEdit"/>
     </item>
     <item>
-     <widget class="NewTable" name="tableWidget">
+     <widget class="dataTable" name="tableWidget">
       <property name="statusTip">
        <string>双击编辑数据</string>
       </property>
@@ -156,13 +156,19 @@
        <enum>Qt::ElideNone</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
       </property>
+      <property name="columnCount">
+       <number>0</number>
+      </property>
       <attribute name="horizontalHeaderCascadingSectionResizes">
        <bool>true</bool>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>1</number>
       </attribute>
       <attribute name="horizontalHeaderDefaultSectionSize">
        <number>120</number>
@@ -171,9 +177,6 @@
        <bool>true</bool>
       </attribute>
       <attribute name="verticalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="verticalHeaderStretchLastSection">
        <bool>false</bool>
       </attribute>
      </widget>
@@ -315,67 +318,13 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>NewTable</class>
+   <class>dataTable</class>
    <extends>QTableWidget</extends>
-   <header>dataTableUI</header>
-   <slots>
-    <slot>show_info(int,int)</slot>
-    <slot>find_text(QString)</slot>
-    <slot>fresh(QTableWidgetItem*)</slot>
-   </slots>
+   <header>dataTable</header>
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>lineEdit</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>tableWidget</receiver>
-   <slot>find_text(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>90</x>
-     <y>40</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>90</x>
-     <y>71</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tableWidget</sender>
-   <signal>itemChanged(QTableWidgetItem*)</signal>
-   <receiver>tableWidget</receiver>
-   <slot>fresh(QTableWidgetItem*)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>90</x>
-     <y>71</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>90</x>
-     <y>71</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tableWidget</sender>
-   <signal>cellClicked(int,int)</signal>
-   <receiver>tableWidget</receiver>
-   <slot>show_info(int,int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>524</x>
-     <y>539</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>666</x>
-     <y>520</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>showInfo(int,int)</slot>
  </slots>
