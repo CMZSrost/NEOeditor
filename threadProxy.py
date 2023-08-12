@@ -20,6 +20,7 @@ class threadProxy(QObject):
 
     def load_data(self, **kwargs):
         self.gen_worker(load_dat, emit=self.in_loading, mutex=self.loadMutex, **kwargs)
+        self.in_loading(1)
 
     def setup_data(self, **kwargs):
         self.gen_worker(setup_dat, **kwargs)
@@ -27,7 +28,6 @@ class threadProxy(QObject):
     def gen_worker(self, func, emit=None, mutex=None, **kwargs):
         worker = func(emit=emit, mutex=mutex, **kwargs)
         self.pool.start(worker)
-        self.in_loading(1)
 
     def in_loading(self, i):
         self.loadingNum += i
