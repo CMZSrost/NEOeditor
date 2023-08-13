@@ -9,6 +9,7 @@ import sourceTree
 from Editor_UI import UI_main, UI_fileTab
 from EditorDB import EditorDB
 from dataTable import dataTable
+from tabEditor import tabEditor
 from threadProxy import threadProxy
 
 
@@ -50,7 +51,9 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             className = kwargs['className']
             func = kwargs['func']
             child = tab.findChild(classType, className)
+            child.setObjectName(tab.objectName())
             func(path, child)
+            return child
 
     def double_click(self, idx):
         if isinstance(self.sender(), sourceTree.sourceTree):
@@ -61,8 +64,15 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                                    'className': 'treeWidget', 'func': self.db.load_file},
                            'php': {'tabName': 'datatab', 'classType': QTableWidget,
                                    'className': 'tableWidget', 'func': self.db.load_php}}
-                kwargs = tempMap[pathList[-1].split('.')[-1]]
-                self.get_chlid(self.tab_factory(pathList, self.fileEditor, kwargs['tabName']), path, **kwargs)
+                extend = pathList[-1].split('.')[-1]
+                kwargs = tempMap[extend]
+                tab = self.tab_factory(pathList, self.fileEditor, kwargs['tabName'])
+                child = self.get_chlid(tab, path, **kwargs)
+                if child:
+                    if extend == 'xml':
+                        child.itemChanged['QTreeWidgetItem*','int'].connect(self.fileEditor.item_change)
+                    elif extend == 'php':
+                        child.cellChanged['int','int'].connect(self.elemEditor.cell_change)
 
             elif os.path.isdir(path) or len(pathList) == 1 or pathList[0] == '':
                 self.expand_node(self.sender(), idx)
@@ -80,7 +90,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                     table.setup(gameData, modInfo, typ, self.proxy.setup_data)
                     table.cellChanged['int', 'int'].connect(self.elemEditor.item_change)
 
-    def tab_factory(self, pathList, tabParent: QTabWidget, typ):
+    def tab_factory(self, pathList, tabParent: tabEditor, typ):
         templateTab = QTabWidget()
         objName = f'{os.path.join(*pathList[:-1])}:{pathList[-1]}'
         objList = [tabParent.tabText(i) for i in range(tabParent.count())]
@@ -105,6 +115,23 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         return -1
 
     def remove_file_tab(self, idx):
+        if self.fileEditor.tabText(idx).find('*') != -1:
+            reply = QMessageBox.question(self, '数据未保存', '你想保存数据吗',
+                                         QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Yes)
+            if reply == QMessageBox.Yes:
+                currentTab = self.fileEditor.widget(idx)
+                objName = currentTab.objectName()
+                tree = currentTab.findChild(QTreeWidget, objName)
+                mods = dict(self.db.getMods)
+                modsKey = [f'{k}_{i}' for k, i in enumerate(mods.keys()) ]
+                modsValue = list(mods.values())
+
+                print(currentTab.objectName())
+                print(dict(self.db.getMods).values())
+                modInfo = modsKey[modsValue.index(objName.split(':')[0])]
+                self.db.write_file_from_tree(tree, self.db.gameData[modInfo],modInfo)
+            elif reply == QMessageBox.Cancel:
+                return
         self.fileEditor.removeTab(idx)
 
     def remove_data_tab(self, idx):
@@ -113,7 +140,9 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                                          QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Yes)
             if reply == QMessageBox.Yes:
                 currentTab = self.elemEditor.widget(idx)
-                currentTab.findChild(dataTable, currentTab.objectName()).update_data(self.db.gameData)
+                table = currentTab.findChild(dataTable, currentTab.objectName())
+                table.update_data(self.db.gameData)
+                self.db.write_file_from_data(table.data, table.objectName().split(':')[1])
             elif reply == QMessageBox.Cancel:
                 return
         self.elemEditor.removeTab(idx)

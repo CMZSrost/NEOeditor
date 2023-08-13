@@ -5,7 +5,8 @@ import os
 from PyQt5.QtWidgets import QTreeWidgetItem
 from PyQt5.QtCore import Qt
 from collections import deque
-from lxml.etree import iterparse
+
+from lxml.etree import iterparse, Element
 
 def fast_iter(context:iterparse):
     stack = deque()
@@ -17,29 +18,29 @@ def fast_iter(context:iterparse):
         if event == 'start':
             # 将元素压入栈
             item = QTreeWidgetItem()
+            item.setData(3, 0, elem.sourceline)
             stack.append(item)
             while len(comment) > 0 and elem.sourceline >= comment[0].sourceline and len(stack) > 0:
                 com = QTreeWidgetItem()
                 com.setText(0, '<!---->')
                 com.setText(1, comment[0].text)
+                com.setFlags(Qt.ItemFlag(63))
                 com.setData(3, 0, comment[0].sourceline)
                 comment.pop(0)
                 stack[-1].addChild(com)
         elif event == 'end':
             item = stack.pop()
             item.setText(0, elem.tag)
-            item.setData(3, 0, elem.sourceline)
-            if elem.text is not None:
+            if elem.text is not None and elem.tag == 'column':
                 item.setFlags(Qt.ItemFlag(63))
                 item.setText(1, elem.text)
             if elem.attrib is not None:
-                item.setText(2, '\n'.join(f'{k}="{v}"' for k, v in elem.attrib.items()))
+                item.setText(2, ''.join(list(elem.attrib.values())))
             if len(stack) == 0:
                 root = item
             else:
                 stack[-1].addChild(item)
-            # 重置元素，清空元素内部数据
-            elem.clear()
+
     return root
 
 

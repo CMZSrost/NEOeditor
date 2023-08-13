@@ -147,9 +147,12 @@ class Ui_main(object):
         self.loadProjectAction.setObjectName("loadProjectAction")
         self.saveProjectAction = QtWidgets.QAction(main)
         self.saveProjectAction.setObjectName("saveProjectAction")
+        self.reloadAction = QtWidgets.QAction(main)
+        self.reloadAction.setObjectName("reloadAction")
         self.menu.addAction(self.newProjectAction)
         self.menu.addAction(self.loadProjectAction)
         self.menu.addAction(self.saveProjectAction)
+        self.menu_3.addAction(self.reloadAction)
         self.menubar.addAction(self.menu.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
         self.menubar.addAction(self.menu_3.menuAction())
@@ -180,5 +183,7 @@ class Ui_main(object):
         self.loadProjectAction.setText(_translate("main", "导入项目"))
         self.loadProjectAction.setStatusTip(_translate("main", "导入文件目录并编码数据"))
         self.saveProjectAction.setText(_translate("main", "保存项目"))
+        self.reloadAction.setText(_translate("main", "刷新"))
+        self.reloadAction.setShortcut(_translate("main", "F5"))
 from sourceTree import sourceTree
 from tabEditor import tabEditor

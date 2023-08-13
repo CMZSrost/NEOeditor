@@ -145,13 +145,13 @@ class Ui_templateTab(object):
         templateTab.addTab(self.tab, "")
 
         self.retranslateUi(templateTab)
-        templateTab.setCurrentIndex(1)
+        templateTab.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(templateTab)
 
     def retranslateUi(self, templateTab):
         _translate = QtCore.QCoreApplication.translate
         templateTab.setWindowTitle(_translate("templateTab", "TabWidget"))
-        self.treeWidget.setSortingEnabled(True)
+        self.treeWidget.setSortingEnabled(False)
         self.treeWidget.headerItem().setText(0, _translate("templateTab", "属性"))
         self.treeWidget.headerItem().setText(1, _translate("templateTab", "值"))
         self.treeWidget.headerItem().setText(2, _translate("templateTab", "属性注释"))
