@@ -125,9 +125,6 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                 mods = dict(self.db.getMods)
                 modsKey = [f'{k}_{i}' for k, i in enumerate(mods.keys()) ]
                 modsValue = list(mods.values())
-
-                print(currentTab.objectName())
-                print(dict(self.db.getMods).values())
                 modInfo = modsKey[modsValue.index(objName.split(':')[0])]
                 self.db.write_file_from_tree(tree, self.db.gameData[modInfo],modInfo)
             elif reply == QMessageBox.Cancel:
