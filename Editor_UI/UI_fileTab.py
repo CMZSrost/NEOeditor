@@ -29,7 +29,7 @@ class Ui_templateTab(object):
         self.lineEdit_2 = QtWidgets.QLineEdit(self.filetab)
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.verticalLayout.addWidget(self.lineEdit_2)
-        self.treeWidget = QtWidgets.QTreeWidget(self.filetab)
+        self.treeWidget = dataTree(self.filetab)
         self.treeWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
         self.treeWidget.setEditTriggers(QtWidgets.QAbstractItemView.DoubleClicked|QtWidgets.QAbstractItemView.EditKeyPressed)
         self.treeWidget.setTabKeyNavigation(True)
@@ -75,6 +75,18 @@ class Ui_templateTab(object):
         self.tableWidget.horizontalHeader().setStretchLastSection(True)
         self.tableWidget.verticalHeader().setVisible(False)
         self.verticalLayout_2.addWidget(self.tableWidget)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.pushButton_add = QtWidgets.QPushButton(self.datatab)
+        self.pushButton_add.setObjectName("pushButton_add")
+        self.horizontalLayout_2.addWidget(self.pushButton_add)
+        self.pushButton_copy = QtWidgets.QPushButton(self.datatab)
+        self.pushButton_copy.setObjectName("pushButton_copy")
+        self.horizontalLayout_2.addWidget(self.pushButton_copy)
+        self.pushButton_delete = QtWidgets.QPushButton(self.datatab)
+        self.pushButton_delete.setObjectName("pushButton_delete")
+        self.horizontalLayout_2.addWidget(self.pushButton_delete)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
         templateTab.addTab(self.datatab, "")
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
@@ -145,7 +157,12 @@ class Ui_templateTab(object):
         templateTab.addTab(self.tab, "")
 
         self.retranslateUi(templateTab)
-        templateTab.setCurrentIndex(0)
+        templateTab.setCurrentIndex(1)
+        self.lineEdit_2.textChanged['QString'].connect(self.treeWidget.filter_file) # type: ignore
+        self.pushButton_add.clicked.connect(self.tableWidget.add_line) # type: ignore
+        self.pushButton_copy.clicked.connect(self.tableWidget.copy_line) # type: ignore
+        self.pushButton_delete.clicked.connect(self.tableWidget.delete_line) # type: ignore
+        self.lineEdit.textChanged['QString'].connect(self.tableWidget.find_text) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(templateTab)
 
     def retranslateUi(self, templateTab):
@@ -160,6 +177,9 @@ class Ui_templateTab(object):
         templateTab.setTabText(templateTab.indexOf(self.filetab), _translate("templateTab", "文件"))
         self.tableWidget.setStatusTip(_translate("templateTab", "双击编辑数据"))
         self.tableWidget.setSortingEnabled(True)
+        self.pushButton_add.setText(_translate("templateTab", "新增行"))
+        self.pushButton_copy.setText(_translate("templateTab", "拷贝选中行"))
+        self.pushButton_delete.setText(_translate("templateTab", "删除行"))
         templateTab.setTabText(templateTab.indexOf(self.datatab), _translate("templateTab", "数据"))
         self.label.setText(_translate("templateTab", "modName:"))
         self.label_4.setText(_translate("templateTab", "TextLabel"))
@@ -173,3 +193,4 @@ class Ui_templateTab(object):
         item.setText(_translate("templateTab", "值"))
         templateTab.setTabText(templateTab.indexOf(self.tab), _translate("templateTab", "详情"))
 from dataTable import dataTable
+from dataTree import dataTree

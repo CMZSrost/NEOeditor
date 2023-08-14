@@ -49,7 +49,6 @@ class dataTable(QTableWidget):
         else:
             gameData[modInfo][typ] = self.data
 
-
     def fresh(self, item):
         self.resizeColumnToContents(item.column())
         self.resizeRowToContents(item.row())
@@ -62,3 +61,27 @@ class dataTable(QTableWidget):
                     flag = True
                     break
             self.showRow(i) if flag else self.hideRow(i)
+
+    def add_line(self):
+        idx = self.currentRow()
+        data = [self.item(idx, i).data(0) for i in range(self.columnCount())]
+        self.insertRow(idx + 1)
+        for i in range(1, self.columnCount() - 1):
+            self.setItem(idx + 1, i, QTableWidgetItem(''))
+        self.setItem(idx + 1, 0, QTableWidgetItem(data[0]))
+        self.setItem(idx + 1, self.columnCount() - 1, QTableWidgetItem(data[-1]))
+        self.setCurrentCell(idx + 1, 0)
+
+    def delete_line(self):
+        idx = self.currentRow()
+        self.removeRow(idx)
+        self.cellChanged.emit(idx, 0)
+        self.setCurrentCell(idx - 1, 0)
+
+    def copy_line(self):
+        idx = self.currentRow()
+        data = [self.item(idx, i).data(0) for i in range(self.columnCount())]
+        self.insertRow(idx + 1)
+        for i in range(self.columnCount()):
+            self.setItem(idx + 1, i, QTableWidgetItem(data[i]))
+        self.setCurrentCell(idx + 1, 0)

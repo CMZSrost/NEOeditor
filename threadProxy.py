@@ -81,7 +81,6 @@ class setup_dat(QRunnable):
         super(setup_dat, self).__init__()
         self.table = kwargs['table']
         self.data: np.ndarray = kwargs['data']
-        # self.result = kwargs['result']
         self.emit = emit
         self.mutex = mutex
 
