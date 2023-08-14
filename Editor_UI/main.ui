@@ -343,8 +343,8 @@
    <slot>double_click(QModelIndex)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>142</x>
-     <y>306</y>
+     <x>113</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
      <x>55</x>
@@ -407,12 +407,12 @@
    <slot>filter_file(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>92</x>
-     <y>91</y>
+     <x>113</x>
+     <y>84</y>
     </hint>
     <hint type="destinationlabel">
-     <x>92</x>
-     <y>177</y>
+     <x>113</x>
+     <y>115</y>
     </hint>
    </hints>
   </connection>

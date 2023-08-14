@@ -20,7 +20,7 @@
    <string>TabWidget</string>
   </property>
   <property name="currentIndex">
-   <number>0</number>
+   <number>1</number>
   </property>
   <property name="tabsClosable">
    <bool>true</bool>
@@ -37,7 +37,7 @@
      <widget class="QLineEdit" name="lineEdit_2"/>
     </item>
     <item>
-     <widget class="QTreeWidget" name="treeWidget">
+     <widget class="dataTree" name="treeWidget">
       <property name="sizeAdjustPolicy">
        <enum>QAbstractScrollArea::AdjustIgnored</enum>
       </property>
@@ -181,6 +181,31 @@
       </attribute>
      </widget>
     </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QPushButton" name="pushButton_add">
+        <property name="text">
+         <string>新增行</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_copy">
+        <property name="text">
+         <string>拷贝选中行</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_delete">
+        <property name="text">
+         <string>删除行</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
   <widget class="QWidget" name="tab">
@@ -321,10 +346,105 @@
    <class>dataTable</class>
    <extends>QTableWidget</extends>
    <header>dataTable</header>
+   <slots>
+    <slot>add_line()</slot>
+    <slot>copy_line()</slot>
+    <slot>delete_line()</slot>
+    <slot>find_text(QString)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>dataTree</class>
+   <extends>QTreeWidget</extends>
+   <header>dataTree</header>
+   <slots>
+    <slot>filter_file(QString)</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>lineEdit_2</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>treeWidget</receiver>
+   <slot>filter_file(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>114</x>
+     <y>63</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>126</x>
+     <y>151</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_add</sender>
+   <signal>clicked()</signal>
+   <receiver>tableWidget</receiver>
+   <slot>add_line()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>177</x>
+     <y>638</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>175</x>
+     <y>546</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_copy</sender>
+   <signal>clicked()</signal>
+   <receiver>tableWidget</receiver>
+   <slot>copy_line()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>481</x>
+     <y>625</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>491</x>
+     <y>547</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_delete</sender>
+   <signal>clicked()</signal>
+   <receiver>tableWidget</receiver>
+   <slot>delete_line()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>788</x>
+     <y>630</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>771</x>
+     <y>540</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>tableWidget</receiver>
+   <slot>find_text(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>91</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>98</x>
+     <y>98</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <slots>
   <slot>showInfo(int,int)</slot>
  </slots>
