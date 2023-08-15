@@ -5,6 +5,10 @@ class dataTree(QTreeWidget):
     def __init__(self, parent=None):
         super(dataTree, self).__init__(parent)
 
+    def add_table(self):
+        print('add table')
+
+
     def filter_file(self, name):
         it = QTreeWidgetItemIterator(self.topLevelItem(0))
         while it.value():

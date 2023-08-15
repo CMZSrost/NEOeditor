@@ -27,9 +27,11 @@ class Ui_templateTab(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(self.filetab)
         self.verticalLayout.setObjectName("verticalLayout")
         self.lineEdit_2 = QtWidgets.QLineEdit(self.filetab)
+        self.lineEdit_2.setClearButtonEnabled(True)
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.verticalLayout.addWidget(self.lineEdit_2)
         self.treeWidget = dataTree(self.filetab)
+        self.treeWidget.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
         self.treeWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
         self.treeWidget.setEditTriggers(QtWidgets.QAbstractItemView.DoubleClicked|QtWidgets.QAbstractItemView.EditKeyPressed)
         self.treeWidget.setTabKeyNavigation(True)
@@ -53,9 +55,11 @@ class Ui_templateTab(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.datatab)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.lineEdit = QtWidgets.QLineEdit(self.datatab)
+        self.lineEdit.setClearButtonEnabled(True)
         self.lineEdit.setObjectName("lineEdit")
         self.verticalLayout_2.addWidget(self.lineEdit)
         self.tableWidget = dataTable(self.datatab)
+        self.tableWidget.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
         self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.AnyKeyPressed|QtWidgets.QAbstractItemView.DoubleClicked|QtWidgets.QAbstractItemView.EditKeyPressed)
         self.tableWidget.setDragEnabled(False)
@@ -155,9 +159,11 @@ class Ui_templateTab(object):
         self.tableWidget_2.verticalHeader().setStretchLastSection(False)
         self.verticalLayout_3.addWidget(self.tableWidget_2)
         templateTab.addTab(self.tab, "")
+        self.actionAddTable = QtWidgets.QAction(templateTab)
+        self.actionAddTable.setObjectName("actionAddTable")
 
         self.retranslateUi(templateTab)
-        templateTab.setCurrentIndex(1)
+        templateTab.setCurrentIndex(0)
         self.lineEdit_2.textChanged['QString'].connect(self.treeWidget.filter_file) # type: ignore
         self.pushButton_add.clicked.connect(self.tableWidget.add_line) # type: ignore
         self.pushButton_copy.clicked.connect(self.tableWidget.copy_line) # type: ignore
@@ -192,5 +198,6 @@ class Ui_templateTab(object):
         item = self.tableWidget_2.horizontalHeaderItem(1)
         item.setText(_translate("templateTab", "值"))
         templateTab.setTabText(templateTab.indexOf(self.tab), _translate("templateTab", "详情"))
+        self.actionAddTable.setText(_translate("templateTab", "新增table"))
 from dataTable import dataTable
 from dataTree import dataTree

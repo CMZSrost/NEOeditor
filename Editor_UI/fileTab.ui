@@ -20,7 +20,7 @@
    <string>TabWidget</string>
   </property>
   <property name="currentIndex">
-   <number>1</number>
+   <number>0</number>
   </property>
   <property name="tabsClosable">
    <bool>true</bool>
@@ -34,10 +34,17 @@
    </attribute>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLineEdit" name="lineEdit_2"/>
+     <widget class="QLineEdit" name="lineEdit_2">
+      <property name="clearButtonEnabled">
+       <bool>true</bool>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="dataTree" name="treeWidget">
+      <property name="contextMenuPolicy">
+       <enum>Qt::ActionsContextMenu</enum>
+      </property>
       <property name="sizeAdjustPolicy">
        <enum>QAbstractScrollArea::AdjustIgnored</enum>
       </property>
@@ -121,10 +128,17 @@
    </attribute>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QLineEdit" name="lineEdit"/>
+     <widget class="QLineEdit" name="lineEdit">
+      <property name="clearButtonEnabled">
+       <bool>true</bool>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="dataTable" name="tableWidget">
+      <property name="contextMenuPolicy">
+       <enum>Qt::ActionsContextMenu</enum>
+      </property>
       <property name="statusTip">
        <string>双击编辑数据</string>
       </property>
@@ -340,6 +354,11 @@
     </item>
    </layout>
   </widget>
+  <action name="actionAddTable">
+   <property name="text">
+    <string>新增table</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -359,6 +378,7 @@
    <header>dataTree</header>
    <slots>
     <slot>filter_file(QString)</slot>
+    <slot>get_custom_menu(QPoint)</slot>
    </slots>
   </customwidget>
  </customwidgets>
