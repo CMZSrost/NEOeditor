@@ -168,6 +168,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
           <property name="tabPosition">
            <enum>QTabWidget::North</enum>
           </property>
@@ -203,6 +206,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::TabFocus</enum>
+          </property>
           <property name="tabShape">
            <enum>QTabWidget::Triangular</enum>
           </property>
@@ -211,6 +217,9 @@
           </property>
           <property name="elideMode">
            <enum>Qt::ElideNone</enum>
+          </property>
+          <property name="documentMode">
+           <bool>false</bool>
           </property>
           <property name="tabsClosable">
            <bool>true</bool>
@@ -416,6 +425,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>reloadAction</sender>
+   <signal>triggered()</signal>
+   <receiver>main</receiver>
+   <slot>reload()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>160</x>
+     <y>62</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>524</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>load_project()</slot>
@@ -425,5 +450,6 @@
   <slot>remove_data_tab(int)</slot>
   <slot>remove_file_tab(int)</slot>
   <slot>show_info(int,int)</slot>
+  <slot>reload()</slot>
  </slots>
 </ui>

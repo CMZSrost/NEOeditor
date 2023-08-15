@@ -104,6 +104,7 @@ class Ui_main(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.fileEditor.sizePolicy().hasHeightForWidth())
         self.fileEditor.setSizePolicy(sizePolicy)
+        self.fileEditor.setFocusPolicy(QtCore.Qt.TabFocus)
         self.fileEditor.setTabPosition(QtWidgets.QTabWidget.North)
         self.fileEditor.setTabShape(QtWidgets.QTabWidget.Triangular)
         self.fileEditor.setElideMode(QtCore.Qt.ElideNone)
@@ -120,8 +121,10 @@ class Ui_main(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.elemEditor.sizePolicy().hasHeightForWidth())
         self.elemEditor.setSizePolicy(sizePolicy)
+        self.elemEditor.setFocusPolicy(QtCore.Qt.TabFocus)
         self.elemEditor.setTabShape(QtWidgets.QTabWidget.Triangular)
         self.elemEditor.setElideMode(QtCore.Qt.ElideNone)
+        self.elemEditor.setDocumentMode(False)
         self.elemEditor.setTabsClosable(True)
         self.elemEditor.setMovable(True)
         self.elemEditor.setObjectName("elemEditor")
@@ -167,6 +170,7 @@ class Ui_main(object):
         self.fileEditor.tabCloseRequested['int'].connect(main.remove_file_tab) # type: ignore
         self.lineEdit_file.textChanged['QString'].connect(self.treeWidget_file.filter_file) # type: ignore
         self.lineEdit_data.textChanged['QString'].connect(self.treeWidget_data.filter_file) # type: ignore
+        self.reloadAction.triggered.connect(main.reload) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(main)
 
     def retranslateUi(self, main):

@@ -22,8 +22,7 @@ class dataTable(QTableWidget):
         # pass
 
     def setup(self, data, modInfo: str, typ: str, proxyFunc):
-        if self.columnCount() != 0:
-            return
+        self.clear()
         self.column, self.data = get_column(typ), data
         self.setObjectName(modInfo + ':' + typ)
         print(data.shape)

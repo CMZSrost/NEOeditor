@@ -114,6 +114,19 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                     return objList.index(i)
         return -1
 
+    def reload(self):
+        # Editor =
+        tree = self.fileEditor.get_child()
+        if tree:
+            filePath = os.path.join(self.db.Path['project'], tree.objectName().replace(':', os.sep))
+            self.db.load_file(filePath, tree)
+            self.fileEditor.setTabText(self.fileEditor.currentIndex(), tree.objectName())
+        table = self.elemEditor.get_child()
+        if table:
+            modInfo, typ = table.objectName().split(':')
+            table.setup(table.data, modInfo, typ, self.proxy.setup_data)
+            self.elemEditor.setTabText(self.elemEditor.currentIndex(), table.objectName())
+
     def remove_file_tab(self, idx):
         if self.fileEditor.tabText(idx).find('*') != -1:
             reply = QMessageBox.question(self, '数据未保存', '你想保存数据吗',

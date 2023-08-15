@@ -109,6 +109,7 @@ class EditorDB:
         return table
 
     def load_file(self, filepath, treeView: QTreeWidget):
+        treeView.clear()
         treeView.sortByColumn(3, Qt.AscendingOrder)
         if os.path.isfile(filepath) and filepath.endswith(".xml"):
             xmlIter = etree.iterparse(filepath, events=('start', 'end'), encoding='UTF-8',)
