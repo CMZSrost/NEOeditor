@@ -32,6 +32,9 @@ class mainUI(QMainWindow, UI_main.Ui_main):
 
         self.treeWidget_file.addAction(self.loadProjectAction)
 
+    def change_language(self, toggle):
+        print(f'change to en:{toggle}')
+
     def load_project(self):
         path = QFileDialog.getExistingDirectory(self, "选择文件夹", self.db.projectPath)
         if os.path.isdir(path):

@@ -20,6 +20,7 @@ class Ui_templateTab(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(templateTab.sizePolicy().hasHeightForWidth())
         templateTab.setSizePolicy(sizePolicy)
+        templateTab.setWindowTitle("TabWidget")
         templateTab.setTabsClosable(True)
         templateTab.setMovable(True)
         self.filetab = QtWidgets.QWidget()
@@ -161,7 +162,7 @@ class Ui_templateTab(object):
         templateTab.addTab(self.tab, "")
 
         self.retranslateUi(templateTab)
-        templateTab.setCurrentIndex(0)
+        templateTab.setCurrentIndex(1)
         self.lineEdit_2.textChanged['QString'].connect(self.treeWidget.filter_file) # type: ignore
         self.pushButton_add.clicked.connect(self.tableWidget.add_line) # type: ignore
         self.pushButton_copy.clicked.connect(self.tableWidget.copy_line) # type: ignore
@@ -171,20 +172,19 @@ class Ui_templateTab(object):
 
     def retranslateUi(self, templateTab):
         _translate = QtCore.QCoreApplication.translate
-        templateTab.setWindowTitle(_translate("templateTab", "TabWidget"))
         self.treeWidget.setSortingEnabled(False)
-        self.treeWidget.headerItem().setText(0, _translate("templateTab", "属性"))
-        self.treeWidget.headerItem().setText(1, _translate("templateTab", "值"))
-        self.treeWidget.headerItem().setText(2, _translate("templateTab", "属性注释"))
-        self.treeWidget.headerItem().setText(3, _translate("templateTab", "行数"))
-        self.treeWidget.headerItem().setText(4, _translate("templateTab", "注释"))
-        templateTab.setTabText(templateTab.indexOf(self.filetab), _translate("templateTab", "文件"))
-        self.tableWidget.setStatusTip(_translate("templateTab", "双击编辑数据"))
+        self.treeWidget.headerItem().setText(0, _translate("templateTab", "tag"))
+        self.treeWidget.headerItem().setText(1, _translate("templateTab", "value"))
+        self.treeWidget.headerItem().setText(2, _translate("templateTab", "attrib"))
+        self.treeWidget.headerItem().setText(3, _translate("templateTab", "sourceline"))
+        self.treeWidget.headerItem().setText(4, _translate("templateTab", "note"))
+        templateTab.setTabText(templateTab.indexOf(self.filetab), _translate("templateTab", "file"))
+        self.tableWidget.setStatusTip(_translate("templateTab", "double click to edit"))
         self.tableWidget.setSortingEnabled(True)
-        self.pushButton_add.setText(_translate("templateTab", "新增行"))
-        self.pushButton_copy.setText(_translate("templateTab", "拷贝选中行"))
-        self.pushButton_delete.setText(_translate("templateTab", "删除行"))
-        templateTab.setTabText(templateTab.indexOf(self.datatab), _translate("templateTab", "数据"))
+        self.pushButton_add.setText(_translate("templateTab", "add line"))
+        self.pushButton_copy.setText(_translate("templateTab", "copy line select"))
+        self.pushButton_delete.setText(_translate("templateTab", "delete line"))
+        templateTab.setTabText(templateTab.indexOf(self.datatab), _translate("templateTab", "data"))
         self.label.setText(_translate("templateTab", "modName:"))
         self.label_4.setText(_translate("templateTab", "TextLabel"))
         self.label_2.setText(_translate("templateTab", "modID:"))
@@ -192,9 +192,9 @@ class Ui_templateTab(object):
         self.label_3.setText(_translate("templateTab", "str:"))
         self.label_6.setText(_translate("templateTab", "TextLabel"))
         item = self.tableWidget_2.horizontalHeaderItem(0)
-        item.setText(_translate("templateTab", "属性"))
+        item.setText(_translate("templateTab", "attrib"))
         item = self.tableWidget_2.horizontalHeaderItem(1)
-        item.setText(_translate("templateTab", "值"))
-        templateTab.setTabText(templateTab.indexOf(self.tab), _translate("templateTab", "详情"))
+        item.setText(_translate("templateTab", "value"))
+        templateTab.setTabText(templateTab.indexOf(self.tab), _translate("templateTab", "detail"))
 from dataTable import dataTable
 from dataTree import dataTree
