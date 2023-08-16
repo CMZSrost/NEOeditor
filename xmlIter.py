@@ -87,3 +87,21 @@ def get_column(type):
         column.extend(json.load(f)[type])
         column.append('filepath')
         return column
+
+
+def gen_xml_table(typ, column, data):
+    if len(column) != len(data):
+        print('column and data must have same length')
+        print(column)
+        print(data)
+
+    tableAttrib = {'name': typ}
+    table = Element('table', attrib=tableAttrib)
+    childs = []
+    for k, v in zip(column, data):
+        attrib = {'name': k}
+        child = Element('column', attrib=attrib)
+        child.text = v
+        childs.append(child)
+    table.extend(childs)
+    return table

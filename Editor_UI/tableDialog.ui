@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>502</width>
+    <height>518</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QComboBox" name="comboBox_type">
+     <item>
+      <property name="text">
+       <string>attackmodes</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>barterhexes</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>battlemoves</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>camptypes</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>chargeprofiles</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>conditions</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>containertypes</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>creatures</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>creaturesources</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>datafiles</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>dmcplaces</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>encounters</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>encountertriggers</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>factions</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>forbiddenhexes</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>gamevars</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>headlines</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>ingredients</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>itemprops</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>itemtypes</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>maps</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>recipes</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>treasuretable</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="tableWidget">
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustIgnored</enum>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <attribute name="horizontalHeaderCascadingSectionResizes">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="verticalHeaderCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>属性</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>值</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox_dialog">
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+     <property name="centerButtons">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox_dialog</sender>
+   <signal>accepted()</signal>
+   <receiver>Dialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>229</x>
+     <y>493</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox_dialog</sender>
+   <signal>rejected()</signal>
+   <receiver>Dialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>297</x>
+     <y>499</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox_type</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>Dialog</receiver>
+   <slot>update_table(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>295</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>608</x>
+     <y>96</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox_dialog</sender>
+   <signal>accepted()</signal>
+   <receiver>Dialog</receiver>
+   <slot>accept_table()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>185</x>
+     <y>491</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-36</x>
+     <y>405</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>update_table(QString)</slot>
+  <slot>accept_table()</slot>
+ </slots>
+</ui>

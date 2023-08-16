@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import QTreeWidget, QTableWidget, QTableWidgetItem, QStatus
 import lxml.etree as etree
 
 from sourceTree import sourceTree
-from xmlIter import fast_iter, get_column
+from xmlIter import fast_iter, get_column,gen_xml_table
 
 
 class EditorDB:
@@ -90,23 +90,6 @@ class EditorDB:
             item.setText(2, '\n'.join(f'{k}="{v}"' for k, v in elem.attrib.items()))
         return item
 
-    @staticmethod
-    def gen_xml_table(typ, column, data):
-        if len(column) != len(data):
-            print('column and data must have same length')
-            print(column)
-            print(data)
-
-        tableAttrib = {'name': typ}
-        table = etree.Element('table', attrib=tableAttrib)
-        childs = []
-        for k, v in zip(column, data):
-            attrib = {'name': k}
-            child = etree.Element('column', attrib=attrib)
-            child.text = v
-            childs.append(child)
-        table.extend(childs)
-        return table
 
     def load_file(self, filepath, treeView: QTreeWidget):
         treeView.clear()
@@ -132,7 +115,7 @@ class EditorDB:
             Path = self.Path['project'] + filePath
             xml_root, database = self.clear_database(Path, typ)
 
-            tables = [EditorDB.gen_xml_table(typ, column, i) for i in dataPiece]
+            tables = [gen_xml_table(typ, column, i) for i in dataPiece]
             database.extend(tables)
             tree = etree.ElementTree(xml_root)
 
@@ -166,7 +149,7 @@ class EditorDB:
                 column = {treeTable.child(j).text(2): treeTable.child(j).text(1) for j in range(treeTable.childCount())
                           if treeTable.child(j).text(0) != '<!---->'}
                 gameData[typ] = np.vstack([gameData[typ], [modInfo, *list(column.values()), filePath]])
-                table = EditorDB.gen_xml_table(typ, list(column.keys()), list(column.values()))
+                table = gen_xml_table(typ, list(column.keys()), list(column.values()))
                 tables.append(table)
         for i in shapes.keys():
             ind = np.where(gameData[i][:, -1] != filePath)[0]

@@ -158,10 +158,6 @@ class Ui_main(object):
         self.reloadAction.setObjectName("reloadAction")
         self.saveFileAction = QtWidgets.QAction(main)
         self.saveFileAction.setObjectName("saveFileAction")
-        self.addTableAction = QtWidgets.QAction(main)
-        self.addTableAction.setObjectName("addTableAction")
-        self.delTableAction = QtWidgets.QAction(main)
-        self.delTableAction.setObjectName("delTableAction")
         self.menu.addAction(self.loadProjectAction)
         self.menu.addAction(self.saveProjectAction)
         self.menu_3.addAction(self.reloadAction)
@@ -201,7 +197,5 @@ class Ui_main(object):
         self.reloadAction.setShortcut(_translate("main", "F5"))
         self.saveFileAction.setText(_translate("main", "保存文件"))
         self.saveFileAction.setShortcut(_translate("main", "Ctrl+S"))
-        self.addTableAction.setText(_translate("main", "新增table"))
-        self.delTableAction.setText(_translate("main", "delTable"))
 from sourceTree import sourceTree
 from tabEditor import tabEditor
