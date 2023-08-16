@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem
+
 from Editor_UI import UI_tableDialog
-from xmlIter import gen_xml_table, get_column
+from xmlIter import get_column
 
 
 class tableDialog(QDialog, UI_tableDialog.Ui_Dialog):

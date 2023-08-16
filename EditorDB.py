@@ -2,12 +2,11 @@ import json
 import os
 from time import time
 
+import lxml.etree as etree
 import numpy as np
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTreeWidget, QTableWidget, QTableWidgetItem, QStatusBar, QTreeWidgetItem, \
     QTreeWidgetItemIterator
-
-import lxml.etree as etree
 
 from sourceTree import sourceTree
 from xmlIter import fast_iter, get_column, gen_xml_table

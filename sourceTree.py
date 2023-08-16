@@ -1,5 +1,5 @@
-from os.path import join, isdir, basename
 from os import listdir
+from os.path import join, isdir, basename
 
 from PyQt5.QtCore import QModelIndex
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QTreeWidgetItemIterator

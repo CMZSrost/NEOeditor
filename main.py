@@ -1,21 +1,23 @@
 import json
-import sys
 import os
+import sys
 
-import numpy as np
-from PyQt5.QtCore import QTranslator
+from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from numpy import vstack
 
-import sourceTree
-from Editor_UI import UI_main
 from EditorDB import EditorDB
+from Editor_UI import UI_main
 from dataTable import dataTable
 from dataTree import dataTree
-from tabEditor import tabEditor
-from threadProxy import threadProxy
-from templateTab import templateTab
 from loggerMsg import logInit
+from sourceTree import sourceTree
+from tabEditor import tabEditor
+from templateTab import templateTab
+from threadProxy import threadProxy
 
+
+# pyinstaller --upx-dir "D:\upx-4.0.2-win64" -D -w "D:\Pytrain\NEOeditor\main.py"
 
 class mainUI(QMainWindow, UI_main.Ui_main):
     def __init__(self):
@@ -85,7 +87,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             return child
 
     def double_click(self, idx):
-        if isinstance(self.sender(), sourceTree.sourceTree):
+        if isinstance(self.sender(), sourceTree):
             pathList = os.path.split(self.sender().get_file_path(idx))
             path = os.path.join(self.db.projectPath, *pathList)
             if os.path.isfile(path):
@@ -110,7 +112,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                 table = self.elemEditor.get_child()
                 if table:
                     if modInfo == 'total':
-                        gameData = np.vstack([self.db.gameData[i][typ] for i in self.db.gameData.keys() if
+                        gameData = vstack([self.db.gameData[i][typ] for i in self.db.gameData.keys() if
                                               typ in self.db.gameData[i].keys()])
                     else:
                         gameData = self.db.gameData[modInfo][typ]
@@ -227,4 +229,4 @@ if __name__ == '__main__':
     Form = mainUI()
     Form.show()
     logInit(logPath)
-    exit(app.exec_())
+    sys.exit(app.exec_())

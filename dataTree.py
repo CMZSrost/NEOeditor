@@ -1,5 +1,4 @@
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItemIterator, QMenu, QTreeWidgetItem, QAction
-from PyQt5.QtCore import Qt
 
 from tableDialog import tableDialog
 

@@ -1,12 +1,11 @@
-# -*- coding:utf-8 -*-
 import json
 import os
-
-from PyQt5.QtWidgets import QTreeWidgetItem
-from PyQt5.QtCore import Qt
 from collections import deque
 
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QTreeWidgetItem
 from lxml.etree import iterparse, Element
+
 
 def fast_iter(context:iterparse):
     stack = deque()

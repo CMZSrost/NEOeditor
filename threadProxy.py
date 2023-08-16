@@ -1,11 +1,12 @@
-from PyQt5.QtCore import QThread, pyqtSignal, QThreadPool, QRunnable, QObject, QMutex
-from PyQt5.QtQml import qmlRegisterType
-from PyQt5.QtWidgets import QTableWidgetItem
-from time import time
-import numpy as np
 import os.path
-from xmlIter import data_iter
+from time import time
+
+from PyQt5.QtCore import pyqtSignal, QThreadPool, QRunnable, QObject, QMutex
+from PyQt5.QtWidgets import QTableWidgetItem
 from lxml import etree
+from numpy import array, vstack
+
+from xmlIter import data_iter
 
 
 class threadProxy(QObject):
@@ -62,9 +63,9 @@ class load_dat(QRunnable):
 
                         for i in tempDB.keys():
                             if i in db.keys():
-                                db[i] = np.vstack((db[i], tempDB[i]))
+                                db[i] = vstack((db[i], tempDB[i]))
                             else:
-                                db[i] = np.array(tempDB[i], dtype=str)
+                                db[i] = array(tempDB[i], dtype=str)
         self.mutex.lock()
         self.gameData[modInfoStr] = db
         for i in db.keys():
@@ -80,7 +81,7 @@ class setup_dat(QRunnable):
     def __init__(self, emit, mutex, **kwargs):
         super(setup_dat, self).__init__()
         self.table = kwargs['table']
-        self.data: np.ndarray = kwargs['data']
+        self.data: array = kwargs['data']
         self.emit = emit
         self.mutex = mutex
 
