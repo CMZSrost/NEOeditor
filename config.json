@@ -1,5 +1,6 @@
 {
-  "language": "Zh_CN",
+  "language": "zh_CN",
   "projectPath": "D:\\software\\Steam\\steamapps\\common\\Neo Scavenger",
-  "logPath": "D:\\software\\Steam\\steamapps\\common\\Neo Scavenger"
+  "logPath": "D:\\software\\Steam\\steamapps\\common\\Neo Scavenger",
+  "transPath": "D:\\Pytrain\\NEOeditor\\Editor_UI"
 }

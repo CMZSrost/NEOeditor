@@ -11,124 +11,127 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>add table</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QComboBox" name="comboBox_type">
+     <property name="currentText">
+      <string notr="true">attackmodes</string>
+     </property>
      <item>
       <property name="text">
-       <string>attackmodes</string>
+       <string notr="true">attackmodes</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>barterhexes</string>
+       <string notr="true">barterhexes</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>battlemoves</string>
+       <string notr="true">battlemoves</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>camptypes</string>
+       <string notr="true">camptypes</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>chargeprofiles</string>
+       <string notr="true">chargeprofiles</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>conditions</string>
+       <string notr="true">conditions</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>containertypes</string>
+       <string notr="true">containertypes</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>creatures</string>
+       <string notr="true">creatures</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>creaturesources</string>
+       <string notr="true">creaturesources</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>datafiles</string>
+       <string notr="true">datafiles</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>dmcplaces</string>
+       <string notr="true">dmcplaces</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>encounters</string>
+       <string notr="true">encounters</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>encountertriggers</string>
+       <string notr="true">encountertriggers</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>factions</string>
+       <string notr="true">factions</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>forbiddenhexes</string>
+       <string notr="true">forbiddenhexes</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>gamevars</string>
+       <string notr="true">gamevars</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>headlines</string>
+       <string notr="true">headlines</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>ingredients</string>
+       <string notr="true">ingredients</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>itemprops</string>
+       <string notr="true">itemprops</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>itemtypes</string>
+       <string notr="true">itemtypes</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>maps</string>
+       <string notr="true">maps</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>recipes</string>
+       <string notr="true">recipes</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>treasuretable</string>
+       <string notr="true">treasuretable</string>
       </property>
      </item>
     </widget>
@@ -158,12 +161,12 @@
      </attribute>
      <column>
       <property name="text">
-       <string>属性</string>
+       <string>attrib</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>值</string>
+       <string>value</string>
       </property>
      </column>
     </widget>

@@ -17,10 +17,10 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>TabWidget</string>
+   <string notr="true">TabWidget</string>
   </property>
   <property name="currentIndex">
-   <number>0</number>
+   <number>1</number>
   </property>
   <property name="tabsClosable">
    <bool>true</bool>
@@ -30,7 +30,7 @@
   </property>
   <widget class="QWidget" name="filetab">
    <attribute name="title">
-    <string>文件</string>
+    <string>file</string>
    </attribute>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -95,27 +95,27 @@
       </attribute>
       <column>
        <property name="text">
-        <string>属性</string>
+        <string>tag</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>值</string>
+        <string>value</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>属性注释</string>
+        <string>attrib</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>行数</string>
+        <string>sourceline</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>注释</string>
+        <string>note</string>
        </property>
       </column>
      </widget>
@@ -124,7 +124,7 @@
   </widget>
   <widget class="QWidget" name="datatab">
    <attribute name="title">
-    <string>数据</string>
+    <string>data</string>
    </attribute>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
@@ -140,7 +140,7 @@
        <enum>Qt::DefaultContextMenu</enum>
       </property>
       <property name="statusTip">
-       <string>双击编辑数据</string>
+       <string>double click to edit</string>
       </property>
       <property name="sizeAdjustPolicy">
        <enum>QAbstractScrollArea::AdjustToContents</enum>
@@ -200,21 +200,21 @@
       <item>
        <widget class="QPushButton" name="pushButton_add">
         <property name="text">
-         <string>新增行</string>
+         <string>add line</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_copy">
         <property name="text">
-         <string>拷贝选中行</string>
+         <string>copy line select</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_delete">
         <property name="text">
-         <string>删除行</string>
+         <string>delete line</string>
         </property>
        </widget>
       </item>
@@ -224,7 +224,7 @@
   </widget>
   <widget class="QWidget" name="tab">
    <attribute name="title">
-    <string>详情</string>
+    <string>detail</string>
    </attribute>
    <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
@@ -342,12 +342,12 @@
       </attribute>
       <column>
        <property name="text">
-        <string>属性</string>
+        <string>attrib</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>值</string>
+        <string>value</string>
        </property>
       </column>
      </widget>

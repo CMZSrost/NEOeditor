@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>NEO editor</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -65,7 +65,7 @@
           </property>
           <widget class="QWidget" name="tab_file">
            <attribute name="title">
-            <string>文件</string>
+            <string>file</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout">
             <item>
@@ -121,7 +121,7 @@
           </widget>
           <widget class="QWidget" name="tab_elem">
            <attribute name="title">
-            <string>数据</string>
+            <string>data</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
@@ -261,19 +261,20 @@
    </property>
    <widget class="QMenu" name="menu">
     <property name="title">
-     <string>文件</string>
+     <string>file</string>
     </property>
     <addaction name="loadProjectAction"/>
     <addaction name="saveProjectAction"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
-     <string>设置</string>
+     <string>setting</string>
     </property>
+    <addaction name="languageAction"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
-     <string>功能</string>
+     <string>function</string>
     </property>
     <addaction name="reloadAction"/>
    </widget>
@@ -284,20 +285,23 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="newProjectAction">
    <property name="text">
-    <string>新建项目</string>
+    <string>new project</string>
+   </property>
+   <property name="toolTip">
+    <string>new project</string>
    </property>
   </action>
   <action name="loadProjectAction">
    <property name="text">
-    <string>导入项目</string>
+    <string>load project</string>
    </property>
    <property name="statusTip">
-    <string>导入文件目录并编码数据</string>
+    <string/>
    </property>
   </action>
   <action name="saveProjectAction">
    <property name="text">
-    <string>保存项目</string>
+    <string>save project</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
@@ -305,7 +309,10 @@
   </action>
   <action name="reloadAction">
    <property name="text">
-    <string>刷新</string>
+    <string>reload</string>
+   </property>
+   <property name="toolTip">
+    <string>reload</string>
    </property>
    <property name="shortcut">
     <string>F5</string>
@@ -313,7 +320,7 @@
   </action>
   <action name="saveFileAction">
    <property name="text">
-    <string>保存文件</string>
+    <string>save file</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
@@ -331,6 +338,20 @@
    </property>
    <property name="shortcutContext">
     <enum>Qt::WidgetShortcut</enum>
+   </property>
+  </action>
+  <action name="languageAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>change language</string>
+   </property>
+   <property name="toolTip">
+    <string>change to Chinese</string>
    </property>
   </action>
  </widget>
@@ -512,6 +533,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>languageAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>main</receiver>
+   <slot>change_language(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>524</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>load_project()</slot>
@@ -522,6 +559,7 @@
   <slot>remove_file_tab(int)</slot>
   <slot>show_info(int,int)</slot>
   <slot>reload()</slot>
+  <slot>change_language(bool)</slot>
   <slot>save_file()</slot>
  </slots>
 </ui>

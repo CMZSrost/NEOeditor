@@ -3,6 +3,7 @@ import sys
 import os
 
 import numpy as np
+from PyQt5.QtCore import QTranslator
 from PyQt5.QtWidgets import *
 
 import sourceTree
@@ -13,13 +14,19 @@ from dataTree import dataTree
 from tabEditor import tabEditor
 from threadProxy import threadProxy
 from templateTab import templateTab
-from loggerMsg import logInit, log_exception
+from loggerMsg import logInit
 
 
 class mainUI(QMainWindow, UI_main.Ui_main):
     def __init__(self):
         super(mainUI, self).__init__()
         self.setupUi(self)
+        with open('config.json', 'r') as f:
+            config = json.load(f)
+            transPath = config['transPath']
+        self.trans = QTranslator()
+        self.transPath = transPath
+        self.languageAction.setChecked(True)
         self.proxy = threadProxy()
         self.db = EditorDB(fileTreeWidget=self.treeWidget_file,
                            dataTreeWidget=self.treeWidget_data,
@@ -27,10 +34,26 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                            statusBar=self.statusbar)
         self.templateTab = templateTab()
         self.proxy.loadingStatusSign.connect(self.loaded)
-
         self.addAction(self.saveFileAction)
-
         self.treeWidget_file.addAction(self.loadProjectAction)
+
+    def change_language(self, toggle):
+        print(f'change to cn:{toggle}')
+        if toggle:
+            print(self.trans.load("zh_CN", self.transPath))
+            # 获取窗口实例
+            app = QApplication.instance()
+            # 将翻译家安装到实例中
+            app.installTranslator(self.trans)
+            # 翻译界面
+            self.retranslateUi(self)
+        else:
+            print(self.trans.load("en", self.transPath))
+            # 获取窗口实例
+            app = QApplication.instance()
+            # 将翻译家安装到实例中
+            app.installTranslator(self.trans)
+            self.retranslateUi(self)
 
     def load_project(self):
         path = QFileDialog.getExistingDirectory(self, "选择文件夹", self.db.projectPath)
@@ -94,7 +117,6 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                     table.setup(gameData, modInfo, typ, self.proxy.setup_data)
                     table.cellChanged['int', 'int'].connect(self.elemEditor.item_change)
 
-    @log_exception(True)
     def tab_factory(self, pathList, tabParent: tabEditor, typ):
         templateTab = QTabWidget()
         objName = f'{os.path.join(*pathList[:-1])}:{pathList[-1]}'
@@ -201,8 +223,8 @@ if __name__ == '__main__':
     with open('config.json', 'r') as f:
         config = json.load(f)
         logPath = os.path.join(config['logPath'], 'NEOeditor.log')
-    logInit(logPath)
     app = QApplication(sys.argv)
     Form = mainUI()
     Form.show()
+    logInit(logPath)
     exit(app.exec_())

@@ -11,14 +11,12 @@ import lxml.etree as etree
 
 from sourceTree import sourceTree
 from xmlIter import fast_iter, get_column, gen_xml_table
-from loggerMsg import log_exception
 
 
 class EditorDB:
     def __init__(self, **kwargs):
         with open("config.json", 'r') as f:
             config = json.load(f)
-            self.language = config["language"]
             self.projectPath = config["projectPath"]
         self.fileTree: sourceTree = kwargs["fileTreeWidget"]
         self.dataTree: sourceTree = kwargs["dataTreeWidget"]
