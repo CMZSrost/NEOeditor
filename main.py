@@ -1,3 +1,4 @@
+import json
 import sys
 import os
 
@@ -12,6 +13,7 @@ from dataTree import dataTree
 from tabEditor import tabEditor
 from threadProxy import threadProxy
 from templateTab import templateTab
+from loggerMsg import logInit, log_exception
 
 
 class mainUI(QMainWindow, UI_main.Ui_main):
@@ -25,6 +27,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                            statusBar=self.statusbar)
         self.templateTab = templateTab()
         self.proxy.loadingStatusSign.connect(self.loaded)
+
         self.addAction(self.saveFileAction)
 
         self.treeWidget_file.addAction(self.loadProjectAction)
@@ -44,7 +47,6 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         else:
             self.treeWidget_data.setEnabled(False)
             self.lineEdit_data.setEnabled(False)
-
 
     @staticmethod
     def expand_node(tree, idx):
@@ -92,6 +94,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                     table.setup(gameData, modInfo, typ, self.proxy.setup_data)
                     table.cellChanged['int', 'int'].connect(self.elemEditor.item_change)
 
+    @log_exception(True)
     def tab_factory(self, pathList, tabParent: tabEditor, typ):
         templateTab = QTabWidget()
         objName = f'{os.path.join(*pathList[:-1])}:{pathList[-1]}'
@@ -117,7 +120,6 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         return -1
 
     def reload(self):
-        # Editor =
         tree = self.fileEditor.get_child()
         if tree:
             filePath = os.path.join(self.db.Path['project'], tree.objectName().replace(':', os.sep))
@@ -138,13 +140,13 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             if self.elemEditor.tabText(i).endswith('*'):
                 self.save_data_tab(i)
 
-
     def save_file(self):
-        if self.treeWidget_data.isEnabled():
-            if isinstance(self.focusWidget(), dataTree):
-                self.save_file_tab()
-            elif isinstance(self.focusWidget(), dataTable):
-                self.save_data_tab()
+        print('save file')
+        # if self.treeWidget_data.isEnabled():
+        if isinstance(self.focusWidget(), dataTree):
+            self.save_file_tab()
+        elif isinstance(self.focusWidget(), dataTable):
+            self.save_data_tab()
 
     def save_file_tab(self, idx=None):
         if idx:
@@ -196,6 +198,10 @@ class mainUI(QMainWindow, UI_main.Ui_main):
 
 
 if __name__ == '__main__':
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+        logPath = os.path.join(config['logPath'], 'NEOeditor.log')
+    logInit(logPath)
     app = QApplication(sys.argv)
     Form = mainUI()
     Form.show()

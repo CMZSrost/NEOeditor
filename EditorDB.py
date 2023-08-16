@@ -10,7 +10,8 @@ from PyQt5.QtWidgets import QTreeWidget, QTableWidget, QTableWidgetItem, QStatus
 import lxml.etree as etree
 
 from sourceTree import sourceTree
-from xmlIter import fast_iter, get_column,gen_xml_table
+from xmlIter import fast_iter, get_column, gen_xml_table
+from loggerMsg import log_exception
 
 
 class EditorDB:
@@ -43,6 +44,7 @@ class EditorDB:
         start = time()
         self.clear()
         self.load_path(path)
+        # print(self.Path)
         modsList: list[str] = self.load_php(self.Path['getMods'])
         self.getMods = list(zip(modsList[::2], modsList[1::2]))
 
@@ -90,12 +92,11 @@ class EditorDB:
             item.setText(2, '\n'.join(f'{k}="{v}"' for k, v in elem.attrib.items()))
         return item
 
-
     def load_file(self, filepath, treeView: QTreeWidget):
         treeView.clear()
         treeView.sortByColumn(3, Qt.AscendingOrder)
         if os.path.isfile(filepath) and filepath.endswith(".xml"):
-            xmlIter = etree.iterparse(filepath, events=('start', 'end'), encoding='UTF-8',)
+            xmlIter = etree.iterparse(filepath, events=('start', 'end'), encoding='UTF-8', )
             treeView.addTopLevelItem(fast_iter(xmlIter))
 
     def clear_database(self, path, typ=None):
@@ -119,7 +120,7 @@ class EditorDB:
             database.extend(tables)
             tree = etree.ElementTree(xml_root)
 
-            saveFile = self.Path['project']+filePath
+            saveFile = self.Path['project'] + filePath
             savePath = os.path.dirname(saveFile)
             fileName = os.path.basename(filePath)
             os.makedirs(savePath, exist_ok=True)
@@ -128,7 +129,7 @@ class EditorDB:
 
     def write_file_from_tree(self, tree: QTreeWidget, gameData, modInfo):
         dirName, fileName = tree.objectName().split(':')
-        filePath = '/'+os.path.join(dirName, fileName).replace('\\', '/')
+        filePath = '/' + os.path.join(dirName, fileName).replace('\\', '/')
         print(filePath)
         Path = os.path.join(self.Path['project'], dirName, fileName)
         xml_root, database = self.clear_database(Path)
@@ -166,6 +167,7 @@ class EditorDB:
     @staticmethod
     def load_php(filepath, tableView: QTableWidget = None):
         if os.path.isfile(filepath):
+            print(filepath)
             offsetMap = {'getmods.php': (1, ['modId', 'strModName', 'strModURL']),
                          'getimages.php': (2, ['imageId', 'strImageURL'])}
             (offset, column) = offsetMap[os.path.basename(filepath)]
