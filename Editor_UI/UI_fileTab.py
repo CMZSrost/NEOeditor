@@ -31,7 +31,7 @@ class Ui_templateTab(object):
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.verticalLayout.addWidget(self.lineEdit_2)
         self.treeWidget = dataTree(self.filetab)
-        self.treeWidget.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
+        self.treeWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.treeWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
         self.treeWidget.setEditTriggers(QtWidgets.QAbstractItemView.DoubleClicked|QtWidgets.QAbstractItemView.EditKeyPressed)
         self.treeWidget.setTabKeyNavigation(True)
@@ -59,7 +59,7 @@ class Ui_templateTab(object):
         self.lineEdit.setObjectName("lineEdit")
         self.verticalLayout_2.addWidget(self.lineEdit)
         self.tableWidget = dataTable(self.datatab)
-        self.tableWidget.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
+        self.tableWidget.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
         self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.AnyKeyPressed|QtWidgets.QAbstractItemView.DoubleClicked|QtWidgets.QAbstractItemView.EditKeyPressed)
         self.tableWidget.setDragEnabled(False)
@@ -159,8 +159,6 @@ class Ui_templateTab(object):
         self.tableWidget_2.verticalHeader().setStretchLastSection(False)
         self.verticalLayout_3.addWidget(self.tableWidget_2)
         templateTab.addTab(self.tab, "")
-        self.actionAddTable = QtWidgets.QAction(templateTab)
-        self.actionAddTable.setObjectName("actionAddTable")
 
         self.retranslateUi(templateTab)
         templateTab.setCurrentIndex(0)
@@ -198,6 +196,5 @@ class Ui_templateTab(object):
         item = self.tableWidget_2.horizontalHeaderItem(1)
         item.setText(_translate("templateTab", "值"))
         templateTab.setTabText(templateTab.indexOf(self.tab), _translate("templateTab", "详情"))
-        self.actionAddTable.setText(_translate("templateTab", "新增table"))
 from dataTable import dataTable
 from dataTree import dataTree

@@ -26,6 +26,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                            statusBar=self.statusbar)
         self.templateTab = templateTab()
         self.proxy.loadingStatusSign.connect(self.loaded)
+        self.treeWidget_file.addAction(self.loadProjectAction)
 
     def load_project(self):
         path = QFileDialog.getExistingDirectory(self, "选择文件夹", self.db.projectPath)
@@ -97,11 +98,12 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         if check != -1:
             tabParent.setCurrentIndex(check)
             return
-        self.templateTab.setup(templateTab)
+        self.templateTab.setupUi(templateTab)
         pos = templateTab.findChild(QWidget, typ)
         pos.setObjectName(objName)
         tabParent.addTab(pos, objName)
         templateTab.clear()
+        # self.templateTab.setup(pos)
         return pos
 
     def check_object_name(self, objName, objList):

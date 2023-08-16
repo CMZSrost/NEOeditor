@@ -43,7 +43,7 @@
     <item>
      <widget class="dataTree" name="treeWidget">
       <property name="contextMenuPolicy">
-       <enum>Qt::ActionsContextMenu</enum>
+       <enum>Qt::CustomContextMenu</enum>
       </property>
       <property name="sizeAdjustPolicy">
        <enum>QAbstractScrollArea::AdjustIgnored</enum>
@@ -137,7 +137,7 @@
     <item>
      <widget class="dataTable" name="tableWidget">
       <property name="contextMenuPolicy">
-       <enum>Qt::ActionsContextMenu</enum>
+       <enum>Qt::DefaultContextMenu</enum>
       </property>
       <property name="statusTip">
        <string>双击编辑数据</string>
@@ -354,11 +354,6 @@
     </item>
    </layout>
   </widget>
-  <action name="actionAddTable">
-   <property name="text">
-    <string>新增table</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>
