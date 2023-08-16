@@ -178,7 +178,7 @@
            </sizepolicy>
           </property>
           <property name="focusPolicy">
-           <enum>Qt::TabFocus</enum>
+           <enum>Qt::StrongFocus</enum>
           </property>
           <property name="contextMenuPolicy">
            <enum>Qt::DefaultContextMenu</enum>
@@ -219,7 +219,7 @@
            </sizepolicy>
           </property>
           <property name="focusPolicy">
-           <enum>Qt::TabFocus</enum>
+           <enum>Qt::StrongFocus</enum>
           </property>
           <property name="contextMenuPolicy">
            <enum>Qt::DefaultContextMenu</enum>
@@ -317,6 +317,20 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="printFocusAction">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>printFocus</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WidgetShortcut</enum>
    </property>
   </action>
  </widget>
@@ -466,6 +480,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>saveProjectAction</sender>
+   <signal>triggered()</signal>
+   <receiver>main</receiver>
+   <slot>save_project()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>524</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>saveFileAction</sender>
+   <signal>triggered()</signal>
+   <receiver>main</receiver>
+   <slot>save_file()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>524</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>load_project()</slot>
@@ -476,5 +522,6 @@
   <slot>remove_file_tab(int)</slot>
   <slot>show_info(int,int)</slot>
   <slot>reload()</slot>
+  <slot>save_file()</slot>
  </slots>
 </ui>

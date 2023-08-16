@@ -106,7 +106,7 @@ class Ui_main(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.fileEditor.sizePolicy().hasHeightForWidth())
         self.fileEditor.setSizePolicy(sizePolicy)
-        self.fileEditor.setFocusPolicy(QtCore.Qt.TabFocus)
+        self.fileEditor.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.fileEditor.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
         self.fileEditor.setTabPosition(QtWidgets.QTabWidget.North)
         self.fileEditor.setTabShape(QtWidgets.QTabWidget.Triangular)
@@ -124,7 +124,7 @@ class Ui_main(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.elemEditor.sizePolicy().hasHeightForWidth())
         self.elemEditor.setSizePolicy(sizePolicy)
-        self.elemEditor.setFocusPolicy(QtCore.Qt.TabFocus)
+        self.elemEditor.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.elemEditor.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
         self.elemEditor.setTabShape(QtWidgets.QTabWidget.Triangular)
         self.elemEditor.setElideMode(QtCore.Qt.ElideNone)
@@ -158,6 +158,10 @@ class Ui_main(object):
         self.reloadAction.setObjectName("reloadAction")
         self.saveFileAction = QtWidgets.QAction(main)
         self.saveFileAction.setObjectName("saveFileAction")
+        self.printFocusAction = QtWidgets.QAction(main)
+        self.printFocusAction.setEnabled(True)
+        self.printFocusAction.setShortcutContext(QtCore.Qt.WidgetShortcut)
+        self.printFocusAction.setObjectName("printFocusAction")
         self.menu.addAction(self.loadProjectAction)
         self.menu.addAction(self.saveProjectAction)
         self.menu_3.addAction(self.reloadAction)
@@ -176,6 +180,8 @@ class Ui_main(object):
         self.lineEdit_file.textChanged['QString'].connect(self.treeWidget_file.filter_file) # type: ignore
         self.lineEdit_data.textChanged['QString'].connect(self.treeWidget_data.filter_file) # type: ignore
         self.reloadAction.triggered.connect(main.reload) # type: ignore
+        self.saveProjectAction.triggered.connect(main.save_project) # type: ignore
+        self.saveFileAction.triggered.connect(main.save_file) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(main)
 
     def retranslateUi(self, main):
@@ -197,5 +203,7 @@ class Ui_main(object):
         self.reloadAction.setShortcut(_translate("main", "F5"))
         self.saveFileAction.setText(_translate("main", "保存文件"))
         self.saveFileAction.setShortcut(_translate("main", "Ctrl+S"))
+        self.printFocusAction.setText(_translate("main", "printFocus"))
+        self.printFocusAction.setShortcut(_translate("main", "F1"))
 from sourceTree import sourceTree
 from tabEditor import tabEditor

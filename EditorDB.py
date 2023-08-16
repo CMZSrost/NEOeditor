@@ -122,7 +122,6 @@ class EditorDB:
             saveFile = os.path.join(self.Path['project'], 'Test' + filePath)
             savePath = os.path.dirname(saveFile)
             fileName = os.path.basename(filePath)
-            print(os.path.join(savePath, fileName))
             os.makedirs(savePath, exist_ok=True)
             tree.write(os.path.join(savePath, fileName), pretty_print=True, xml_declaration=True,
                        encoding='utf-8')
@@ -153,7 +152,6 @@ class EditorDB:
                 tables.append(table)
         for i in shapes.keys():
             ind = np.where(gameData[i][:, -1] != filePath)[0]
-            print(ind)
             gameData[i] = np.vstack([gameData[i][ind], gameData[i][shapes[i]:]])
         database.extend(tables)
 

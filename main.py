@@ -2,6 +2,7 @@ import sys
 import os
 
 import numpy as np
+import winsound
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import *
 
@@ -26,6 +27,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                            statusBar=self.statusbar)
         self.templateTab = templateTab()
         self.proxy.loadingStatusSign.connect(self.loaded)
+
         self.treeWidget_file.addAction(self.loadProjectAction)
 
     def load_project(self):
@@ -43,6 +45,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         else:
             self.treeWidget_data.setEnabled(False)
             self.lineEdit_data.setEnabled(False)
+
 
     @staticmethod
     def expand_node(tree, idx):
@@ -103,7 +106,6 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         pos.setObjectName(objName)
         tabParent.addTab(pos, objName)
         templateTab.clear()
-        # self.templateTab.setup(pos)
         return pos
 
     def check_object_name(self, objName, objList):
@@ -128,21 +130,56 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             table.setup(table.data, modInfo, typ, self.proxy.setup_data)
             self.elemEditor.setTabText(self.elemEditor.currentIndex(), table.objectName())
 
+    def save_project(self):
+        print('save project')
+        for i in range(self.fileEditor.count()):
+            if self.fileEditor.tabText(i).endswith('*'):
+                self.save_file_tab(i)
+        for i in range(self.elemEditor.count()):
+            if self.elemEditor.tabText(i).endswith('*'):
+                self.save_data_tab(i)
+
+
+    def save_file(self):
+        if isinstance(self.focusWidget(), dataTree):
+            self.save_file_tab()
+        elif isinstance(self.focusWidget(), dataTable):
+            self.save_data_tab()
+
+    def save_file_tab(self, idx=None):
+        if idx:
+            currentTab = self.fileEditor.widget(idx)
+        else:
+            currentTab = self.fileEditor.currentWidget()
+        if currentTab:
+            objName = currentTab.objectName()
+            tree = currentTab.findChild(dataTree)
+            mods = dict(self.db.getMods)
+            modsKey = [f'{k}_{i}' for k, i in enumerate(mods.keys())]
+            modsKey = ['-_data', *modsKey]
+            modsValue = list(mods.values())
+            modsValue = ['data', *modsValue]
+            modInfo = modsKey[modsValue.index(objName.split(':')[0])]
+            self.db.write_file_from_tree(tree, self.db.gameData[modInfo], modInfo)
+            self.fileEditor.setTabText(self.fileEditor.currentIndex(), tree.objectName())
+
+    def save_data_tab(self, idx=None):
+        if idx:
+            currentTab = self.elemEditor.widget(idx)
+        else:
+            currentTab = self.elemEditor.currentWidget()
+        if currentTab:
+            table = currentTab.findChild(dataTable)
+            table.update_data(self.db.gameData)
+            self.db.write_file_from_data(table.data, table.objectName().split(':')[1])
+            self.elemEditor.setTabText(self.elemEditor.currentIndex(), table.objectName())
+
     def remove_file_tab(self, idx):
         if self.fileEditor.tabText(idx).find('*') != -1:
             reply = QMessageBox.question(self, '数据未保存', '你想保存数据吗',
                                          QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Yes)
             if reply == QMessageBox.Yes:
-                currentTab = self.fileEditor.widget(idx)
-                objName = currentTab.objectName()
-                tree = currentTab.findChild(dataTree)
-                mods = dict(self.db.getMods)
-                modsKey = [f'{k}_{i}' for k, i in enumerate(mods.keys())]
-                modsKey = ['-_data', *modsKey]
-                modsValue = list(mods.values())
-                modsValue = ['data', *modsValue]
-                modInfo = modsKey[modsValue.index(objName.split(':')[0])]
-                self.db.write_file_from_tree(tree, self.db.gameData[modInfo], modInfo)
+                self.save_file_tab(idx)
             elif reply == QMessageBox.Cancel:
                 return
         self.fileEditor.removeTab(idx)
@@ -152,10 +189,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             reply = QMessageBox.question(self, '数据未保存', '你想保存数据吗',
                                          QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Yes)
             if reply == QMessageBox.Yes:
-                currentTab = self.elemEditor.widget(idx)
-                table = currentTab.findChild(dataTable)
-                table.update_data(self.db.gameData)
-                self.db.write_file_from_data(table.data, table.objectName().split(':')[1])
+                self.save_data_tab(idx)
             elif reply == QMessageBox.Cancel:
                 return
         self.elemEditor.removeTab(idx)
