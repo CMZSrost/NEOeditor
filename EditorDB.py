@@ -119,7 +119,7 @@ class EditorDB:
             database.extend(tables)
             tree = etree.ElementTree(xml_root)
 
-            saveFile = os.path.join(self.Path['project'], 'Test' + filePath)
+            saveFile = self.Path['project']+filePath
             savePath = os.path.dirname(saveFile)
             fileName = os.path.basename(filePath)
             os.makedirs(savePath, exist_ok=True)
@@ -157,7 +157,7 @@ class EditorDB:
 
         tree = etree.ElementTree(xml_root)
 
-        savePath = os.path.join(self.Path['project'], 'Test', dirName)
+        savePath = os.path.join(self.Path['project'], dirName)
         saveFile = os.path.join(savePath, fileName)
         os.makedirs(savePath, exist_ok=True)
         tree.write(saveFile, pretty_print=True, xml_declaration=True,

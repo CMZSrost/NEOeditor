@@ -2,12 +2,10 @@ import sys
 import os
 
 import numpy as np
-import winsound
-from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import *
 
 import sourceTree
-from Editor_UI import UI_main, UI_fileTab
+from Editor_UI import UI_main
 from EditorDB import EditorDB
 from dataTable import dataTable
 from dataTree import dataTree
@@ -27,6 +25,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                            statusBar=self.statusbar)
         self.templateTab = templateTab()
         self.proxy.loadingStatusSign.connect(self.loaded)
+        self.addAction(self.saveFileAction)
 
         self.treeWidget_file.addAction(self.loadProjectAction)
 
@@ -141,10 +140,11 @@ class mainUI(QMainWindow, UI_main.Ui_main):
 
 
     def save_file(self):
-        if isinstance(self.focusWidget(), dataTree):
-            self.save_file_tab()
-        elif isinstance(self.focusWidget(), dataTable):
-            self.save_data_tab()
+        if self.treeWidget_data.isEnabled():
+            if isinstance(self.focusWidget(), dataTree):
+                self.save_file_tab()
+            elif isinstance(self.focusWidget(), dataTable):
+                self.save_data_tab()
 
     def save_file_tab(self, idx=None):
         if idx:
