@@ -155,9 +155,18 @@ class mainUI(QMainWindow, UI_main.Ui_main):
     def reload(self):
         tree = self.fileEditor.get_current_child()
         if tree:
-            filePath = os.path.join(self.db.Path['project'], tree.objectName().replace(':', os.sep))
-            self.db.load_file(filePath, tree)
-            self.fileEditor.setTabText(self.fileEditor.currentIndex(), tree.objectName())
+            fileName = tree.objectName().split(':')[-1]
+            tmp = tree.objectName()
+            if tmp.startswith(':'):
+                tmp = tmp[1:]
+            filePath = os.path.join(self.db.Path['project'], tmp.replace(':', os.sep))
+            if fileName.endswith('xml'):
+                self.db.load_file(filePath, tree)
+                self.fileEditor.setTabText(self.fileEditor.currentIndex(), tree.objectName())
+            elif fileName.endswith('php'):
+                print(filePath)
+                self.db.load_php(filePath, tree)
+                self.fileEditor.setTabText(self.fileEditor.currentIndex(), tree.objectName())
         table = self.elemEditor.get_current_child()
         if table:
             modInfo, typ = table.objectName().split(':')

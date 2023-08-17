@@ -23,8 +23,6 @@ class EditorDB:
         with open("config.json", 'r') as f:
             config = json.load(f)
             self.Path['project'] = config["projectPath"]
-            if ~os.path.isdir(self.Path['project']):
-                self.Path['project'] = os.getcwd()
 
     def clear(self):
         self.fileTree.clear()
@@ -184,6 +182,7 @@ class EditorDB:
     @staticmethod
     def load_php(filepath, tableView: QTableWidget = None):
         if os.path.isfile(filepath):
+            print(os.path.basename(filepath))
             print(filepath)
             offsetMap = {'getmods.php': (1, ['modId', 'strModName', 'strModURL']),
                          'getimages.php': (2, ['imageId', 'strImageURL'])}
@@ -195,6 +194,7 @@ class EditorDB:
             if tableView:
                 tableView.setColumnCount(len(column))
                 tableView.setHorizontalHeaderLabels(column)
+                tableView.column = column
                 if tableView.columnCount() == 3:
                     item = list(zip(item[::2], item[1::2]))
                 tableView.setRowCount(len(item))

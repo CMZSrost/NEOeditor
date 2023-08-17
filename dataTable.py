@@ -55,6 +55,7 @@ class dataTable(QTableWidget):
         self.resizeRowToContents(item.row())
 
     def find_text(self, text):
+        self.setSortingEnabled(False)
         for i in range(self.rowCount()):
             flag = False
             for j in range(self.columnCount()):
@@ -62,40 +63,51 @@ class dataTable(QTableWidget):
                     flag = True
                     break
             self.showRow(i) if flag else self.hideRow(i)
+        self.setSortingEnabled(True)
 
     def add_line(self):
         idx = self.currentRow()
         if idx >= 0:
+            self.setSortingEnabled(False)
             data = [self.item(idx, i).data(0) for i in range(self.columnCount())]
             self.insertRow(idx + 1)
             for i in range(1, self.columnCount() - 1):
                 self.setItem(idx + 1, i, QTableWidgetItem(''))
             self.setItem(idx + 1, 0, QTableWidgetItem(data[0]))
-            self.setItem(idx + 1, self.columnCount() - 1, QTableWidgetItem(data[-1]))
+            if self.column[self.columnCount() - 1] == 'filepath':
+                self.setItem(idx + 1, self.columnCount() - 1, QTableWidgetItem(data[-1]))
             self.setCurrentCell(idx + 1, 0)
+            self.setSortingEnabled(True)
 
     def delete_line(self):
         idx = self.currentRow()
+        print(idx)
         if idx >= 0:
+            self.setSortingEnabled(False)
             self.removeRow(idx)
             self.cellChanged.emit(idx, 0)
             self.setCurrentCell(idx - 1, 0)
+            self.setSortingEnabled(True)
 
     def copy_line(self):
         idx = self.currentRow()
+        print(idx)
         if idx >= 0:
+            self.setSortingEnabled(False)
             data = [self.item(idx, i).data(0) for i in range(self.columnCount())]
+            print(data)
             self.insertRow(idx + 1)
             for i in range(self.columnCount()):
                 self.setItem(idx + 1, i, QTableWidgetItem(data[i]))
             self.setCurrentCell(idx + 1, 0)
+            self.setSortingEnabled(True)
 
     def dropEvent(self, event: QDropEvent) -> None:
         src = self.currentRow()
         if src >= 0:
-            item = self.itemAt(event.pos())
-            if item:
-                dst = item.row()
+            select = self.itemAt(event.pos())
+            if select:
+                dst = select.row()
                 if src > dst:
                     src+=1
                 elif src < dst:
@@ -104,5 +116,7 @@ class dataTable(QTableWidget):
                 dst = self.rowCount()
             self.insertRow(dst)
             for i in range(self.columnCount()):
-                self.setItem(dst, i, QTableWidgetItem(self.item(src, i).text()))
+                item = self.item(src, i)
+                if item:
+                    self.setItem(dst, i, QTableWidgetItem(item.text()))
             self.removeRow(src)

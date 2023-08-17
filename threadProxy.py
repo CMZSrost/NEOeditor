@@ -88,10 +88,12 @@ class setup_dat(QRunnable):
     def run(self):
         start = time()
         m, n = self.data.shape
+        self.table.setSortingEnabled(False)
         for i in range(m):
             for j in range(n):
                 item = QTableWidgetItem(self.data[i, j])
                 self.table.setItem(i, j, item)
+        self.table.setSortingEnabled(True)
         self.table.resizeColumnsToContents()
         self.table.resizeRowsToContents()
         print(f'data setup in {time() - start} seconds')

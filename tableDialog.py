@@ -1,3 +1,4 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QDialog, QTreeWidgetItem, QTableWidgetItem
 
 from Editor_UI import UI_tableDialog
@@ -32,6 +33,7 @@ class tableDialog(QDialog, UI_tableDialog.Ui_Dialog):
             child.setText(1, self.tableWidget.item(i, 1).text())
             child.setText(2, self.tableWidget.item(i, 0).text())
             child.setData(3, 0, sourceLine)
+            child.setFlags(Qt.ItemFlag(63))
             children.append(child)
         table.addChildren(children)
         self.item.addChild(table)
