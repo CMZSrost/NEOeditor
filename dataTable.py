@@ -69,13 +69,15 @@ class dataTable(QTableWidget):
         idx = self.currentRow()
         if idx >= 0:
             self.setSortingEnabled(False)
-            data = [self.item(idx, i).data(0) for i in range(self.columnCount())]
+            data = [self.item(idx, i).text() if self.item(idx, i) else '' for i in range(self.columnCount())]
             self.insertRow(idx + 1)
             for i in range(1, self.columnCount() - 1):
                 self.setItem(idx + 1, i, QTableWidgetItem(''))
             self.setItem(idx + 1, 0, QTableWidgetItem(data[0]))
             if self.column[self.columnCount() - 1] == 'filepath':
                 self.setItem(idx + 1, self.columnCount() - 1, QTableWidgetItem(data[-1]))
+            else:
+                self.setItem(idx + 1, self.columnCount() - 1, QTableWidgetItem(''))
             self.setCurrentCell(idx + 1, 0)
             self.setSortingEnabled(True)
 
@@ -94,7 +96,7 @@ class dataTable(QTableWidget):
         print(idx)
         if idx >= 0:
             self.setSortingEnabled(False)
-            data = [self.item(idx, i).data(0) for i in range(self.columnCount())]
+            data = [self.item(idx, i).text() if self.item(idx, i) else '' for i in range(self.columnCount())]
             print(data)
             self.insertRow(idx + 1)
             for i in range(self.columnCount()):
@@ -109,9 +111,9 @@ class dataTable(QTableWidget):
             if select:
                 dst = select.row()
                 if src > dst:
-                    src+=1
+                    src += 1
                 elif src < dst:
-                    dst+=1
+                    dst += 1
             else:
                 dst = self.rowCount()
             self.insertRow(dst)
@@ -119,4 +121,6 @@ class dataTable(QTableWidget):
                 item = self.item(src, i)
                 if item:
                     self.setItem(dst, i, QTableWidgetItem(item.text()))
+                else:
+                    self.setItem(dst, i, QTableWidgetItem(''))
             self.removeRow(src)
