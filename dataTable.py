@@ -65,40 +65,44 @@ class dataTable(QTableWidget):
 
     def add_line(self):
         idx = self.currentRow()
-        data = [self.item(idx, i).data(0) for i in range(self.columnCount())]
-        self.insertRow(idx + 1)
-        for i in range(1, self.columnCount() - 1):
-            self.setItem(idx + 1, i, QTableWidgetItem(''))
-        self.setItem(idx + 1, 0, QTableWidgetItem(data[0]))
-        self.setItem(idx + 1, self.columnCount() - 1, QTableWidgetItem(data[-1]))
-        self.setCurrentCell(idx + 1, 0)
+        if idx >= 0:
+            data = [self.item(idx, i).data(0) for i in range(self.columnCount())]
+            self.insertRow(idx + 1)
+            for i in range(1, self.columnCount() - 1):
+                self.setItem(idx + 1, i, QTableWidgetItem(''))
+            self.setItem(idx + 1, 0, QTableWidgetItem(data[0]))
+            self.setItem(idx + 1, self.columnCount() - 1, QTableWidgetItem(data[-1]))
+            self.setCurrentCell(idx + 1, 0)
 
     def delete_line(self):
         idx = self.currentRow()
-        self.removeRow(idx)
-        self.cellChanged.emit(idx, 0)
-        self.setCurrentCell(idx - 1, 0)
+        if idx >= 0:
+            self.removeRow(idx)
+            self.cellChanged.emit(idx, 0)
+            self.setCurrentCell(idx - 1, 0)
 
     def copy_line(self):
         idx = self.currentRow()
-        data = [self.item(idx, i).data(0) for i in range(self.columnCount())]
-        self.insertRow(idx + 1)
-        for i in range(self.columnCount()):
-            self.setItem(idx + 1, i, QTableWidgetItem(data[i]))
-        self.setCurrentCell(idx + 1, 0)
+        if idx >= 0:
+            data = [self.item(idx, i).data(0) for i in range(self.columnCount())]
+            self.insertRow(idx + 1)
+            for i in range(self.columnCount()):
+                self.setItem(idx + 1, i, QTableWidgetItem(data[i]))
+            self.setCurrentCell(idx + 1, 0)
 
     def dropEvent(self, event: QDropEvent) -> None:
         src = self.currentRow()
-        item = self.itemAt(event.pos())
-        if item:
-            dst = item.row()
-            if src > dst:
-                src+=1
-            elif src < dst:
-                dst+=1
-        else:
-            dst = self.rowCount()
-        self.insertRow(dst)
-        for i in range(self.columnCount()):
-            self.setItem(dst, i, QTableWidgetItem(self.item(src, i).text()))
-        self.removeRow(src)
+        if src >= 0:
+            item = self.itemAt(event.pos())
+            if item:
+                dst = item.row()
+                if src > dst:
+                    src+=1
+                elif src < dst:
+                    dst+=1
+            else:
+                dst = self.rowCount()
+            self.insertRow(dst)
+            for i in range(self.columnCount()):
+                self.setItem(dst, i, QTableWidgetItem(self.item(src, i).text()))
+            self.removeRow(src)

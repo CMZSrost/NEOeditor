@@ -17,7 +17,7 @@ class tabEditor(QTabWidget):
         if self.tabText(idx).find('*') == -1:
             self.setTabText(idx, self.tabText(idx) + '*')
 
-    def get_child(self):
+    def get_current_child(self):
         tab = self.currentWidget()
         if tab:
             tree = tab.findChild(QTreeWidget)

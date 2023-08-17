@@ -16,7 +16,6 @@ from tabEditor import tabEditor
 from templateTab import templateTab
 from threadProxy import threadProxy
 
-
 # pyinstaller --upx-dir "D:\upx-4.0.2-win64" -D -w "D:\Pytrain\NEOeditor\main.py"
 
 class mainUI(QMainWindow, UI_main.Ui_main):
@@ -96,6 +95,8 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                 tempMap = {'xml': {'tabName': 'filetab', 'classType': dataTree, 'func': self.db.load_file},
                            'php': {'tabName': 'datatab', 'classType': dataTable, 'func': self.db.load_php}}
                 extend = pathList[-1].split('.')[-1]
+                if extend not in tempMap:
+                    return
                 kwargs = tempMap[extend]
                 tab = self.tab_factory(pathList, self.fileEditor, kwargs['tabName'])
                 child = self.get_chlid(tab, path, **kwargs)
@@ -110,20 +111,22 @@ class mainUI(QMainWindow, UI_main.Ui_main):
 
             else:
                 [modInfo, typ] = pathList
-                self.tab_factory(pathList, self.elemEditor, 'datatab')
-                table = self.elemEditor.get_child()
-                if table:
-                    if modInfo == 'total':
-                        gameData = vstack([self.db.gameData[i][typ] for i in self.db.gameData.keys() if
-                                              typ in self.db.gameData[i].keys()])
-                    else:
-                        gameData = self.db.gameData[modInfo][typ]
-                    table.setup(gameData, modInfo, typ, self.proxy.setup_data)
-                    table.cellChanged['int', 'int'].connect(self.elemEditor.item_change)
+                tab = self.tab_factory(pathList, self.elemEditor, 'datatab')
+                if tab:
+                    table = tab.findChild(dataTable)
+                    if table:
+                        if modInfo == 'total':
+                            gameData = vstack([self.db.gameData[i][typ] for i in self.db.gameData.keys() if
+                                                  typ in self.db.gameData[i].keys()])
+                        else:
+                            gameData = self.db.gameData[modInfo][typ]
+                        table.setup(gameData, modInfo, typ, self.proxy.setup_data)
+                        table.cellChanged['int', 'int'].connect(self.elemEditor.item_change)
 
     def tab_factory(self, pathList, tabParent: tabEditor, typ):
         templateTab = QTabWidget()
         objName = f'{os.path.join(*pathList[:-1])}:{pathList[-1]}'
+        print(objName)
         objList = [tabParent.tabText(i) for i in range(tabParent.count())]
         check = self.check_object_name(objName, objList)
         if check != -1:
@@ -143,15 +146,19 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             for i in objList:
                 if ~i.startswith('total') and i.endswith(objName.split(':')[1]):
                     return objList.index(i)
+        else:
+            for i in objList:
+                if i.startswith('total') and i.endswith(objName.split(':')[1]):
+                    return objList.index(i)
         return -1
 
     def reload(self):
-        tree = self.fileEditor.get_child()
+        tree = self.fileEditor.get_current_child()
         if tree:
             filePath = os.path.join(self.db.Path['project'], tree.objectName().replace(':', os.sep))
             self.db.load_file(filePath, tree)
             self.fileEditor.setTabText(self.fileEditor.currentIndex(), tree.objectName())
-        table = self.elemEditor.get_child()
+        table = self.elemEditor.get_current_child()
         if table:
             modInfo, typ = table.objectName().split(':')
             table.setup(table.data, modInfo, typ, self.proxy.setup_data)
