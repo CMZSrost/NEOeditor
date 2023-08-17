@@ -1,4 +1,5 @@
 from PyQt5.Qt import QTableWidget, QTabWidget
+from PyQt5.QtGui import QDropEvent
 from PyQt5.QtWidgets import QTableWidgetItem
 from numpy import array, where
 
@@ -85,3 +86,19 @@ class dataTable(QTableWidget):
         for i in range(self.columnCount()):
             self.setItem(idx + 1, i, QTableWidgetItem(data[i]))
         self.setCurrentCell(idx + 1, 0)
+
+    def dropEvent(self, event: QDropEvent) -> None:
+        src = self.currentRow()
+        item = self.itemAt(event.pos())
+        if item:
+            dst = item.row()
+            if src > dst:
+                src+=1
+            elif src < dst:
+                dst+=1
+        else:
+            dst = self.rowCount()
+        self.insertRow(dst)
+        for i in range(self.columnCount()):
+            self.setItem(dst, i, QTableWidgetItem(self.item(src, i).text()))
+        self.removeRow(src)

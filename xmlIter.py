@@ -81,7 +81,7 @@ def data_iter(context, modInfo, filePath):
     return DBdict
 
 def get_column(type):
-    with open(os.path.join(os.getcwd(), 'templateFile', 'typelistTemplate.json'), 'r', encoding='utf-8') as f:
+    with open(os.path.join(os.getcwd(), 'jsonData', 'typelistTemplate.json'), 'r', encoding='utf-8') as f:
         column = ['modinfo']
         column.extend(json.load(f)[type])
         column.append('filepath')

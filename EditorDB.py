@@ -14,15 +14,17 @@ from xmlIter import fast_iter, get_column, gen_xml_table
 
 class EditorDB:
     def __init__(self, **kwargs):
-        with open("config.json", 'r') as f:
-            config = json.load(f)
-            self.projectPath = config["projectPath"]
         self.fileTree: sourceTree = kwargs["fileTreeWidget"]
         self.dataTree: sourceTree = kwargs["dataTreeWidget"]
         self.proxy = kwargs["proxy"]
         self.statusBar: QStatusBar = kwargs["statusBar"]
         self.statusBar.showMessage('waiting for project', 0)
         self.Path, self.getMods, self.gameData = {}, {}, {}
+        with open("config.json", 'r') as f:
+            config = json.load(f)
+            self.Path['project'] = config["projectPath"]
+            if ~os.path.isdir(self.Path['project']):
+                self.Path['project'] = os.getcwd()
 
     def clear(self):
         self.fileTree.clear()
@@ -41,18 +43,19 @@ class EditorDB:
         start = time()
         self.clear()
         self.load_path(path)
-        # print(self.Path)
+        print(self.Path)
         modsList: list[str] = self.load_php(self.Path['getMods'])
-        self.getMods = list(zip(modsList[::2], modsList[1::2]))
+        if modsList:
+            self.getMods = list(zip(modsList[::2], modsList[1::2]))
 
-        for i in list(self.Path.values())[1:]:
-            print(f'loading {i}')
-            self.fileTree.load_folder(i)
-        self.dataTree.load_data('total', [os.path.splitext(i)[-2] for i in os.listdir(self.Path['data'])])
+            for i in list(self.Path.values())[1:]:
+                print(f'loading {i}')
+                self.fileTree.load_folder(i)
+            self.dataTree.load_data('total', [os.path.splitext(i)[-2] for i in os.listdir(self.Path['data'])])
 
-        print(f'Initial in {np.round(time() - start, 3)} seconds')
-        self.load_mods()
-        self.statusBar.showMessage(f'Project loaded in {np.round(time() - start, 3)} seconds')
+            print(f'Initial in {np.round(time() - start, 3)} seconds')
+            self.load_mods()
+            self.statusBar.showMessage(f'Project loaded in {np.round(time() - start, 3)} seconds')
 
     def load_mods(self):
         kwargs = {'gameData': self.gameData,
@@ -160,6 +163,23 @@ class EditorDB:
         os.makedirs(savePath, exist_ok=True)
         tree.write(saveFile, pretty_print=True, xml_declaration=True,
                    encoding='utf-8')
+
+    def write_php_from_data(self, table: QTableWidget):
+        dirName, fileName = table.objectName().split(':')
+        Path = os.path.join(self.Path['project'], dirName, fileName).replace('\\','/')
+        print(Path)
+        print(fileName)
+        with open(Path, 'w', encoding='utf-8') as f:
+            table.sortByColumn(0, Qt.AscendingOrder)
+            if fileName == 'getmods.php':
+                f.write(f'nRows={table.rowCount()}')
+                for i in range(table.rowCount()):
+                    f.write(f'&strModName{table.item(i, 0).text()}={table.item(i, 1).text()}&strModURL{table.item(i, 0).text()}={table.item(i, 2).text()}\n')
+            elif fileName == 'getimages.php':
+                f.write(f'nRows={table.rowCount()}&nCols=2')
+                for i in range(table.rowCount()):
+                    f.write(f'&strImageURL{table.item(i, 0).text()}={table.item(i, 1).text()}')
+
 
     @staticmethod
     def load_php(filepath, tableView: QTableWidget = None):

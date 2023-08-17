@@ -139,6 +139,9 @@
       <property name="contextMenuPolicy">
        <enum>Qt::DefaultContextMenu</enum>
       </property>
+      <property name="acceptDrops">
+       <bool>false</bool>
+      </property>
       <property name="statusTip">
        <string>double click to edit</string>
       </property>
@@ -149,16 +152,16 @@
        <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
       </property>
       <property name="dragEnabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="dragDropOverwriteMode">
        <bool>false</bool>
       </property>
       <property name="dragDropMode">
-       <enum>QAbstractItemView::NoDragDrop</enum>
+       <enum>QAbstractItemView::InternalMove</enum>
       </property>
       <property name="defaultDropAction">
-       <enum>Qt::CopyAction</enum>
+       <enum>Qt::MoveAction</enum>
       </property>
       <property name="selectionMode">
        <enum>QAbstractItemView::SingleSelection</enum>
@@ -386,12 +389,12 @@
    <slot>filter_file(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>114</x>
-     <y>63</y>
+     <x>90</x>
+     <y>40</y>
     </hint>
     <hint type="destinationlabel">
-     <x>126</x>
-     <y>151</y>
+     <x>90</x>
+     <y>71</y>
     </hint>
    </hints>
   </connection>
@@ -402,12 +405,12 @@
    <slot>add_line()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>177</x>
-     <y>638</y>
+     <x>206</x>
+     <y>517</y>
     </hint>
     <hint type="destinationlabel">
      <x>175</x>
-     <y>546</y>
+     <y>355</y>
     </hint>
    </hints>
   </connection>
@@ -418,12 +421,12 @@
    <slot>copy_line()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>481</x>
-     <y>625</y>
+     <x>510</x>
+     <y>504</y>
     </hint>
     <hint type="destinationlabel">
      <x>491</x>
-     <y>547</y>
+     <y>355</y>
     </hint>
    </hints>
   </connection>
@@ -434,12 +437,12 @@
    <slot>delete_line()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>788</x>
-     <y>630</y>
+     <x>817</x>
+     <y>509</y>
     </hint>
     <hint type="destinationlabel">
      <x>771</x>
-     <y>540</y>
+     <y>355</y>
     </hint>
    </hints>
   </connection>

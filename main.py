@@ -58,7 +58,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             self.retranslateUi(self)
 
     def load_project(self):
-        path = QFileDialog.getExistingDirectory(self, "选择文件夹", self.db.projectPath)
+        path = QFileDialog.getExistingDirectory(self, "选择文件夹", self.db.Path['project'])
         if os.path.isdir(path):
             self.db.load_project(path)
             self.treeWidget_file.setEnabled(True)
@@ -77,7 +77,8 @@ class mainUI(QMainWindow, UI_main.Ui_main):
     def expand_node(tree, idx):
         tree.setExpanded(idx, not tree.isExpanded(idx))
 
-    def get_chlid(self, tab, path, **kwargs):
+    @staticmethod
+    def get_chlid(tab, path, **kwargs):
         if tab:
             classType = kwargs['classType']
             func = kwargs['func']
@@ -89,7 +90,8 @@ class mainUI(QMainWindow, UI_main.Ui_main):
     def double_click(self, idx):
         if isinstance(self.sender(), sourceTree):
             pathList = os.path.split(self.sender().get_file_path(idx))
-            path = os.path.join(self.db.projectPath, *pathList)
+            path = os.path.join(self.db.Path['project'], *pathList)
+            print(path)
             if os.path.isfile(path):
                 tempMap = {'xml': {'tabName': 'filetab', 'classType': dataTree, 'func': self.db.load_file},
                            'php': {'tabName': 'datatab', 'classType': dataTable, 'func': self.db.load_php}}
@@ -101,7 +103,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                     if extend == 'xml':
                         child.itemChanged['QTreeWidgetItem*', 'int'].connect(self.fileEditor.item_change)
                     elif extend == 'php':
-                        child.cellChanged['int', 'int'].connect(self.elemEditor.cell_change)
+                        child.cellChanged['int', 'int'].connect(self.fileEditor.cell_change)
 
             elif os.path.isdir(path) or len(pathList) == 1 or pathList[0] == '':
                 self.expand_node(self.sender(), idx)
@@ -166,28 +168,42 @@ class mainUI(QMainWindow, UI_main.Ui_main):
 
     def save_file(self):
         print('save file')
-        # if self.treeWidget_data.isEnabled():
-        if isinstance(self.focusWidget(), dataTree):
-            self.save_file_tab()
-        elif isinstance(self.focusWidget(), dataTable):
-            self.save_data_tab()
+        if self.treeWidget_data.isEnabled():
+            objName = self.focusWidget().objectName()
+            objListFile = [self.fileEditor.widget(i).objectName() for i in range(self.fileEditor.count())]
+            objListData = [self.elemEditor.widget(i).objectName() for i in range(self.elemEditor.count())]
+            if objName in objListFile:
+                self.save_file_tab()
+            elif objName in objListData:
+                self.save_data_tab()
 
     def save_file_tab(self, idx=None):
-        if idx:
+        if idx is not None:
+            print('idx is not None')
             currentTab = self.fileEditor.widget(idx)
         else:
+            print('idx is None')
             currentTab = self.fileEditor.currentWidget()
+        print('save file tab')
         if currentTab:
             objName = currentTab.objectName()
-            tree = currentTab.findChild(dataTree)
-            mods = dict(self.db.getMods)
-            modsKey = [f'{k}_{i}' for k, i in enumerate(mods.keys())]
-            modsKey = ['-_data', *modsKey]
-            modsValue = list(mods.values())
-            modsValue = ['data', *modsValue]
-            modInfo = modsKey[modsValue.index(objName.split(':')[0])]
-            self.db.write_file_from_tree(tree, self.db.gameData[modInfo], modInfo)
-            self.fileEditor.setTabText(self.fileEditor.currentIndex(), tree.objectName())
+            fileName = objName.split(':')[-1]
+            if fileName.endswith('.xml'):
+                print('save xml')
+                tree = currentTab.findChild(dataTree)
+                mods = dict(self.db.getMods)
+                modsKey = [f'{k}_{i}' for k, i in enumerate(mods.keys())]
+                modsKey = ['-_data', *modsKey]
+                modsValue = list(mods.values())
+                modsValue = ['data', *modsValue]
+                modInfo = modsKey[modsValue.index(objName.split(':')[0])]
+                self.db.write_file_from_tree(tree, self.db.gameData[modInfo], modInfo)
+                self.fileEditor.setTabText(self.fileEditor.currentIndex(), tree.objectName())
+            elif fileName.endswith('.php'):
+                print('save php')
+                table = currentTab.findChild(dataTable)
+                self.db.write_php_from_data(table)
+                self.fileEditor.setTabText(self.fileEditor.currentIndex(), table.objectName())
 
     def save_data_tab(self, idx=None):
         if idx:
@@ -196,6 +212,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             currentTab = self.elemEditor.currentWidget()
         if currentTab:
             table = currentTab.findChild(dataTable)
+            table.sortByColumn(0, Qt.AscendingOrder)
             table.update_data(self.db.gameData)
             self.db.write_file_from_data(table.data, table.objectName().split(':')[1])
             self.elemEditor.setTabText(self.elemEditor.currentIndex(), table.objectName())
@@ -228,5 +245,5 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     Form = mainUI()
     Form.show()
-    logInit(logPath)
+    # logInit(logPath)
     sys.exit(app.exec_())
