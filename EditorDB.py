@@ -1,41 +1,32 @@
-import json
 import os
 from time import time
-
 import lxml.etree as etree
 import numpy as np
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QTreeWidget, QTableWidget, QTableWidgetItem, QStatusBar, QTreeWidgetItem, \
-    QTreeWidgetItemIterator
-
-from sourceTree import sourceTree
+from PyQt5.QtWidgets import QTreeWidget, QTableWidget, QTableWidgetItem, QTreeWidgetItem, QTreeWidgetItemIterator
 from xmlIter import fast_iter, get_column, gen_xml_table
 
 
 class EditorDB:
+    Path, getMods, gameData = {}, {}, {}
     def __init__(self, **kwargs):
-        self.fileTree: sourceTree = kwargs["fileTreeWidget"]
-        self.dataTree: sourceTree = kwargs["dataTreeWidget"]
+        self.MainWindow = kwargs["MainWindow"]
         self.proxy = kwargs["proxy"]
-        self.statusBar: QStatusBar = kwargs["statusBar"]
-        self.statusBar.showMessage('waiting for project', 0)
-        self.Path, self.getMods, self.gameData = {}, {}, {}
-        with open("config.json", 'r') as f:
-            config = json.load(f)
-            self.Path['project'] = config["projectPath"]
+        self.config = kwargs["config"]
+        self.Path['project'] = self.config["projectPath"]
 
     def clear(self):
-        self.fileTree.clear()
-        self.dataTree.clear()
+        self.MainWindow.treeWidget_file.clear()
+        self.MainWindow.treeWidget_data.clear()
         self.gameData.clear()
 
     def load_path(self, path: str):
         self.Path['project'] = path
-        self.Path['data'] = path + "/data"
-        self.Path['mods'] = path + "/Mods"
-        self.Path['img'] = path + "/img"
-        self.Path['getMods'] = path + "/getmods.php"
-        self.Path['getimages'] = path + "/getimages.php"
+        paths = ['data', 'Mods', 'img']
+        for i in paths:
+            self.Path[i] = os.path.join(path, i)
+        self.Path['getMods'] = os.path.join(path, 'getmods.php')
+        self.Path['getimages'] = os.path.join(path, 'getimages.php')
 
     def load_project(self, path):
         start = time()
@@ -48,27 +39,27 @@ class EditorDB:
 
             for i in list(self.Path.values())[1:]:
                 print(f'loading {i}')
-                self.fileTree.load_folder(i)
-            self.dataTree.load_data('total', [os.path.splitext(i)[-2] for i in os.listdir(self.Path['data'])])
+                self.MainWindow.treeWidget_file.load_folder(i)
+            self.MainWindow.treeWidget_data.load_data('total', [os.path.splitext(i)[-2] for i in os.listdir(self.Path['data'])])
 
             print(f'Initial in {np.round(time() - start, 3)} seconds')
             self.load_mods()
-            self.statusBar.showMessage(f'Project loaded in {np.round(time() - start, 3)} seconds')
+            self.MainWindow.statusbar.showMessage(f'Project loaded in {np.round(time() - start, 3)} seconds')
 
     def load_mods(self):
         kwargs = {'gameData': self.gameData,
-                  'dataTree': self.dataTree,
+                  'dataTree': self.MainWindow.treeWidget_data,
                   'projectPath': self.Path['project'],
                   'dirPath': self.Path['data'],
                   'modInfo': ['-', 'data']}
         self.gameData['-_data'] = {}
-        self.dataTree.add_node('-_data')
+        self.MainWindow.treeWidget_data.add_node('-_data')
         self.proxy.load_data(**kwargs)
         for modID, modStr in enumerate(self.getMods):
             self.gameData[f'{modID}_{modStr[0]}'] = {}
             kwargs['dirPath'] = os.path.join(self.Path['project'], modStr[1])
             kwargs['modInfo'] = [modID, modStr[0]]
-            self.dataTree.add_node(f'{modID}_{modStr[0]}')
+            self.MainWindow.treeWidget_data.add_node(f'{modID}_{modStr[0]}')
             self.proxy.load_data(**kwargs)
 
     @staticmethod

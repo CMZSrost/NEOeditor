@@ -16,23 +16,21 @@ from tabEditor import tabEditor
 from templateTab import templateTab
 from threadProxy import threadProxy
 
-# pyinstaller --upx-dir "D:\upx-4.0.2-win64" -D -w "D:\Pytrain\NEOeditor\main.py"
+
+# nuitka --standalone --show-memory --show-progress --plugin-enable=pyqt5,upx --follow-import-to=Editor_UI --onefile --output-dir=out main.py
 
 class mainUI(QMainWindow, UI_main.Ui_main):
     def __init__(self):
         super(mainUI, self).__init__()
         self.setupUi(self)
-        with open('config.json', 'r') as f:
-            config = json.load(f)
-            transPath = config['transPath']
-        self.trans = QTranslator()
-        self.transPath = transPath
+        with open(os.path.join(os.getcwd(), 'config.json'), 'r') as f:
+            self.config = json.load(f)
+        self.trans = QTranslator(self)
         self.languageAction.setChecked(True)
         self.proxy = threadProxy()
-        self.db = EditorDB(fileTreeWidget=self.treeWidget_file,
-                           dataTreeWidget=self.treeWidget_data,
+        self.db = EditorDB(MainWindow=self,
                            proxy=self.proxy,
-                           statusBar=self.statusbar)
+                           config=self.config)
         self.templateTab = templateTab()
         self.proxy.loadingStatusSign.connect(self.loaded)
         self.addAction(self.saveFileAction)
@@ -41,7 +39,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
     def change_language(self, toggle):
         print(f'change to cn:{toggle}')
         if toggle:
-            print(self.trans.load("zh_CN", self.transPath))
+            print(self.trans.load("zh_CN", self.config['transPath']))
             # 获取窗口实例
             app = QApplication.instance()
             # 将翻译家安装到实例中
@@ -49,7 +47,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             # 翻译界面
             self.retranslateUi(self)
         else:
-            print(self.trans.load("en", self.transPath))
+            print(self.trans.load("en", self.config['transPath']))
             # 获取窗口实例
             app = QApplication.instance()
             # 将翻译家安装到实例中
@@ -117,7 +115,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                     if table:
                         if modInfo == 'total':
                             gameData = vstack([self.db.gameData[i][typ] for i in self.db.gameData.keys() if
-                                                  typ in self.db.gameData[i].keys()])
+                                               typ in self.db.gameData[i].keys()])
                         else:
                             gameData = self.db.gameData[modInfo][typ]
                         table.setup(gameData, modInfo, typ, self.proxy.setup_data)
@@ -255,11 +253,10 @@ class mainUI(QMainWindow, UI_main.Ui_main):
 
 
 if __name__ == '__main__':
-    with open('config.json', 'r') as f:
-        config = json.load(f)
-        logPath = os.path.join(config['logPath'], 'NEOeditor.log')
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    sys.path.append(os.path.join(BASE_DIR, 'client'))
     app = QApplication(sys.argv)
     Form = mainUI()
     Form.show()
-    # logInit(logPath)
+    logInit(os.getcwd())
     sys.exit(app.exec_())
