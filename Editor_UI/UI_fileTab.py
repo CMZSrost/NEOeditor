@@ -60,6 +60,7 @@ class Ui_templateTab(object):
         self.lineEdit.setObjectName("lineEdit")
         self.verticalLayout_2.addWidget(self.lineEdit)
         self.tableWidget = dataTable(self.datatab)
+        self.tableWidget.setMouseTracking(True)
         self.tableWidget.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
         self.tableWidget.setAcceptDrops(False)
         self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
@@ -169,6 +170,7 @@ class Ui_templateTab(object):
         self.pushButton_copy.clicked.connect(self.tableWidget.copy_line) # type: ignore
         self.pushButton_delete.clicked.connect(self.tableWidget.delete_line) # type: ignore
         self.lineEdit.textChanged['QString'].connect(self.tableWidget.find_text) # type: ignore
+        self.tableWidget.cellEntered['int','int'].connect(self.tableWidget.show_tooltips) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(templateTab)
 
     def retranslateUi(self, templateTab):

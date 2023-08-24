@@ -2,13 +2,26 @@ from os import listdir
 from os.path import join, isdir, basename
 
 from PyQt5.QtCore import QModelIndex
-from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QTreeWidgetItemIterator
+from PyQt5.QtGui import QCursor
+from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QTreeWidgetItemIterator, QToolTip
 
 
 class sourceTree(QTreeWidget):
     def __init__(self, parent=None):
         super().__init__()
         self.self = parent
+        self.tooltips = {}
+
+    def setup_tooltips(self,tooltips:dict):
+        tips = [i.get('#') for i in tooltips.values()]
+        self.tooltips = dict(zip(tooltips.keys(), tips))
+        print(self.tooltips)
+
+    def show_tooltips(self, item:QTreeWidgetItem):
+        if item.text(0) in self.tooltips:
+            print(item.text(0))
+            QToolTip.showText(QCursor.pos(), self.tooltips[item.text(0)])
+
 
     def get_top_item(self, name):
         namelist = [self.topLevelItem(i).text(0) for i in range(self.topLevelItemCount())]

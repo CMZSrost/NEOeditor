@@ -10,6 +10,9 @@
     <height>650</height>
    </rect>
   </property>
+  <property name="mouseTracking">
+   <bool>true</bool>
+  </property>
   <property name="windowTitle">
    <string>NEO editor</string>
   </property>
@@ -61,7 +64,7 @@
            <enum>Qt::DefaultContextMenu</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tab_file">
            <attribute name="title">
@@ -147,6 +150,9 @@
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="mouseTracking">
+               <bool>true</bool>
               </property>
               <property name="itemsExpandable">
                <bool>true</bool>
@@ -277,6 +283,7 @@
      <string>function</string>
     </property>
     <addaction name="reloadAction"/>
+    <addaction name="helpAction"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -354,6 +361,14 @@
     <string>change to Chinese</string>
    </property>
   </action>
+  <action name="helpAction">
+   <property name="text">
+    <string>help</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -368,6 +383,7 @@
    <header>sourceTree</header>
    <slots>
     <slot>filter_file(QString)</slot>
+    <slot>show_tooltips(QTreeWidgetItem*)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -549,6 +565,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>helpAction</sender>
+   <signal>triggered()</signal>
+   <receiver>main</receiver>
+   <slot>help()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>524</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>treeWidget_data</sender>
+   <signal>itemEntered(QTreeWidgetItem*,int)</signal>
+   <receiver>treeWidget_data</receiver>
+   <slot>show_tooltips(QTreeWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>225</x>
+     <y>175</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>224</x>
+     <y>294</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>load_project()</slot>
@@ -561,5 +609,6 @@
   <slot>reload()</slot>
   <slot>change_language(bool)</slot>
   <slot>save_file()</slot>
+  <slot>help()</slot>
  </slots>
 </ui>

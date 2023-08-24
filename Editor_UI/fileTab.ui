@@ -136,6 +136,9 @@
     </item>
     <item>
      <widget class="dataTable" name="tableWidget">
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
       <property name="contextMenuPolicy">
        <enum>Qt::DefaultContextMenu</enum>
       </property>
@@ -368,6 +371,7 @@
     <slot>copy_line()</slot>
     <slot>delete_line()</slot>
     <slot>find_text(QString)</slot>
+    <slot>show_tooltips(int,int)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -405,8 +409,8 @@
    <slot>add_line()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>206</x>
-     <y>517</y>
+     <x>209</x>
+     <y>645</y>
     </hint>
     <hint type="destinationlabel">
      <x>175</x>
@@ -421,8 +425,8 @@
    <slot>copy_line()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>510</x>
-     <y>504</y>
+     <x>618</x>
+     <y>645</y>
     </hint>
     <hint type="destinationlabel">
      <x>491</x>
@@ -437,8 +441,8 @@
    <slot>delete_line()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>817</x>
-     <y>509</y>
+     <x>924</x>
+     <y>645</y>
     </hint>
     <hint type="destinationlabel">
      <x>771</x>
@@ -459,6 +463,22 @@
     <hint type="destinationlabel">
      <x>98</x>
      <y>98</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableWidget</sender>
+   <signal>cellEntered(int,int)</signal>
+   <receiver>tableWidget</receiver>
+   <slot>show_tooltips(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>196</x>
+     <y>313</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>430</x>
+     <y>299</y>
     </hint>
    </hints>
   </connection>

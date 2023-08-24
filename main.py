@@ -17,42 +17,43 @@ from templateTab import templateTab
 from threadProxy import threadProxy
 
 
-# nuitka --standalone --show-memory --show-progress --plugin-enable=pyqt5,upx --follow-import-to=Editor_UI --onefile --output-dir=out main.py
+# nuitka --standalone --show-memory --show-progress --plugin-enable=pyqt5 --follow-import-to=Editor_UI --onefile --output-dir=out main.py
 
 class mainUI(QMainWindow, UI_main.Ui_main):
     def __init__(self):
         super(mainUI, self).__init__()
+        self.comments, self.config = None, None
         self.setupUi(self)
-        with open(os.path.join(os.getcwd(), 'config.json'), 'r') as f:
-            self.config = json.load(f)
+
+        self.load_json()
         self.trans = QTranslator(self)
-        self.languageAction.setChecked(True)
         self.proxy = threadProxy()
-        self.db = EditorDB(MainWindow=self,
-                           proxy=self.proxy,
-                           config=self.config)
         self.templateTab = templateTab()
-        self.proxy.loadingStatusSign.connect(self.loaded)
+        self.db = EditorDB(MainWindow=self, proxy=self.proxy, config=self.config)
+        self.setup_connection()
+
+    def load_json(self):
+        with open(os.path.join(os.getcwd(), 'config.json'), 'r', encoding='UTF-8') as f:
+            self.config = json.load(f)
+        with open(os.path.join(os.getcwd(), 'jsonData', 'NEOcomments.json'), 'r', encoding='UTF-8') as f:
+            self.comments = json.load(f)
+
+    def setup_connection(self):
+        self.languageAction.setChecked(True if self.config['language'] == 'zh_CN' else False)
         self.addAction(self.saveFileAction)
         self.treeWidget_file.addAction(self.loadProjectAction)
+        self.proxy.loadingStatusSign.connect(self.loaded)
+        self.treeWidget_data.setup_tooltips(self.comments)
 
     def change_language(self, toggle):
-        print(f'change to cn:{toggle}')
+        transPath = os.path.join(os.getcwd(), 'jsonData')
         if toggle:
-            print(self.trans.load("zh_CN", self.config['transPath']))
-            # 获取窗口实例
-            app = QApplication.instance()
-            # 将翻译家安装到实例中
-            app.installTranslator(self.trans)
-            # 翻译界面
-            self.retranslateUi(self)
+            self.trans.load("zh_CN", transPath)
         else:
-            print(self.trans.load("en", self.config['transPath']))
-            # 获取窗口实例
-            app = QApplication.instance()
-            # 将翻译家安装到实例中
-            app.installTranslator(self.trans)
-            self.retranslateUi(self)
+            self.trans.load("en", transPath)
+        app = QApplication.instance()
+        app.installTranslator(self.trans)
+        self.retranslateUi(self)
 
     def load_project(self):
         path = QFileDialog.getExistingDirectory(self, "选择文件夹", self.db.Path['project'])
@@ -84,6 +85,9 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             func(path, child)
             return child
 
+    def help(self):
+        QMessageBox.about(self, '帮助', '请联系作者')
+
     def double_click(self, idx):
         if isinstance(self.sender(), sourceTree):
             pathList = os.path.split(self.sender().get_file_path(idx))
@@ -109,17 +113,20 @@ class mainUI(QMainWindow, UI_main.Ui_main):
 
             else:
                 [modInfo, typ] = pathList
-                tab = self.tab_factory(pathList, self.elemEditor, 'datatab')
-                if tab:
-                    table = tab.findChild(dataTable)
-                    if table:
-                        if modInfo == 'total':
-                            gameData = vstack([self.db.gameData[i][typ] for i in self.db.gameData.keys() if
-                                               typ in self.db.gameData[i].keys()])
-                        else:
-                            gameData = self.db.gameData[modInfo][typ]
-                        table.setup(gameData, modInfo, typ, self.proxy.setup_data)
-                        table.cellChanged['int', 'int'].connect(self.elemEditor.item_change)
+                try:
+                    table = self.tab_factory(pathList, self.elemEditor, 'datatab').findChild(dataTable)
+                except AttributeError:
+                    print('AttributeError')
+                    table = None
+                if table:
+                    if modInfo == 'total':
+                        gameData = vstack([self.db.gameData[i][typ] for i in self.db.gameData.keys() if
+                                           typ in self.db.gameData[i].keys()])
+                    else:
+                        gameData = self.db.gameData[modInfo][typ]
+                    table.setup(gameData, modInfo, typ, self.proxy.setup_data)
+                    table.setup_tooltips(self.comments[typ])
+                    table.cellChanged['int', 'int'].connect(self.elemEditor.item_change)
 
     def tab_factory(self, pathList, tabParent: tabEditor, typ):
         templateTab = QTabWidget()

@@ -1,6 +1,6 @@
 from PyQt5.Qt import QTableWidget, QTabWidget
-from PyQt5.QtGui import QDropEvent
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtGui import QDropEvent, QCursor
+from PyQt5.QtWidgets import QTableWidgetItem, QToolTip
 from numpy import array, where
 
 from xmlIter import get_column
@@ -13,6 +13,10 @@ class dataTable(QTableWidget):
         self.data = array([])
         self.column = []
         self.loaded = self.ptr = 0
+        self.toolTips = {}
+
+    def setup_tooltips(self, tooltips: dict):
+        self.toolTips = tooltips
 
     def show_info(self, i, j):
         item = self.item(i, j)
@@ -22,6 +26,15 @@ class dataTable(QTableWidget):
         else:
             print(f'{i},{j}:\tit is None')
         # pass
+
+    def show_info_idx(self, idx):
+        i, j = idx.row(), idx.column()
+        self.show_info(i, j)
+
+    def show_tooltips(self, i, j):
+        toolTip = self.toolTips.get(self.column[j])
+        if toolTip:
+            QToolTip.showText(QCursor.pos(), toolTip)
 
     def setup(self, data, modInfo: str, typ: str, proxyFunc):
         self.clear()
@@ -124,3 +137,4 @@ class dataTable(QTableWidget):
                 else:
                     self.setItem(dst, i, QTableWidgetItem(''))
             self.removeRow(src)
+

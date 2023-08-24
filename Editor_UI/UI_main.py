@@ -15,6 +15,7 @@ class Ui_main(object):
     def setupUi(self, main):
         main.setObjectName("main")
         main.resize(1050, 650)
+        main.setMouseTracking(True)
         self.centralwidget = QtWidgets.QWidget(main)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -93,6 +94,7 @@ class Ui_main(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.treeWidget_data.sizePolicy().hasHeightForWidth())
         self.treeWidget_data.setSizePolicy(sizePolicy)
+        self.treeWidget_data.setMouseTracking(True)
         self.treeWidget_data.setItemsExpandable(True)
         self.treeWidget_data.setHeaderHidden(True)
         self.treeWidget_data.setExpandsOnDoubleClick(False)
@@ -167,16 +169,19 @@ class Ui_main(object):
         self.languageAction.setCheckable(True)
         self.languageAction.setChecked(False)
         self.languageAction.setObjectName("languageAction")
+        self.helpAction = QtWidgets.QAction(main)
+        self.helpAction.setObjectName("helpAction")
         self.menu.addAction(self.loadProjectAction)
         self.menu.addAction(self.saveProjectAction)
         self.menu_2.addAction(self.languageAction)
         self.menu_3.addAction(self.reloadAction)
+        self.menu_3.addAction(self.helpAction)
         self.menubar.addAction(self.menu.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
         self.menubar.addAction(self.menu_3.menuAction())
 
         self.retranslateUi(main)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         self.elemEditor.setCurrentIndex(-1)
         self.loadProjectAction.triggered.connect(main.load_project) # type: ignore
         self.treeWidget_file.doubleClicked['QModelIndex'].connect(main.double_click) # type: ignore
@@ -189,6 +194,8 @@ class Ui_main(object):
         self.saveProjectAction.triggered.connect(main.save_project) # type: ignore
         self.saveFileAction.triggered.connect(main.save_file) # type: ignore
         self.languageAction.toggled['bool'].connect(main.change_language) # type: ignore
+        self.helpAction.triggered.connect(main.help) # type: ignore
+        self.treeWidget_data.itemEntered['QTreeWidgetItem*','int'].connect(self.treeWidget_data.show_tooltips) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(main)
 
     def retranslateUi(self, main):
@@ -215,5 +222,7 @@ class Ui_main(object):
         self.printFocusAction.setShortcut(_translate("main", "F1"))
         self.languageAction.setText(_translate("main", "change language"))
         self.languageAction.setToolTip(_translate("main", "change to Chinese"))
+        self.helpAction.setText(_translate("main", "help"))
+        self.helpAction.setShortcut(_translate("main", "F1"))
 from sourceTree import sourceTree
 from tabEditor import tabEditor
