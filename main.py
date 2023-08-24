@@ -14,10 +14,11 @@ from loggerMsg import logInit
 from sourceTree import sourceTree
 from tabEditor import tabEditor
 from templateTab import templateTab
+from helpDialog import helpDialog
 from threadProxy import threadProxy
 
 
-# nuitka --standalone --show-memory --show-progress --plugin-enable=pyqt5 --follow-import-to=Editor_UI --onefile --output-dir=out main.py
+# nuitka --show-memory --show-progress --plugin-enable=pyqt5 --follow-import-to=Editor_UI --onefile --output-dir=out main.py
 
 class mainUI(QMainWindow, UI_main.Ui_main):
     def __init__(self):
@@ -37,6 +38,8 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             self.config = json.load(f)
         with open(os.path.join(os.getcwd(), 'jsonData', 'NEOcomments.json'), 'r', encoding='UTF-8') as f:
             self.comments = json.load(f)
+        with open(os.path.join(os.getcwd(), 'jsonData', 'NEOhelps.json'), 'r', encoding='UTF-8') as f:
+            self.helps = json.load(f)
 
     def setup_connection(self):
         self.languageAction.setChecked(True if self.config['language'] == 'zh_CN' else False)
@@ -86,7 +89,10 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             return child
 
     def help(self):
-        QMessageBox.about(self, '帮助', '请联系作者')
+        # QMessageBox.about(self, '帮助', '请联系作者')
+        helpD = helpDialog(self.helps, self)
+        helpD.show()
+
 
     def double_click(self, idx):
         if isinstance(self.sender(), sourceTree):

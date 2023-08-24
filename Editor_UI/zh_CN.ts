@@ -22,7 +22,7 @@
 <context>
     <name>help</name>
     <message>
-        <location filename="UI_help.py" line="45"/>
+        <location filename="UI_help.py" line="43"/>
         <source>help</source>
         <translation type="unfinished"></translation>
     </message>
