@@ -51,9 +51,9 @@ class EditorDB:
                   'dataTree': self.MainWindow.treeWidget_data,
                   'projectPath': self.Path['project'],
                   'dirPath': self.Path['data'],
-                  'modInfo': ['-', 'data']}
-        self.gameData['-_data'] = {}
-        self.MainWindow.treeWidget_data.add_node('-_data')
+                  'modInfo': ['-', '0']}
+        self.gameData['-_0'] = {}
+        self.MainWindow.treeWidget_data.add_node('-_0')
         self.proxy.load_data(**kwargs)
         for modID, modStr in enumerate(self.getMods):
             self.gameData[f'{modID}_{modStr[0]}'] = {}

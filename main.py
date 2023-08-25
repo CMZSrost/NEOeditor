@@ -220,7 +220,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                 tree = currentTab.findChild(dataTree)
                 mods = dict(self.db.getMods)
                 modsKey = [f'{k}_{i}' for k, i in enumerate(mods.keys())]
-                modsKey = ['-_data', *modsKey]
+                modsKey = ['-_0', *modsKey]
                 modsValue = list(mods.values())
                 modsValue = ['data', *modsValue]
                 modInfo = modsKey[modsValue.index(objName.split(':')[0])]
