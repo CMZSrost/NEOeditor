@@ -48,7 +48,14 @@ class dataTable(QTableWidget):
         self.setHorizontalHeaderLabels(self.column)
         self.horizontalHeader().stretchLastSection()
 
-        proxyFunc(data=self.data, table=self)
+        for i in range(self.data.shape[0]):
+            for j in range(self.data.shape[1]):
+                item = QTableWidgetItem(self.data[i, j])
+                self.setItem(i, j, item)
+        self.resizeColumnsToContents()
+        self.resizeRowsToContents()
+
+        # proxyFunc(data=self.data, table=self)
 
     def update_data(self, gameData):
         temp = []
