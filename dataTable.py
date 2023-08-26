@@ -36,26 +36,29 @@ class dataTable(QTableWidget):
         if toolTip:
             QToolTip.showText(QCursor.pos(), toolTip)
 
-    def setup(self, data, modInfo: str, typ: str, proxyFunc):
+    def setup(self, data, modInfo: str, typ: str, proxyFunc=None):
         self.clear()
         self.column, self.data = get_column(typ), data
         self.setObjectName(modInfo + ':' + typ)
         print(data.shape)
 
-        self.setRowCount(self.data.shape[0])
         self.setColumnCount(self.data.shape[1])
-
         self.setHorizontalHeaderLabels(self.column)
-        self.horizontalHeader().stretchLastSection()
 
-        for i in range(self.data.shape[0]):
-            for j in range(self.data.shape[1]):
-                item = QTableWidgetItem(self.data[i, j])
+        self.load_data(data)
+
+        # proxyFunc(data=self.data, table=self)
+
+    def load_data(self, data,column=None):
+        if column:
+            self.setHorizontalHeaderLabels(column)
+        self.setRowCount(data.shape[0])
+        for i in range(data.shape[0]):
+            for j in range(data.shape[1]):
+                item = QTableWidgetItem(data[i, j])
                 self.setItem(i, j, item)
         self.resizeColumnsToContents()
         self.resizeRowsToContents()
-
-        # proxyFunc(data=self.data, table=self)
 
     def update_data(self, gameData):
         temp = []

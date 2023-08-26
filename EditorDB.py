@@ -1,24 +1,32 @@
 import os
 from time import time
+
 import lxml.etree as etree
 import numpy as np
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTreeWidget, QTableWidget, QTableWidgetItem, QTreeWidgetItem, QTreeWidgetItemIterator
+
+from recipeDialog import recipeDialog
 from xmlIter import fast_iter, get_column, gen_xml_table
 
 
 class EditorDB:
     Path, getMods, gameData = {}, {}, {}
+
     def __init__(self, **kwargs):
         self.MainWindow = kwargs["MainWindow"]
         self.proxy = kwargs["proxy"]
         self.config = kwargs["config"]
         self.Path['project'] = self.config["projectPath"]
+        self.recipes = None
 
     def clear(self):
         self.MainWindow.treeWidget_file.clear()
         self.MainWindow.treeWidget_data.clear()
         self.gameData.clear()
+        self.recipes = None
+        self.MainWindow.recipesAnalysisAction.setEnabled(False)
+        self.MainWindow.showRecipesAction.setEnabled(False)
 
     def load_path(self, path: str):
         self.Path['project'] = path
@@ -40,11 +48,17 @@ class EditorDB:
             for i in list(self.Path.values())[1:]:
                 print(f'loading {i}')
                 self.MainWindow.treeWidget_file.load_folder(i)
-            self.MainWindow.treeWidget_data.load_data('total', [os.path.splitext(i)[-2] for i in os.listdir(self.Path['data'])])
+            self.MainWindow.treeWidget_data.load_data('total',
+                                                      [os.path.splitext(i)[-2] for i in os.listdir(self.Path['data'])])
 
             print(f'Initial in {np.round(time() - start, 3)} seconds')
             self.load_mods()
             self.MainWindow.statusbar.showMessage(f'Project loaded in {np.round(time() - start, 3)} seconds')
+
+    def recipes_analysis(self):
+        self.recipes = recipeDialog(self.MainWindow)
+        self.recipes.setup(self.gameData)
+        self.MainWindow.showRecipesAction.setEnabled(True)
 
     def load_mods(self):
         kwargs = {'gameData': self.gameData,
@@ -155,7 +169,7 @@ class EditorDB:
 
     def write_php_from_data(self, table: QTableWidget):
         dirName, fileName = table.objectName().split(':')
-        Path = os.path.join(self.Path['project'], dirName, fileName).replace('\\','/')
+        Path = os.path.join(self.Path['project'], dirName, fileName).replace('\\', '/')
         print(Path)
         print(fileName)
         with open(Path, 'w', encoding='utf-8') as f:
@@ -163,12 +177,12 @@ class EditorDB:
             if fileName == 'getmods.php':
                 f.write(f'nRows={table.rowCount()}')
                 for i in range(table.rowCount()):
-                    f.write(f'&strModName{table.item(i, 0).text()}={table.item(i, 1).text()}&strModURL{table.item(i, 0).text()}={table.item(i, 2).text()}\n')
+                    f.write(
+                        f'&strModName{table.item(i, 0).text()}={table.item(i, 1).text()}&strModURL{table.item(i, 0).text()}={table.item(i, 2).text()}\n')
             elif fileName == 'getimages.php':
                 f.write(f'nRows={table.rowCount()}&nCols=2')
                 for i in range(table.rowCount()):
                     f.write(f'&strImageURL{table.item(i, 0).text()}={table.item(i, 1).text()}')
-
 
     @staticmethod
     def load_php(filepath, tableView: QTableWidget = None):

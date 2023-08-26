@@ -30,93 +30,171 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="UI_main.py" line="208"/>
+        <location filename="UI_main.py" line="218"/>
         <source>file</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="207"/>
+        <location filename="UI_main.py" line="217"/>
         <source>data</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="215"/>
+        <location filename="UI_main.py" line="225"/>
         <source>Ctrl+Shift+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="218"/>
+        <location filename="UI_main.py" line="228"/>
         <source>F5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="220"/>
+        <location filename="UI_main.py" line="230"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="221"/>
+        <location filename="UI_main.py" line="231"/>
         <source>printFocus</source>
         <translation>打印焦点</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="226"/>
+        <location filename="UI_main.py" line="236"/>
         <source>F1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="209"/>
+        <location filename="UI_main.py" line="219"/>
         <source>setting</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="210"/>
+        <location filename="UI_main.py" line="220"/>
         <source>function</source>
         <translation>功能</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="212"/>
+        <location filename="UI_main.py" line="222"/>
         <source>new project</source>
         <translation>新增项目</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="213"/>
+        <location filename="UI_main.py" line="223"/>
         <source>load project</source>
         <translation>读取项目</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="214"/>
+        <location filename="UI_main.py" line="224"/>
         <source>save project</source>
         <translation>保存项目</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="217"/>
+        <location filename="UI_main.py" line="227"/>
         <source>reload</source>
         <translation>刷新项目</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="219"/>
+        <location filename="UI_main.py" line="229"/>
         <source>save file</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="223"/>
+        <location filename="UI_main.py" line="233"/>
         <source>change language</source>
         <translation>改变语言</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="224"/>
+        <location filename="UI_main.py" line="234"/>
         <source>change to Chinese</source>
         <translation>改变语言为中文</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="203"/>
+        <location filename="UI_main.py" line="213"/>
         <source>NEO editor</source>
         <translation>NEO 编辑器</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="225"/>
+        <location filename="UI_main.py" line="235"/>
         <source>help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_main.py" line="237"/>
+        <source>recipesAnalysis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_main.py" line="238"/>
+        <source>showRecipes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>recipes</name>
+    <message>
+        <location filename="UI_recipesAnalysis.py" line="163"/>
+        <source>recipes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_recipesAnalysis.py" line="192"/>
+        <source>id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_recipesAnalysis.py" line="174"/>
+        <source>strSecretName</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_recipesAnalysis.py" line="175"/>
+        <source>tools&amp;consumed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_recipesAnalysis.py" line="178"/>
+        <source>type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_recipesAnalysis.py" line="186"/>
+        <source>num</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_recipesAnalysis.py" line="187"/>
+        <source>items</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_recipesAnalysis.py" line="190"/>
+        <source>modinfo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_recipesAnalysis.py" line="194"/>
+        <source>strName</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_recipesAnalysis.py" line="184"/>
+        <source>strPropertyName</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_recipesAnalysis.py" line="196"/>
+        <source>nGroupID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_recipesAnalysis.py" line="198"/>
+        <source>nSubgroupID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_recipesAnalysis.py" line="182"/>
+        <source>nID</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

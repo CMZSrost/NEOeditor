@@ -74,7 +74,7 @@ def data_iter(context, modInfo, filePath):
             table = {i: '' for i in typelist}
             table['modinfo'] = f'{modInfo[0]}_{modInfo[1]}'
             table["filepath"] = filePath
-            table.update({i.attrib.values()[0]: i.text for i in elem.xpath('column')})
+            table.update({i.attrib.values()[0]: (i.text if i.text is not None else '') for i in elem.xpath('column')})
 
             DBdict[pos].append([table[i] for i in typelist])
             table.clear()

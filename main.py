@@ -41,6 +41,15 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         with open(os.path.join(os.getcwd(), 'jsonData', 'NEOhelps.json'), 'r', encoding='UTF-8') as f:
             self.helps = json.load(f)
 
+    def recipe_analysis(self):
+        self.db.recipes_analysis()
+
+    def recipe_show(self):
+        if self.db.recipes is None:
+            QMessageBox.information(self, '提示', '请先加载数据')
+            return
+        self.db.recipes.show()
+
     def setup_connection(self):
         self.languageAction.setChecked(True if self.config['language'] == 'zh_CN' else False)
         self.addAction(self.saveFileAction)
@@ -70,6 +79,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             self.treeWidget_data.setEnabled(True)
             self.lineEdit_data.setEnabled(True)
             self.treeWidget_data.setRootIsDecorated(True)
+            self.recipesAnalysisAction.setEnabled(True)
         else:
             self.treeWidget_data.setEnabled(False)
             self.lineEdit_data.setEnabled(False)
@@ -92,7 +102,6 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         # QMessageBox.about(self, '帮助', '请联系作者')
         helpD = helpDialog(self.helps, self)
         helpD.show()
-
 
     def double_click(self, idx):
         if isinstance(self.sender(), sourceTree):
@@ -150,7 +159,8 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         templateTab.clear()
         return pos
 
-    def check_object_name(self, objName, objList):
+    @staticmethod
+    def check_object_name(objName, objList):
         if objName in objList:
             return objList.index(objName)
         if objName.startswith('total'):

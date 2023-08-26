@@ -171,17 +171,25 @@ class Ui_main(object):
         self.languageAction.setObjectName("languageAction")
         self.helpAction = QtWidgets.QAction(main)
         self.helpAction.setObjectName("helpAction")
+        self.recipesAnalysisAction = QtWidgets.QAction(main)
+        self.recipesAnalysisAction.setEnabled(False)
+        self.recipesAnalysisAction.setObjectName("recipesAnalysisAction")
+        self.showRecipesAction = QtWidgets.QAction(main)
+        self.showRecipesAction.setEnabled(False)
+        self.showRecipesAction.setObjectName("showRecipesAction")
         self.menu.addAction(self.loadProjectAction)
         self.menu.addAction(self.saveProjectAction)
         self.menu_2.addAction(self.languageAction)
         self.menu_3.addAction(self.reloadAction)
+        self.menu_3.addAction(self.recipesAnalysisAction)
+        self.menu_3.addAction(self.showRecipesAction)
         self.menu_3.addAction(self.helpAction)
         self.menubar.addAction(self.menu.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
         self.menubar.addAction(self.menu_3.menuAction())
 
         self.retranslateUi(main)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.elemEditor.setCurrentIndex(-1)
         self.loadProjectAction.triggered.connect(main.load_project) # type: ignore
         self.treeWidget_file.doubleClicked['QModelIndex'].connect(main.double_click) # type: ignore
@@ -196,6 +204,8 @@ class Ui_main(object):
         self.languageAction.toggled['bool'].connect(main.change_language) # type: ignore
         self.helpAction.triggered.connect(main.help) # type: ignore
         self.treeWidget_data.itemEntered['QTreeWidgetItem*','int'].connect(self.treeWidget_data.show_tooltips) # type: ignore
+        self.recipesAnalysisAction.triggered.connect(main.recipe_analysis) # type: ignore
+        self.showRecipesAction.triggered.connect(main.recipe_show) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(main)
 
     def retranslateUi(self, main):
@@ -224,5 +234,7 @@ class Ui_main(object):
         self.languageAction.setToolTip(_translate("main", "change to Chinese"))
         self.helpAction.setText(_translate("main", "help"))
         self.helpAction.setShortcut(_translate("main", "F1"))
+        self.recipesAnalysisAction.setText(_translate("main", "recipesAnalysis"))
+        self.showRecipesAction.setText(_translate("main", "showRecipes"))
 from sourceTree import sourceTree
 from tabEditor import tabEditor

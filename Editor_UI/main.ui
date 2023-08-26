@@ -64,7 +64,7 @@
            <enum>Qt::DefaultContextMenu</enum>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tab_file">
            <attribute name="title">
@@ -283,6 +283,8 @@
      <string>function</string>
     </property>
     <addaction name="reloadAction"/>
+    <addaction name="recipesAnalysisAction"/>
+    <addaction name="showRecipesAction"/>
     <addaction name="helpAction"/>
    </widget>
    <addaction name="menu"/>
@@ -369,6 +371,22 @@
     <string>F1</string>
    </property>
   </action>
+  <action name="recipesAnalysisAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>recipesAnalysis</string>
+   </property>
+  </action>
+  <action name="showRecipesAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>showRecipes</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -413,7 +431,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>113</x>
-     <y>115</y>
+     <y>91</y>
     </hint>
     <hint type="destinationlabel">
      <x>536</x>
@@ -476,12 +494,12 @@
    <slot>filter_file(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>156</x>
-     <y>95</y>
+     <x>113</x>
+     <y>84</y>
     </hint>
     <hint type="destinationlabel">
-     <x>157</x>
-     <y>182</y>
+     <x>113</x>
+     <y>91</y>
     </hint>
    </hints>
   </connection>
@@ -597,6 +615,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>recipesAnalysisAction</sender>
+   <signal>triggered()</signal>
+   <receiver>main</receiver>
+   <slot>recipe_analysis()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>524</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>showRecipesAction</sender>
+   <signal>triggered()</signal>
+   <receiver>main</receiver>
+   <slot>recipe_show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>524</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>load_project()</slot>
@@ -610,5 +660,7 @@
   <slot>change_language(bool)</slot>
   <slot>save_file()</slot>
   <slot>help()</slot>
+  <slot>recipe_analysis()</slot>
+  <slot>recipe_show()</slot>
  </slots>
 </ui>
