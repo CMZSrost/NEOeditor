@@ -51,6 +51,7 @@ class dataTable(QTableWidget):
 
     def load_data(self, data,column=None):
         if column:
+            self.setColumnCount(len(column))
             self.setHorizontalHeaderLabels(column)
         self.setRowCount(data.shape[0])
         for i in range(data.shape[0]):

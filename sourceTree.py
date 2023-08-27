@@ -15,11 +15,9 @@ class sourceTree(QTreeWidget):
     def setup_tooltips(self,tooltips:dict):
         tips = [i.get('#') for i in tooltips.values()]
         self.tooltips = dict(zip(tooltips.keys(), tips))
-        print(self.tooltips)
 
     def show_tooltips(self, item:QTreeWidgetItem):
         if item.text(0) in self.tooltips:
-            print(item.text(0))
             QToolTip.showText(QCursor.pos(), self.tooltips[item.text(0)])
 
 

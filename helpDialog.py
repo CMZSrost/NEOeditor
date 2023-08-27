@@ -12,6 +12,7 @@ class helpDialog(QDialog, UI_help.Ui_help):
         model = QStringListModel()
         model.setStringList(list(self.helps.keys()))
         self.listView_key.setModel(model)
+        self.setWindowFlags(Qt.Window)
 
     def show_value(self, index):
         self.textBrowser.clear()

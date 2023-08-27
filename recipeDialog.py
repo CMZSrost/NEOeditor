@@ -11,38 +11,49 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
         self.setupUi(self)
         self.recipesLabel = ['modinfo', 'nID', 'strName']
         self.toolLabel = ['type', 'modinfo', 'nID', 'strPropertyName', 'num']
+        self.itemLabel = ['modinfo', 'id', 'nGroupID', 'nSubGroupID', 'strName']
         self.gameData = None
         self.recipes = None
+        self.itempropsName = {}
+        self.itemprops = {}
         self.modinfoMap = {}
+        self.setWindowFlags(Qt.Window)
         # self.item
 
     def setup(self, gameData):
-        self.gameData = gameData
+        Data = {}
+        keys = gameData[list(gameData.keys())[0]].keys()
+        for typ in keys:
+            Data[typ] = np.vstack([gameData[i][typ] for i in gameData.keys() if
+                                   typ in gameData[i].keys()])
+        self.gameData = Data
         self.load_recipes()
         self.analysis()
 
     def load_recipes(self):
         self.tableWidget_recipes.clear()
-        recipes = np.array([])
-        for i in self.gameData:
-            if 'recipes' in self.gameData[i]:
-                recipes = np.vstack((recipes, self.gameData[i]['recipes'])) if recipes.size else self.gameData[i][
-                    'recipes']
-        self.recipes = recipes
-        self.tableWidget_recipes.load_data(recipes[:, :3], self.recipesLabel)
+        self.recipes = self.gameData['recipes']
+        self.tableWidget_recipes.load_data(self.recipes[:, :3], self.recipesLabel)
 
     def analysis(self):
         column = get_column('itemprops')
         ptr = column.index('nID')
         namePtr = column.index('strPropertyName')
+        self.itempropsName = {}
         self.itemprops = {}
-        for i in self.gameData:
-            if 'itemprops' in self.gameData[i]:
-                for j in self.gameData[i]['itemprops']:
-                    self.modinfoMap[j[0].split("_")[-1]] = j[0]
-                    self.itemprops[f'{j[0].split("_")[-1]}:{j[ptr]}'] = j[namePtr]
-        print(self.itemprops)
-        print(self.modinfoMap)
+        for j in self.gameData['itemprops']:
+            self.modinfoMap[j[0].split("_")[-1]] = j[0]
+            self.itempropsName[f'{j[0].split("_")[-1]}:{j[ptr]}'] = j[namePtr]
+            self.itemprops[f'{j[0].split("_")[-1]}:{j[ptr]}'] = []
+        column = get_column('itemtypes')
+        ptr = column.index('vProperties')
+        for i, j in enumerate(self.gameData['itemtypes']):
+            vProperty = j[ptr].split(',')
+            for k in vProperty:
+                if k.find(':') == -1:
+                    k = f'{j[0].split("_")[-1]}:{k}'
+                if k in self.itemprops.keys():
+                    self.itemprops[k].append(i)
 
     def show_recipe(self, i, j):
         print(i, j)
@@ -65,13 +76,29 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
                 print(f'ValueError:{v}')
                 num, nID = 1, v
             if nID.find(':') == -1:
-                nID = f'0:{nID}'
+                nID = f'{self.recipes[i][0].split("_")[-1]}:{nID}'
             modinfo, nID = nID.split(':')
-            ary[k, :] = ['', self.modinfoMap[modinfo], nID, self.itemprops.get(f'{modinfo}:{nID}', 'None'), num]
+            ary[k, :] = ['', self.modinfoMap[modinfo], nID, self.itempropsName.get(f'{modinfo}:{nID}', 'None'), num]
         ary[:len(tools), 0] = ['tool' for _ in range(len(tools))]
         ary[len(tools):, 0] = ['consumed' for _ in range(len(consumed))]
         self.tableWidget_tools.load_data(ary, self.toolLabel)
+        self.clear(self.tableWidget_items)
         self.label_modinfo.setText(self.recipes[i][0])
         self.label_nID.setText(self.recipes[i][1])
         self.label_strName.setText(self.recipes[i][2])
         self.label_strSecretName.setText(self.recipes[i][3])
+
+    def clear(self, tableWidget):
+        tableWidget.clear()
+        tableWidget.setRowCount(0)
+        tableWidget.setColumnCount(0)
+
+    def show_item(self, i, j):
+        print(i, j)
+        modName = self.tableWidget_tools.item(i, 1).text().split('_')[-1]
+        nID = self.tableWidget_tools.item(i, 2).text()
+        Property = f'{modName}:{nID}'
+        ptr = len(self.itemLabel)
+
+        item = self.gameData['itemtypes'][self.itemprops[Property], :ptr]
+        self.tableWidget_items.load_data(item, self.itemLabel)
