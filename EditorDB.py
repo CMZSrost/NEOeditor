@@ -57,7 +57,7 @@ class EditorDB:
 
     def recipes_analysis(self):
         self.recipes = recipeDialog(self.MainWindow)
-        self.recipes.setup(self.gameData)
+        self.recipes.setup(self.gameData, self.Path['project'])
         self.MainWindow.showRecipesAction.setEnabled(True)
 
     def load_mods(self):

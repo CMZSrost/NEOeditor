@@ -43,6 +43,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
 
     def recipe_analysis(self):
         self.db.recipes_analysis()
+        self.recipe_show()
 
     def recipe_show(self):
         if self.db.recipes is None:

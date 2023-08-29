@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtCore import Qt
@@ -14,13 +16,15 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
         self.itemLabel = ['modinfo', 'id', 'nGroupID', 'nSubGroupID', 'strName']
         self.gameData = None
         self.recipes = None
+        self.path = None
         self.itempropsName = {}
         self.itemprops = {}
         self.modinfoMap = {}
         self.setWindowFlags(Qt.Window)
         # self.item
 
-    def setup(self, gameData):
+    def setup(self, gameData, path):
+        self.path = path
         Data = {}
         keys = gameData[list(gameData.keys())[0]].keys()
         for typ in keys:
@@ -57,16 +61,11 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
 
     def show_recipe(self, i, j):
         print(i, j)
+        recipe = self.recipes[i]
         toolPtr = get_column('recipes').index('strTools')
         consumedPtr = get_column('recipes').index('strConsumed')
-        if self.recipes[i][toolPtr] != '':
-            tools = self.recipes[i][toolPtr].split('+')
-        else:
-            tools = []
-        if self.recipes[i][consumedPtr] != '':
-            consumed = self.recipes[i][consumedPtr].split('+')
-        else:
-            consumed = []
+        tools = recipe[toolPtr].split('+') if recipe[toolPtr] != '' else []
+        consumed = recipe[consumedPtr].split('+') if recipe[consumedPtr] != '' else []
 
         ary = np.full((len(tools) + len(consumed), 5), '', dtype=object)
         for k, v in enumerate([*tools, *consumed]):
@@ -81,12 +80,45 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
             ary[k, :] = ['', self.modinfoMap[modinfo], nID, self.itempropsName.get(f'{modinfo}:{nID}', 'None'), num]
         ary[:len(tools), 0] = ['tool' for _ in range(len(tools))]
         ary[len(tools):, 0] = ['consumed' for _ in range(len(consumed))]
+
         self.tableWidget_tools.load_data(ary, self.toolLabel)
         self.clear(self.tableWidget_items)
         self.label_modinfo.setText(self.recipes[i][0])
         self.label_nID.setText(self.recipes[i][1])
         self.label_strName.setText(self.recipes[i][2])
         self.label_strSecretName.setText(self.recipes[i][3])
+
+    def load_tools(self,i, toolID,tool):
+        for j in toolID:
+            try:
+                num, nID = j.split('x')
+            except ValueError:
+                print(f'ValueError:{j}')
+                num, nID = 1, j
+            if nID.find(':') == -1:
+                nID = f'{i[0].split("_")[-1]}:{nID}'
+            modinfo, nID = nID.split(':')
+            tool.append(f"{self.itempropsName.get(f'{modinfo}:{nID}')} x {num}")
+
+    def export_recipes(self):
+        filePath = os.path.join(self.path, 'recipes.txt')
+        strNamePtr = get_column('recipes').index('strName')
+        toolPtr = get_column('recipes').index('strTools')
+        consumedPtr = get_column('recipes').index('strConsumed')
+        print(filePath)
+        with open(filePath, 'w', encoding='utf-8') as f:
+            f.write(f'all recipes:\n\n')
+            for i in self.recipes:
+                recipeStr = f"{i[strNamePtr]}:"
+                toolID = i[toolPtr].split('+') if i[toolPtr] != '' else []
+                consumedID = i[consumedPtr].split('+') if i[consumedPtr] != '' else []
+                tool, consumed = [], []
+                self.load_tools(i, toolID, tool)
+                self.load_tools(i, consumedID, consumed)
+                recipeStr += '\ntool:\t' + ',  '.join(tool)
+                recipeStr += '\nconsumed:\t' + ',  '.join(consumed)
+                f.write(recipeStr + '\n\n')
+
 
     def clear(self, tableWidget):
         tableWidget.clear()
@@ -97,8 +129,9 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
         print(i, j)
         modName = self.tableWidget_tools.item(i, 1).text().split('_')[-1]
         nID = self.tableWidget_tools.item(i, 2).text()
+
         Property = f'{modName}:{nID}'
         ptr = len(self.itemLabel)
-
-        item = self.gameData['itemtypes'][self.itemprops[Property], :ptr]
-        self.tableWidget_items.load_data(item, self.itemLabel)
+        if Property in self.itemprops.keys():
+            item = self.gameData['itemtypes'][self.itemprops[Property], :ptr]
+            self.tableWidget_items.load_data(item, self.itemLabel)

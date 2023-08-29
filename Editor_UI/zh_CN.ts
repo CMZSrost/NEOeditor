@@ -133,68 +133,73 @@
 <context>
     <name>recipes</name>
     <message>
-        <location filename="UI_recipesAnalysis.py" line="166"/>
+        <location filename="UI_recipesAnalysis.py" line="170"/>
         <source>recipes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="UI_recipesAnalysis.py" line="195"/>
+        <location filename="UI_recipesAnalysis.py" line="200"/>
         <source>id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="UI_recipesAnalysis.py" line="177"/>
+        <location filename="UI_recipesAnalysis.py" line="182"/>
         <source>strSecretName</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="UI_recipesAnalysis.py" line="178"/>
+        <location filename="UI_recipesAnalysis.py" line="183"/>
         <source>tools&amp;consumed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="UI_recipesAnalysis.py" line="181"/>
+        <location filename="UI_recipesAnalysis.py" line="186"/>
         <source>type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="UI_recipesAnalysis.py" line="189"/>
+        <location filename="UI_recipesAnalysis.py" line="194"/>
         <source>num</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="UI_recipesAnalysis.py" line="190"/>
+        <location filename="UI_recipesAnalysis.py" line="195"/>
         <source>items</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="UI_recipesAnalysis.py" line="193"/>
+        <location filename="UI_recipesAnalysis.py" line="198"/>
         <source>modinfo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="UI_recipesAnalysis.py" line="201"/>
+        <location filename="UI_recipesAnalysis.py" line="206"/>
         <source>strName</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="UI_recipesAnalysis.py" line="187"/>
+        <location filename="UI_recipesAnalysis.py" line="192"/>
         <source>strPropertyName</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="UI_recipesAnalysis.py" line="197"/>
+        <location filename="UI_recipesAnalysis.py" line="202"/>
         <source>nGroupID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="UI_recipesAnalysis.py" line="199"/>
+        <location filename="UI_recipesAnalysis.py" line="204"/>
         <source>nSubgroupID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="UI_recipesAnalysis.py" line="185"/>
+        <location filename="UI_recipesAnalysis.py" line="190"/>
         <source>nID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_recipesAnalysis.py" line="178"/>
+        <source>export recipes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
