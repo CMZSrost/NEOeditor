@@ -12,19 +12,22 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
         super(recipeDialog, self).__init__(parent)
         self.setupUi(self)
         self.recipesLabel = ['modinfo', 'nID', 'strName']
-        self.toolLabel = ['type', 'modinfo', 'nID', 'strPropertyName', 'num']
+        self.toolLabel = ['type', 'modinfo', 'nID', 'strName', 'num']
         self.itemLabel = ['modinfo', 'id', 'nGroupID', 'nSubGroupID', 'strName']
         self.gameData = None
         self.recipes = None
         self.path = None
-        self.itempropsName = {}
-        self.itemprops = {}
-        self.modinfoMap = {}
+        self.modsList = None
+        self.ingredientsName = {}
+        self.ingredients = {}
+        # self.modinfoMap = {}
         self.setWindowFlags(Qt.Window)
         # self.item
 
-    def setup(self, gameData, path):
+    def setup(self, gameData, path, modsList):
         self.path = path
+        self.modsList = modsList
+        print(modsList)
         Data = {}
         keys = gameData[list(gameData.keys())[0]].keys()
         for typ in keys:
@@ -40,24 +43,40 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
         self.tableWidget_recipes.load_data(self.recipes[:, :3], self.recipesLabel)
 
     def analysis(self):
-        column = get_column('itemprops')
+        def get_ingredients(List):
+            tmp = []
+            for j in List:
+                if j.find(':') == -1:
+                    j = f'{i[0]}:{j}'
+                modInfo, nID = j.split(':')
+                modInfo = self.get_mod_info(modInfo)
+                j = f'{modInfo}:{nID}'
+                tmp.append(j)
+            return tmp
+
+        column = get_column('ingredients')
         ptr = column.index('nID')
-        namePtr = column.index('strPropertyName')
-        self.itempropsName = {}
-        self.itemprops = {}
-        for j in self.gameData['itemprops']:
-            self.modinfoMap[j[0].split("_")[-1]] = j[0]
-            self.itempropsName[f'{j[0].split("_")[-1]}:{j[ptr]}'] = j[namePtr]
-            self.itemprops[f'{j[0].split("_")[-1]}:{j[ptr]}'] = []
-        column = get_column('itemtypes')
-        ptr = column.index('vProperties')
-        for i, j in enumerate(self.gameData['itemtypes']):
-            vProperty = j[ptr].split(',')
-            for k in vProperty:
-                if k.find(':') == -1:
-                    k = f'{j[0].split("_")[-1]}:{k}'
-                if k in self.itemprops.keys():
-                    self.itemprops[k].append(i)
+        namePtr = column.index('strName')
+        requiredPtr = column.index('strRequiredProps')
+        forbidPtr = column.index('strForbidProps')
+        self.ingredientsName = {}
+        self.ingredients = {}
+        for i in self.gameData['ingredients']:
+            # self.modinfoMap[i[0].split("_")[-1]] = i[0]
+            self.ingredientsName[f'{i[0]}:{i[ptr]}'] = i[namePtr]
+            required = get_ingredients(i[requiredPtr].split('&') if i[requiredPtr] != '' else [])
+            forbid = get_ingredients(i[forbidPtr].split('&') if i[forbidPtr] != '' else [])
+            self.ingredients[f'{i[0]}:{i[ptr]}'] = (required, forbid)
+            print(f' modInfo:{i[0]}, nID:{i[ptr]}, name:{i[namePtr]}')
+            print(f' required:{required}')
+            print(f' forbid:{forbid}')
+
+    def get_mod_info(self, modInfo):
+        if modInfo == '0':
+            modInfo = '-_0'
+        elif modInfo.find('_') == -1:
+            modInfo = f'{self.modsList.index(modInfo)}_{modInfo}'
+        return modInfo
 
     def show_recipe(self, i, j):
         print(i, j)
@@ -75,9 +94,14 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
                 print(f'ValueError:{v}')
                 num, nID = 1, v
             if nID.find(':') == -1:
-                nID = f'{self.recipes[i][0].split("_")[-1]}:{nID}'
+                nID = f'{self.recipes[i][0]}:{nID}'
             modinfo, nID = nID.split(':')
-            ary[k, :] = ['', self.modinfoMap[modinfo], nID, self.itempropsName.get(f'{modinfo}:{nID}', 'None'), num]
+            modinfo = self.get_mod_info(modinfo)
+            ingredientName = self.ingredientsName.get(f'{modinfo}:{nID}', '')
+            if ingredientName == '' and modinfo != '-_0':
+                modinfo = '-_0'
+                ingredientName = self.ingredientsName.get(f'{modinfo}:{nID}', '')
+            ary[k, :] = ['', modinfo, nID, ingredientName, num]
         ary[:len(tools), 0] = ['tool' for _ in range(len(tools))]
         ary[len(tools):, 0] = ['consumed' for _ in range(len(consumed))]
 
@@ -88,7 +112,7 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
         self.label_strName.setText(self.recipes[i][2])
         self.label_strSecretName.setText(self.recipes[i][3])
 
-    def load_tools(self,i, toolID,tool):
+    def load_tools(self, i, toolID, tool):
         for j in toolID:
             try:
                 num, nID = j.split('x')
@@ -96,9 +120,10 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
                 print(f'ValueError:{j}')
                 num, nID = 1, j
             if nID.find(':') == -1:
-                nID = f'{i[0].split("_")[-1]}:{nID}'
+                nID = f'{i[0]}:{nID}'
             modinfo, nID = nID.split(':')
-            tool.append(f"{self.itempropsName.get(f'{modinfo}:{nID}')} x {num}")
+            modinfo = self.get_mod_info(modinfo)
+            tool.append(f"{self.ingredientsName.get(f'{modinfo}:{nID}')} x {num}")
 
     def export_recipes(self):
         filePath = os.path.join(self.path, 'recipes.txt')
@@ -119,19 +144,37 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
                 recipeStr += '\nconsumed:\t' + ',  '.join(consumed)
                 f.write(recipeStr + '\n\n')
 
-
-    def clear(self, tableWidget):
+    @staticmethod
+    def clear(tableWidget):
         tableWidget.clear()
         tableWidget.setRowCount(0)
         tableWidget.setColumnCount(0)
 
     def show_item(self, i, j):
         print(i, j)
-        modName = self.tableWidget_tools.item(i, 1).text().split('_')[-1]
+        modinfo = self.tableWidget_tools.item(i, 1).text()
         nID = self.tableWidget_tools.item(i, 2).text()
+        ingredientName = f'{modinfo}:{nID}'
+        required, forbid = self.ingredients.get(ingredientName, ([], []))
+        requiredSet, forbidSet = set(required), set(forbid)
 
-        Property = f'{modName}:{nID}'
-        ptr = len(self.itemLabel)
-        if Property in self.itemprops.keys():
-            item = self.gameData['itemtypes'][self.itemprops[Property], :ptr]
-            self.tableWidget_items.load_data(item, self.itemLabel)
+        itemtypesColumn = get_column('itemtypes')
+        namePtr = itemtypesColumn.index('strName')
+        ptr = itemtypesColumn.index('vProperties')
+
+        ary = np.array([])
+
+        for i, j in enumerate(self.gameData['itemtypes']):
+            vProperty = j[ptr].split(',')
+            props = set()
+            for k in vProperty:
+                if k.find(':') == -1:
+                    k = f'{j[0]}:{k}'
+                kmodinfo, knID = k.split(':')
+                kmodinfo = self.get_mod_info(kmodinfo)
+                k = f'{kmodinfo}:{knID}'
+                props.add(k)
+            if requiredSet.issubset(props) and not forbidSet.intersection(props):
+                ary = np.vstack((ary, j[:namePtr+1])) if ary.size else j[:namePtr+1]
+
+        self.tableWidget_items.load_data(ary, self.itemLabel)

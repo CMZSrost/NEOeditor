@@ -19,12 +19,14 @@ class EditorDB:
         self.config = kwargs["config"]
         self.Path['project'] = self.config["projectPath"]
         self.recipes = None
+        self.modsList = None
 
     def clear(self):
         self.MainWindow.treeWidget_file.clear()
         self.MainWindow.treeWidget_data.clear()
         self.gameData.clear()
         self.recipes = None
+        self.modsList = None
         self.MainWindow.recipesAnalysisAction.setEnabled(False)
         self.MainWindow.showRecipesAction.setEnabled(False)
 
@@ -42,6 +44,7 @@ class EditorDB:
         self.load_path(path)
         print(self.Path)
         modsList: list[str] = self.load_php(self.Path['getMods'])
+        self.modsList = modsList[::2]
         if modsList:
             self.getMods = list(zip(modsList[::2], modsList[1::2]))
 
@@ -57,7 +60,7 @@ class EditorDB:
 
     def recipes_analysis(self):
         self.recipes = recipeDialog(self.MainWindow)
-        self.recipes.setup(self.gameData, self.Path['project'])
+        self.recipes.setup(self.gameData, self.Path['project'], self.modsList)
         self.MainWindow.showRecipesAction.setEnabled(True)
 
     def load_mods(self):
