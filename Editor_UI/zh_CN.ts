@@ -206,84 +206,94 @@
 <context>
     <name>templateTab</name>
     <message>
-        <location filename="UI_fileTab.py" line="193"/>
+        <location filename="UI_fileTab.py" line="229"/>
         <source>modName:</source>
         <translation>mod名</translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="198"/>
+        <location filename="UI_fileTab.py" line="234"/>
         <source>TextLabel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="195"/>
+        <location filename="UI_fileTab.py" line="231"/>
         <source>modID:</source>
         <translation>modID</translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="197"/>
+        <location filename="UI_fileTab.py" line="233"/>
         <source>str:</source>
         <translation>字符串</translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="181"/>
+        <location filename="UI_fileTab.py" line="217"/>
         <source>tag</source>
         <translation>标签</translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="202"/>
+        <location filename="UI_fileTab.py" line="238"/>
         <source>value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="200"/>
+        <location filename="UI_fileTab.py" line="236"/>
         <source>attrib</source>
         <translation>属性</translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="184"/>
+        <location filename="UI_fileTab.py" line="220"/>
         <source>sourceline</source>
         <translation>行数</translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="185"/>
+        <location filename="UI_fileTab.py" line="221"/>
         <source>note</source>
         <translation>笔记</translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="186"/>
+        <location filename="UI_fileTab.py" line="222"/>
         <source>file</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="189"/>
+        <location filename="UI_fileTab.py" line="225"/>
         <source>add line</source>
         <translation>新增行</translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="190"/>
+        <location filename="UI_fileTab.py" line="226"/>
         <source>copy line select</source>
         <translation>拷贝选中行</translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="191"/>
+        <location filename="UI_fileTab.py" line="227"/>
         <source>delete line</source>
         <translation>删除选中行</translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="192"/>
+        <location filename="UI_fileTab.py" line="228"/>
         <source>data</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="203"/>
+        <location filename="UI_fileTab.py" line="239"/>
         <source>detail</source>
         <translation>详情</translation>
     </message>
     <message>
-        <location filename="UI_fileTab.py" line="187"/>
+        <location filename="UI_fileTab.py" line="223"/>
         <source>double click to edit</source>
         <translation>双击编辑数据</translation>
+    </message>
+    <message>
+        <location filename="UI_fileTab.py" line="240"/>
+        <source>imgName:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_fileTab.py" line="241"/>
+        <source>img</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -1,7 +1,7 @@
 from PyQt5.Qt import QTableWidget, QTabWidget
 from PyQt5.QtCore import pyqtSignal, QObject
 from PyQt5.QtGui import QDropEvent, QCursor
-from PyQt5.QtWidgets import QTableWidgetItem, QToolTip, QAction, QMenu
+from PyQt5.QtWidgets import QTableWidgetItem, QToolTip, QAction, QMenu, QLabel
 from numpy import array, where
 
 from xmlIter import get_column
@@ -122,7 +122,7 @@ class dataTable(QTableWidget):
         for i in range(self.rowCount()):
             flag = False
             for j in range(self.columnCount()):
-                if self.item(i, j) and text == '' or self.item(i, j).data(0).find(text) != -1:
+                if text == '' or (self.item(i, j) and str(self.item(i, j).data(0)).find(text) != -1):
                     flag = True
                     break
             self.showRow(i) if flag else self.hideRow(i)
@@ -169,6 +169,7 @@ class dataTable(QTableWidget):
 
     def dropEvent(self, event: QDropEvent) -> None:
         src = self.currentRow()
+        self.setSortingEnabled(False)
         if src >= 0:
             select = self.itemAt(event.pos())
             if select:
@@ -182,8 +183,14 @@ class dataTable(QTableWidget):
             self.insertRow(dst)
             for i in range(self.columnCount()):
                 item = self.item(src, i)
-                if item:
-                    self.setItem(dst, i, QTableWidgetItem(item.text()))
+                widget = self.cellWidget(src, i)
+                if widget:
+                    self.setCellWidget(dst, i, widget)
+                elif item:
+                    self.setItem(dst, i, QTableWidgetItem(item))
                 else:
                     self.setItem(dst, i, QTableWidgetItem(''))
             self.removeRow(src)
+            self.resizeColumnsToContents()
+            self.resizeRowsToContents()
+            self.setSortingEnabled(False)

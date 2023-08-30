@@ -185,8 +185,8 @@ class Ui_main(object):
         self.menu_3.addAction(self.showRecipesAction)
         self.menu_3.addAction(self.helpAction)
         self.menubar.addAction(self.menu.menuAction())
-        self.menubar.addAction(self.menu_2.menuAction())
         self.menubar.addAction(self.menu_3.menuAction())
+        self.menubar.addAction(self.menu_2.menuAction())
 
         self.retranslateUi(main)
         self.tabWidget.setCurrentIndex(0)

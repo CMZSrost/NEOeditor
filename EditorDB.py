@@ -3,8 +3,10 @@ from time import time
 
 import lxml.etree as etree
 import numpy as np
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QTreeWidget, QTableWidget, QTableWidgetItem, QTreeWidgetItem, QTreeWidgetItemIterator
+from PyQt5.QtCore import Qt, QIODevice, QFile
+from PyQt5.QtGui import QPixmap, QIcon, QImage, QImageReader
+from PyQt5.QtWidgets import QTreeWidget, QTableWidget, QTableWidgetItem, QTreeWidgetItem, QTreeWidgetItemIterator, \
+    QLabel
 
 from recipeDialog import recipeDialog
 from xmlIter import fast_iter, get_column, gen_xml_table
@@ -81,7 +83,6 @@ class EditorDB:
         self.recipes = recipeDialog(self.MainWindow)
         self.recipes.setup(self.gameData, self.Path['project'], self.modsList)
         self.MainWindow.showRecipesAction.setEnabled(True)
-
 
     def load_mods(self):
         kwargs = {'gameData': self.gameData,
@@ -213,8 +214,9 @@ class EditorDB:
             print(os.path.basename(filepath))
             print(filepath)
             offsetMap = {'getmods.php': (1, ['modId', 'strModName', 'strModURL']),
-                         'getimages.php': (2, ['imageId', 'strImageURL'])}
-            (offset, column) = offsetMap[os.path.basename(filepath)]
+                         'getimages.php': (2, ['imageId', 'strImageURL', 'Image'])}
+            phpTyp = os.path.basename(filepath)
+            (offset, column) = offsetMap[phpTyp]
 
             with open(filepath, 'r', encoding='utf-8') as f:
                 text = ''.join(f.readlines()).replace('\n', '').split("&")[offset:]
@@ -223,14 +225,35 @@ class EditorDB:
                 tableView.setColumnCount(len(column))
                 tableView.setHorizontalHeaderLabels(column)
                 tableView.column = column
-                if tableView.columnCount() == 3:
+                if phpTyp == 'getmods.php':
                     item = list(zip(item[::2], item[1::2]))
                 tableView.setRowCount(len(item))
                 for cnt, value in enumerate(item):
-                    tableView.setItem(cnt, 0, QTableWidgetItem(str(cnt)))
-                    if tableView.columnCount() == 3:
+                    idItem = QTableWidgetItem()
+                    idItem.setData(0, cnt)
+                    tableView.setItem(cnt, 0, idItem)
+                    if phpTyp == 'getmods.php':
                         tableView.setItem(cnt, 1, QTableWidgetItem(value[0]))
                         tableView.setItem(cnt, 2, QTableWidgetItem(value[1]))
                     else:
                         tableView.setItem(cnt, 1, QTableWidgetItem(value))
+                        # tableView.setItem(cnt, 2, QTableWidgetItem(''))
+                        try:
+                            path = os.path.join(os.path.dirname(filepath), 'img', value).replace('\\', '/')
+                            if os.path.isfile(path):
+                                img = QLabel("")
+                                img.setAlignment(Qt.AlignCenter)
+                                pixmap = QPixmap()
+
+                                if pixmap.load(path):
+                                    img.setPixmap(pixmap)
+                                else:
+                                    img.setText('img load failed')
+                            else:
+                                img = QLabel('img not found')
+                            tableView.setCellWidget(cnt, 2, img)
+                        except FileNotFoundError:
+                            print('img cannot load')
+                tableView.resizeColumnsToContents()
+                tableView.resizeRowsToContents()
             return item

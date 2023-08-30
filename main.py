@@ -2,7 +2,9 @@ import json
 import os
 import sys
 
+import numpy as np
 from PyQt5.QtCore import *
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import *
 from numpy import vstack
 
@@ -82,6 +84,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             self.lineEdit_data.setEnabled(True)
             self.treeWidget_data.setRootIsDecorated(True)
             self.recipesAnalysisAction.setEnabled(True)
+
         else:
             self.treeWidget_data.setEnabled(False)
             self.lineEdit_data.setEnabled(False)
@@ -114,7 +117,21 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                 tempMap = {'xml': {'tabName': 'filetab', 'classType': dataTree, 'func': self.db.load_file},
                            'php': {'tabName': 'datatab', 'classType': dataTable, 'func': self.db.load_php}}
                 extend = pathList[-1].split('.')[-1]
-                if extend not in tempMap:
+                if extend == 'png' or extend == 'jpeg' or extend == 'jpg':
+                    tab = self.tab_factory(pathList, self.fileEditor, 'imgtab')
+                    if tab:
+                        label = tab.findChild(QLabel, 'label_imgName')
+                        img = tab.findChild(QLabel, 'label_img')
+                        label.setText(pathList[-1])
+                        try:
+                            img.setPixmap(QPixmap(path))
+                        except Exception:
+                            return
+                        self.fileEditor.setCurrentIndex(self.fileEditor.count() - 1)
+                    return
+                elif extend not in tempMap:
+                    print(extend)
+                    print('return')
                     return
                 kwargs = tempMap[extend]
                 tab = self.tab_factory(pathList, self.fileEditor, kwargs['tabName'])
