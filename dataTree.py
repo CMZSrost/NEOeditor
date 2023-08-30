@@ -6,7 +6,9 @@ from tableDialog import tableDialog
 class dataTree(QTreeWidget):
     def __init__(self, parent=None):
         super(dataTree, self).__init__(parent)
-        self.customContextMenuRequested.connect(self.open_menu)
+        self.setup_action()
+
+    def setup_action(self):
         self.addTableAction = QAction('新增table', self)
         self.copyTableAction = QAction('拷贝table', self)
         self.delTableAction = QAction('删除table', self)

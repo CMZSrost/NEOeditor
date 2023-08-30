@@ -102,7 +102,7 @@
                </sizepolicy>
               </property>
               <property name="contextMenuPolicy">
-               <enum>Qt::ActionsContextMenu</enum>
+               <enum>Qt::CustomContextMenu</enum>
               </property>
               <property name="itemsExpandable">
                <bool>true</bool>
@@ -402,6 +402,7 @@
    <slots>
     <slot>filter_file(QString)</slot>
     <slot>show_tooltips(QTreeWidgetItem*)</slot>
+    <slot>open_menu(QPoint)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -430,8 +431,8 @@
    <slot>double_click(QModelIndex)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>113</x>
-     <y>91</y>
+     <x>138</x>
+     <y>187</y>
     </hint>
     <hint type="destinationlabel">
      <x>536</x>
@@ -498,8 +499,8 @@
      <y>84</y>
     </hint>
     <hint type="destinationlabel">
-     <x>113</x>
-     <y>91</y>
+     <x>138</x>
+     <y>187</y>
     </hint>
    </hints>
   </connection>
@@ -606,12 +607,12 @@
    <slot>show_tooltips(QTreeWidgetItem*)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>225</x>
-     <y>175</y>
+     <x>113</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
-     <x>224</x>
-     <y>294</y>
+     <x>113</x>
+     <y>115</y>
     </hint>
    </hints>
   </connection>
@@ -644,6 +645,22 @@
     <hint type="destinationlabel">
      <x>524</x>
      <y>324</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>treeWidget_file</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>treeWidget_file</receiver>
+   <slot>open_menu(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>79</x>
+     <y>520</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>217</x>
+     <y>544</y>
     </hint>
    </hints>
   </connection>

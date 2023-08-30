@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>941</width>
-    <height>662</height>
+    <height>682</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -140,7 +140,7 @@
        <bool>true</bool>
       </property>
       <property name="contextMenuPolicy">
-       <enum>Qt::DefaultContextMenu</enum>
+       <enum>Qt::CustomContextMenu</enum>
       </property>
       <property name="acceptDrops">
        <bool>false</bool>
@@ -372,6 +372,7 @@
     <slot>delete_line()</slot>
     <slot>find_text(QString)</slot>
     <slot>show_tooltips(int,int)</slot>
+    <slot>open_menu(QPoint)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -380,7 +381,7 @@
    <header>dataTree</header>
    <slots>
     <slot>filter_file(QString)</slot>
-    <slot>get_custom_menu(QPoint)</slot>
+    <slot>open_menu(QPoint)</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -397,8 +398,8 @@
      <y>40</y>
     </hint>
     <hint type="destinationlabel">
-     <x>90</x>
-     <y>71</y>
+     <x>92</x>
+     <y>99</y>
     </hint>
    </hints>
   </connection>
@@ -410,7 +411,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>209</x>
-     <y>645</y>
+     <y>665</y>
     </hint>
     <hint type="destinationlabel">
      <x>175</x>
@@ -426,7 +427,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>618</x>
-     <y>645</y>
+     <y>665</y>
     </hint>
     <hint type="destinationlabel">
      <x>491</x>
@@ -442,7 +443,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>924</x>
-     <y>645</y>
+     <y>665</y>
     </hint>
     <hint type="destinationlabel">
      <x>771</x>
@@ -478,6 +479,38 @@
     </hint>
     <hint type="destinationlabel">
      <x>430</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>treeWidget</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>treeWidget</receiver>
+   <slot>open_menu(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>319</x>
+     <y>325</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>575</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableWidget</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>tableWidget</receiver>
+   <slot>open_menu(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>289</x>
+     <y>302</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>613</x>
      <y>299</y>
     </hint>
    </hints>

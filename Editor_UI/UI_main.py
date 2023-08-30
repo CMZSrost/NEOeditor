@@ -67,7 +67,7 @@ class Ui_main(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.treeWidget_file.sizePolicy().hasHeightForWidth())
         self.treeWidget_file.setSizePolicy(sizePolicy)
-        self.treeWidget_file.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
+        self.treeWidget_file.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.treeWidget_file.setItemsExpandable(True)
         self.treeWidget_file.setHeaderHidden(True)
         self.treeWidget_file.setExpandsOnDoubleClick(False)
@@ -206,6 +206,7 @@ class Ui_main(object):
         self.treeWidget_data.itemEntered['QTreeWidgetItem*','int'].connect(self.treeWidget_data.show_tooltips) # type: ignore
         self.recipesAnalysisAction.triggered.connect(main.recipe_analysis) # type: ignore
         self.showRecipesAction.triggered.connect(main.recipe_show) # type: ignore
+        self.treeWidget_file.customContextMenuRequested['QPoint'].connect(self.treeWidget_file.open_menu) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(main)
 
     def retranslateUi(self, main):

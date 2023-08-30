@@ -42,6 +42,15 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
         self.recipes = self.gameData['recipes']
         self.tableWidget_recipes.load_data(self.recipes[:, :3], self.recipesLabel)
 
+    def find_recipe(self, modinfo, nID):
+        print(modinfo, nID)
+        idx = np.where((self.recipes[:, 0] == modinfo) & (self.recipes[:, 1] == nID))[0]
+        if len(idx) == 0:
+            return
+        self.show_recipe(idx[0],idx[0])
+
+
+
     def analysis(self):
         def get_ingredients(List):
             tmp = []
@@ -147,10 +156,19 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
         tableWidget.setRowCount(0)
         tableWidget.setColumnCount(0)
 
-    def show_item(self, i, j):
+    def clear_text(self):
+        self.label_modinfo = ''
+        self.label_nID = ''
+        self.label_strName = ''
+        self.label_strSecretName = ''
+
+    def show_item(self,i, j):
         print(i, j)
         modinfo = self.tableWidget_tools.item(i, 1).text()
         nID = self.tableWidget_tools.item(i, 2).text()
+        self.show_cell_item(modinfo, nID)
+
+    def show_cell_item(self, modinfo, nID):
         ingredientName = f'{modinfo}:{nID}'
         required, forbid = self.ingredients.get(ingredientName, ([], []))
         requiredSet, forbidSet = set(required), set(forbid)
@@ -174,4 +192,4 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
             if requiredSet.issubset(props) and not forbidSet.intersection(props):
                 ary = np.vstack((ary, j[:namePtr+1])) if ary.size else j[:namePtr+1]
 
-        self.tableWidget_items.load_data(ary, self.itemLabel)
+        self.tableWidget_items.load_data(ary.reshape((-1,namePtr+1)), self.itemLabel)

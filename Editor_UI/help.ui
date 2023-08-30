@@ -62,6 +62,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>listView_key</sender>
+   <signal>activated(QModelIndex)</signal>
+   <receiver>help</receiver>
+   <slot>show_value(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>361</x>
+     <y>406</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>447</x>
+     <y>724</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>show_value(QModelIndex)</slot>

@@ -89,6 +89,11 @@ class Ui_recipes(object):
         self.label_strSecretName.setObjectName("label_strSecretName")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.label_strSecretName)
         self.verticalLayout_3.addLayout(self.formLayout)
+        self.line = QtWidgets.QFrame(self.layoutWidget)
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
+        self.verticalLayout_3.addWidget(self.line)
         self.splitter = QtWidgets.QSplitter(self.layoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -159,10 +164,12 @@ class Ui_recipes(object):
         self.verticalLayout_4.addWidget(self.splitter_2)
 
         self.retranslateUi(recipes)
-        self.lineEdit.textChanged['QString'].connect(self.tableWidget_recipes.find_text) # type: ignore
-        self.tableWidget_recipes.cellDoubleClicked['int','int'].connect(recipes.show_recipe) # type: ignore
         self.tableWidget_tools.cellDoubleClicked['int','int'].connect(recipes.show_item) # type: ignore
         self.pushButton_export.clicked.connect(recipes.export_recipes) # type: ignore
+        self.tableWidget_tools.cellActivated['int','int'].connect(recipes.show_item) # type: ignore
+        self.tableWidget_recipes.cellActivated['int','int'].connect(recipes.show_recipe) # type: ignore
+        self.lineEdit.textChanged['QString'].connect(self.tableWidget_recipes.find_text) # type: ignore
+        self.tableWidget_recipes.cellDoubleClicked['int','int'].connect(recipes.show_recipe) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(recipes)
 
     def retranslateUi(self, recipes):

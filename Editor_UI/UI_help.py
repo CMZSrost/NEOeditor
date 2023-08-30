@@ -36,6 +36,7 @@ class Ui_help(object):
 
         self.retranslateUi(help)
         self.listView_key.doubleClicked['QModelIndex'].connect(help.show_value) # type: ignore
+        self.listView_key.activated['QModelIndex'].connect(help.show_value) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(help)
 
     def retranslateUi(self, help):

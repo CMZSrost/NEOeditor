@@ -1,16 +1,46 @@
+import os.path
 from os import listdir
 from os.path import join, isdir, basename
 
 from PyQt5.QtCore import QModelIndex
 from PyQt5.QtGui import QCursor
-from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QTreeWidgetItemIterator, QToolTip
+from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QTreeWidgetItemIterator, QToolTip, QAction, QMenu
 
 
 class sourceTree(QTreeWidget):
     def __init__(self, parent=None):
         super().__init__()
-        self.self = parent
+        self.parent = parent
+        self.path = ''
         self.tooltips = {}
+
+    def setup_actions(self):
+        self.loadProjectAction = self.actions()[0]
+        self.openFolderAction = QAction('打开文件(夹)', self)
+        self.openFolderAction.setObjectName('openFolderAction')
+        self.openFolderAction.triggered.connect(self.open_folder)
+
+    def open_folder(self):
+        path = self.get_file_path(self.currentIndex()).replace('/', '\\')
+        path = os.path.join(self.path, path)
+
+        if os.path.exists(path):
+            #打开文件
+            os.startfile(path)
+        else:
+            print('not a file')
+            print(path)
+
+    def open_menu(self, pos):
+        menu = QMenu()
+        item = self.itemAt(pos)
+        if item:
+            menu.addAction(self.openFolderAction)
+        else:
+            menu.addAction(self.loadProjectAction)
+
+        if len(menu.actions()) > 0:
+            menu.exec_(self.mapToGlobal(pos))
 
     def setup_tooltips(self,tooltips:dict):
         tips = [i.get('#') for i in tooltips.values()]
@@ -51,6 +81,8 @@ class sourceTree(QTreeWidget):
             self.add_node(i, topItem)
 
     def get_file_path(self, idx: QModelIndex):
+        if not idx.isValid():
+            return ''
         item = self.itemFromIndex(idx)
         path = item.text(0)
         while item.parent() is not None:

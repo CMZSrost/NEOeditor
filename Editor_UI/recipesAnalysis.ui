@@ -152,6 +152,13 @@
         </layout>
        </item>
        <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QSplitter" name="splitter">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -309,38 +316,6 @@
  <resources/>
  <connections>
   <connection>
-   <sender>lineEdit</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>tableWidget_recipes</receiver>
-   <slot>find_text(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>107</x>
-     <y>31</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>122</x>
-     <y>72</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>tableWidget_recipes</sender>
-   <signal>cellDoubleClicked(int,int)</signal>
-   <receiver>recipes</receiver>
-   <slot>show_recipe(int,int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>241</x>
-     <y>252</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>360</x>
-     <y>810</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>tableWidget_tools</sender>
    <signal>cellDoubleClicked(int,int)</signal>
    <receiver>recipes</receiver>
@@ -369,6 +344,70 @@
     <hint type="destinationlabel">
      <x>384</x>
      <y>855</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableWidget_tools</sender>
+   <signal>cellActivated(int,int)</signal>
+   <receiver>recipes</receiver>
+   <slot>show_item(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>526</x>
+     <y>535</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>564</x>
+     <y>841</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableWidget_recipes</sender>
+   <signal>cellActivated(int,int)</signal>
+   <receiver>recipes</receiver>
+   <slot>show_recipe(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>164</x>
+     <y>396</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-40</x>
+     <y>455</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>tableWidget_recipes</receiver>
+   <slot>find_text(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>107</x>
+     <y>31</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>122</x>
+     <y>72</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableWidget_recipes</sender>
+   <signal>cellDoubleClicked(int,int)</signal>
+   <receiver>recipes</receiver>
+   <slot>show_recipe(int,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>241</x>
+     <y>252</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>360</x>
+     <y>810</y>
     </hint>
    </hints>
   </connection>

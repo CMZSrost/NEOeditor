@@ -1,12 +1,16 @@
 from PyQt5.Qt import QTableWidget, QTabWidget
+from PyQt5.QtCore import pyqtSignal, QObject
 from PyQt5.QtGui import QDropEvent, QCursor
-from PyQt5.QtWidgets import QTableWidgetItem, QToolTip
+from PyQt5.QtWidgets import QTableWidgetItem, QToolTip, QAction, QMenu
 from numpy import array, where
 
 from xmlIter import get_column
 
 
 class dataTable(QTableWidget):
+    findRecipeSignal = pyqtSignal(str, str)
+    findIngredientSignal = pyqtSignal(str, str)
+
     def __init__(self, parent: QTabWidget = None):
         super(dataTable, self).__init__(parent)
         self.parent = parent
@@ -14,6 +18,8 @@ class dataTable(QTableWidget):
         self.column = []
         self.loaded = self.ptr = 0
         self.toolTips = {}
+        self.setup_action()
+        self.findRecipeSignal.connect(lambda x: print(x))
 
     def setup_tooltips(self, tooltips: dict):
         self.toolTips = tooltips
@@ -36,6 +42,39 @@ class dataTable(QTableWidget):
         if toolTip:
             QToolTip.showText(QCursor.pos(), toolTip)
 
+    def setup_action(self):
+        self.findRecipeAction = QAction('查看合成表', self)
+        self.findIngredientAction = QAction('查看材料表', self)
+        self.findRecipeAction.setObjectName('findRecipeAction')
+        self.findIngredientAction.setObjectName('findIngredientAction')
+        self.findRecipeAction.triggered.connect(self.emit_findRecipe)
+        self.findIngredientAction.triggered.connect(self.emit_findIngredient)
+
+    def emit_findRecipe(self):
+        item = self.currentItem()
+        if item:
+            i, j = item.row(), item.column()
+            self.findRecipeSignal.emit(self.data[i, 0], self.data[i, 1])
+
+    def emit_findIngredient(self):
+        item = self.currentItem()
+        if item:
+            i, j = item.row(), item.column()
+            self.findIngredientSignal.emit(self.data[i, 0], self.data[i, 1])
+
+    def open_menu(self, pos):
+        menu = QMenu()
+        item = self.currentItem()
+        if item:
+            typ = self.objectName().split(':')[-1]
+            if typ == 'recipes':
+                menu.addAction(self.findRecipeAction)
+            elif typ == 'ingredients':
+                menu.addAction(self.findIngredientAction)
+
+        if len(menu.actions()) > 0:
+            menu.exec_(self.mapToGlobal(pos))
+
     def setup(self, data, modInfo: str, typ: str, proxyFunc=None):
         self.clear()
         self.column, self.data = get_column(typ), data
@@ -49,7 +88,7 @@ class dataTable(QTableWidget):
 
         # proxyFunc(data=self.data, table=self)
 
-    def load_data(self, data,column=None):
+    def load_data(self, data, column=None):
         if column:
             self.setColumnCount(len(column))
             self.setHorizontalHeaderLabels(column)
@@ -148,4 +187,3 @@ class dataTable(QTableWidget):
                 else:
                     self.setItem(dst, i, QTableWidgetItem(''))
             self.removeRow(src)
-

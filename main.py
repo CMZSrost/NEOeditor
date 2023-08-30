@@ -55,6 +55,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         self.languageAction.setChecked(True if self.config['language'] == 'zh_CN' else False)
         self.addAction(self.saveFileAction)
         self.treeWidget_file.addAction(self.loadProjectAction)
+        self.treeWidget_file.setup_actions()
         self.proxy.loadingStatusSign.connect(self.loaded)
         self.treeWidget_data.setup_tooltips(self.comments)
 
@@ -123,6 +124,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                         child.itemChanged['QTreeWidgetItem*', 'int'].connect(self.fileEditor.item_change)
                     elif extend == 'php':
                         child.cellChanged['int', 'int'].connect(self.fileEditor.cell_change)
+                    self.fileEditor.setCurrentIndex(self.fileEditor.count()-1)
 
             elif os.path.isdir(path) or len(pathList) == 1 or pathList[0] == '':
                 self.expand_node(self.sender(), idx)
@@ -143,6 +145,9 @@ class mainUI(QMainWindow, UI_main.Ui_main):
                     table.setup(gameData, modInfo, typ, self.proxy.setup_data)
                     table.setup_tooltips(self.comments[typ])
                     table.cellChanged['int', 'int'].connect(self.elemEditor.item_change)
+                    table.findRecipeSignal.connect(self.db.find_recipe)
+                    table.findIngredientSignal.connect(self.db.find_ingredient)
+                    self.elemEditor.setCurrentIndex(self.elemEditor.count()-1)
 
     def tab_factory(self, pathList, tabParent: tabEditor, typ):
         templateTab = QTabWidget()
@@ -159,6 +164,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         tabParent.addTab(pos, objName)
         templateTab.clear()
         return pos
+
 
     @staticmethod
     def check_object_name(objName, objList):

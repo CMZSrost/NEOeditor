@@ -43,6 +43,7 @@ class EditorDB:
         self.clear()
         self.load_path(path)
         print(self.Path)
+        self.MainWindow.treeWidget_file.path = self.Path['project']
         modsList: list[str] = self.load_php(self.Path['getMods'])
         self.modsList = modsList[::2]
         if modsList:
@@ -58,10 +59,29 @@ class EditorDB:
             self.load_mods()
             self.MainWindow.statusbar.showMessage(f'Project loaded in {np.round(time() - start, 3)} seconds')
 
+    def find_recipe(self, modinfo, nID):
+        if self.recipes:
+            self.recipes.find_recipe(modinfo, nID)
+        else:
+            self.recipes_analysis()
+            self.find_recipe(modinfo, nID)
+        self.MainWindow.showRecipesAction.trigger()
+
+    def find_ingredient(self, modinfo, nID):
+        if self.recipes:
+            self.recipes.show_cell_item(modinfo, nID)
+        else:
+            self.recipes_analysis()
+            self.find_ingredient(modinfo, nID)
+        self.recipes.clear(self.recipes.tableWidget_tools)
+        self.recipes.clear_text()
+        self.MainWindow.showRecipesAction.trigger()
+
     def recipes_analysis(self):
         self.recipes = recipeDialog(self.MainWindow)
         self.recipes.setup(self.gameData, self.Path['project'], self.modsList)
         self.MainWindow.showRecipesAction.setEnabled(True)
+
 
     def load_mods(self):
         kwargs = {'gameData': self.gameData,

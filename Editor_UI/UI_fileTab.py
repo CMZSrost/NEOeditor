@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_templateTab(object):
     def setupUi(self, templateTab):
         templateTab.setObjectName("templateTab")
-        templateTab.resize(941, 662)
+        templateTab.resize(941, 682)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Ignored)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -61,7 +61,7 @@ class Ui_templateTab(object):
         self.verticalLayout_2.addWidget(self.lineEdit)
         self.tableWidget = dataTable(self.datatab)
         self.tableWidget.setMouseTracking(True)
-        self.tableWidget.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
+        self.tableWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.tableWidget.setAcceptDrops(False)
         self.tableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.AnyKeyPressed|QtWidgets.QAbstractItemView.DoubleClicked|QtWidgets.QAbstractItemView.EditKeyPressed)
@@ -171,6 +171,8 @@ class Ui_templateTab(object):
         self.pushButton_delete.clicked.connect(self.tableWidget.delete_line) # type: ignore
         self.lineEdit.textChanged['QString'].connect(self.tableWidget.find_text) # type: ignore
         self.tableWidget.cellEntered['int','int'].connect(self.tableWidget.show_tooltips) # type: ignore
+        self.treeWidget.customContextMenuRequested['QPoint'].connect(self.treeWidget.open_menu) # type: ignore
+        self.tableWidget.customContextMenuRequested['QPoint'].connect(self.tableWidget.open_menu) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(templateTab)
 
     def retranslateUi(self, templateTab):
