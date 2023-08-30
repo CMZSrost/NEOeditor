@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_main(object):
     def setupUi(self, main):
         main.setObjectName("main")
-        main.resize(1050, 650)
+        main.resize(1050, 688)
         main.setMouseTracking(True)
         self.centralwidget = QtWidgets.QWidget(main)
         self.centralwidget.setObjectName("centralwidget")

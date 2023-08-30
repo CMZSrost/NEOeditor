@@ -24,7 +24,7 @@
     <message>
         <location filename="UI_help.py" line="43"/>
         <source>help</source>
-        <translation type="unfinished"></translation>
+        <translation>帮助日志</translation>
     </message>
 </context>
 <context>
@@ -117,17 +117,17 @@
     <message>
         <location filename="UI_main.py" line="235"/>
         <source>help</source>
-        <translation type="unfinished"></translation>
+        <translation>帮助日志</translation>
     </message>
     <message>
         <location filename="UI_main.py" line="237"/>
         <source>recipesAnalysis</source>
-        <translation type="unfinished"></translation>
+        <translation>分析合成表</translation>
     </message>
     <message>
         <location filename="UI_main.py" line="238"/>
         <source>showRecipes</source>
-        <translation type="unfinished"></translation>
+        <translation>打开合成表</translation>
     </message>
 </context>
 <context>
@@ -135,72 +135,72 @@
     <message>
         <location filename="UI_recipesAnalysis.py" line="170"/>
         <source>recipes</source>
-        <translation type="unfinished"></translation>
+        <translation>合成表</translation>
     </message>
     <message>
         <location filename="UI_recipesAnalysis.py" line="200"/>
         <source>id</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="UI_recipesAnalysis.py" line="182"/>
         <source>strSecretName</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="UI_recipesAnalysis.py" line="183"/>
         <source>tools&amp;consumed</source>
-        <translation type="unfinished"></translation>
+        <translation>工具与消耗品</translation>
     </message>
     <message>
         <location filename="UI_recipesAnalysis.py" line="186"/>
         <source>type</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="UI_recipesAnalysis.py" line="194"/>
         <source>num</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="UI_recipesAnalysis.py" line="195"/>
         <source>items</source>
-        <translation type="unfinished"></translation>
+        <translation>适配物品</translation>
     </message>
     <message>
         <location filename="UI_recipesAnalysis.py" line="198"/>
         <source>modinfo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="UI_recipesAnalysis.py" line="206"/>
         <source>strName</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="UI_recipesAnalysis.py" line="192"/>
         <source>strPropertyName</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="UI_recipesAnalysis.py" line="202"/>
         <source>nGroupID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="UI_recipesAnalysis.py" line="204"/>
         <source>nSubgroupID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="UI_recipesAnalysis.py" line="190"/>
         <source>nID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="UI_recipesAnalysis.py" line="178"/>
         <source>export recipes</source>
-        <translation type="unfinished"></translation>
+        <translation>导出合成表</translation>
     </message>
 </context>
 <context>

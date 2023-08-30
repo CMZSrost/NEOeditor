@@ -67,9 +67,6 @@ class recipeDialog(QDialog, UI_recipesAnalysis.Ui_recipes):
             required = get_ingredients(i[requiredPtr].split('&') if i[requiredPtr] != '' else [])
             forbid = get_ingredients(i[forbidPtr].split('&') if i[forbidPtr] != '' else [])
             self.ingredients[f'{i[0]}:{i[ptr]}'] = (required, forbid)
-            print(f' modInfo:{i[0]}, nID:{i[ptr]}, name:{i[namePtr]}')
-            print(f' required:{required}')
-            print(f' forbid:{forbid}')
 
     def get_mod_info(self, modInfo):
         if modInfo == '0':
