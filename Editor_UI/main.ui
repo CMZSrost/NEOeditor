@@ -284,11 +284,18 @@
     </property>
     <addaction name="reloadAction"/>
     <addaction name="recipesAnalysisAction"/>
+   </widget>
+   <widget class="QMenu" name="menuview">
+    <property name="title">
+     <string>view</string>
+    </property>
     <addaction name="showRecipesAction"/>
+    <addaction name="addBrowserAction"/>
     <addaction name="helpAction"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_3"/>
+   <addaction name="menuview"/>
    <addaction name="menu_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -385,6 +392,14 @@
    </property>
    <property name="text">
     <string>showRecipes</string>
+   </property>
+  </action>
+  <action name="addBrowserAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>addBrowser</string>
    </property>
   </action>
  </widget>
@@ -664,6 +679,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>addBrowserAction</sender>
+   <signal>triggered()</signal>
+   <receiver>main</receiver>
+   <slot>browser_show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>524</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>load_project()</slot>
@@ -679,5 +710,6 @@
   <slot>help()</slot>
   <slot>recipe_analysis()</slot>
   <slot>recipe_show()</slot>
+  <slot>browser_show()</slot>
  </slots>
 </ui>

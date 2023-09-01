@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QTreeWidget, QTableWidget, QTableWidgetItem, QTreeWi
     QLabel
 
 from recipeDialog import recipeDialog
-from xmlIter import fast_iter, get_column, gen_xml_table
+from xmlIter import fast_iter, get_column, gen_xml_table, get_keys
 
 
 class EditorDB:
@@ -54,8 +54,7 @@ class EditorDB:
             for i in list(self.Path.values())[1:]:
                 print(f'loading {i}')
                 self.MainWindow.treeWidget_file.load_folder(i)
-            self.MainWindow.treeWidget_data.load_data('total',
-                                                      [os.path.splitext(i)[-2] for i in os.listdir(self.Path['data'])])
+            self.MainWindow.treeWidget_data.load_data('total', get_keys())
 
             print(f'Initial in {np.round(time() - start, 3)} seconds')
             self.load_mods()

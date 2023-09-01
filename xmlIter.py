@@ -87,6 +87,12 @@ def get_column(type):
         column.append('filepath')
         return column
 
+def get_keys():
+    with open(os.path.join(os.getcwd(), 'jsonData', 'typelistTemplate.json'), 'r', encoding='utf-8') as f:
+        res = list(json.load(f).keys())
+        res.sort()
+        return res
+
 
 def gen_xml_table(typ, column, data):
     if len(column) != len(data):

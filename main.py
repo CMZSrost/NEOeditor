@@ -2,12 +2,12 @@ import json
 import os
 import sys
 
-import numpy as np
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import *
 from numpy import vstack
 
+import browserDialog
 from EditorDB import EditorDB
 from Editor_UI import UI_main
 from dataTable import dataTable
@@ -18,6 +18,7 @@ from tabEditor import tabEditor
 from templateTab import templateTab
 from helpDialog import helpDialog
 from threadProxy import threadProxy
+from browserDialog import BrowserDialog
 
 
 # nuitka --show-memory --show-progress --plugin-enable=pyqt5 --follow-import-to=Editor_UI --onefile --output-dir=out main.py
@@ -34,6 +35,7 @@ class mainUI(QMainWindow, UI_main.Ui_main):
         self.templateTab = templateTab()
         self.db = EditorDB(MainWindow=self, proxy=self.proxy, config=self.config)
         self.setup_connection()
+        self.browser = []
 
     def load_json(self):
         with open(os.path.join(os.getcwd(), 'config.json'), 'r', encoding='UTF-8') as f:
@@ -52,6 +54,12 @@ class mainUI(QMainWindow, UI_main.Ui_main):
             QMessageBox.information(self, '提示', '请先加载数据')
             return
         self.db.recipes.show()
+
+    def browser_show(self):
+        browser = browserDialog.BrowserDialog(self.db.gameData)
+        self.browser.append(browser)
+        browser.destroyed.connect(lambda: self.browser.remove(browser))
+        browser.show()
 
     def setup_connection(self):
         self.languageAction.setChecked(True if self.config['language'] == 'zh_CN' else False)
@@ -81,13 +89,15 @@ class mainUI(QMainWindow, UI_main.Ui_main):
     def loaded(self, flag):
         if flag == 0:
             self.treeWidget_data.setEnabled(True)
-            self.lineEdit_data.setEnabled(True)
             self.treeWidget_data.setRootIsDecorated(True)
+            self.lineEdit_data.setEnabled(True)
             self.recipesAnalysisAction.setEnabled(True)
-
+            self.addBrowserAction.setEnabled(True)
         else:
             self.treeWidget_data.setEnabled(False)
             self.lineEdit_data.setEnabled(False)
+            self.recipesAnalysisAction.setEnabled(False)
+            self.addBrowserAction.setEnabled(False)
 
     @staticmethod
     def expand_node(tree, idx):

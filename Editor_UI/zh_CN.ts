@@ -20,6 +20,19 @@
     </message>
 </context>
 <context>
+    <name>browser</name>
+    <message>
+        <location filename="UI_browser.py" line="84"/>
+        <source>browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_browser.py" line="85"/>
+        <source>Visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>help</name>
     <message>
         <location filename="UI_help.py" line="44"/>
@@ -30,104 +43,114 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="UI_main.py" line="219"/>
+        <location filename="UI_main.py" line="227"/>
         <source>file</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="218"/>
+        <location filename="UI_main.py" line="226"/>
         <source>data</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="226"/>
+        <location filename="UI_main.py" line="235"/>
         <source>Ctrl+Shift+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="229"/>
+        <location filename="UI_main.py" line="238"/>
         <source>F5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="231"/>
+        <location filename="UI_main.py" line="240"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="232"/>
+        <location filename="UI_main.py" line="241"/>
         <source>printFocus</source>
         <translation>打印焦点</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="237"/>
+        <location filename="UI_main.py" line="246"/>
         <source>F1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="220"/>
+        <location filename="UI_main.py" line="228"/>
         <source>setting</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="221"/>
+        <location filename="UI_main.py" line="229"/>
         <source>function</source>
         <translation>功能</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="223"/>
+        <location filename="UI_main.py" line="232"/>
         <source>new project</source>
         <translation>新增项目</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="224"/>
+        <location filename="UI_main.py" line="233"/>
         <source>load project</source>
         <translation>读取项目</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="225"/>
+        <location filename="UI_main.py" line="234"/>
         <source>save project</source>
         <translation>保存项目</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="228"/>
+        <location filename="UI_main.py" line="237"/>
         <source>reload</source>
         <translation>刷新项目</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="230"/>
+        <location filename="UI_main.py" line="239"/>
         <source>save file</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="234"/>
+        <location filename="UI_main.py" line="243"/>
         <source>change language</source>
         <translation>改变语言</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="235"/>
+        <location filename="UI_main.py" line="244"/>
         <source>change to Chinese</source>
         <translation>改变语言为中文</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="214"/>
+        <location filename="UI_main.py" line="222"/>
         <source>NEO editor</source>
         <translation>NEO 编辑器</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="236"/>
+        <location filename="UI_main.py" line="245"/>
         <source>help</source>
         <translation>帮助日志</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="238"/>
+        <location filename="UI_main.py" line="247"/>
         <source>recipesAnalysis</source>
         <translation>分析合成表</translation>
     </message>
     <message>
-        <location filename="UI_main.py" line="239"/>
+        <location filename="UI_main.py" line="248"/>
         <source>showRecipes</source>
         <translation>打开合成表</translation>
+    </message>
+    <message>
+        <location filename="UI_main.py" line="230"/>
+        <source>view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="UI_main.py" line="249"/>
+        <source>addBrowser</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

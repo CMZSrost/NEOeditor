@@ -146,6 +146,8 @@ class Ui_main(object):
         self.menu_2.setObjectName("menu_2")
         self.menu_3 = QtWidgets.QMenu(self.menubar)
         self.menu_3.setObjectName("menu_3")
+        self.menuview = QtWidgets.QMenu(self.menubar)
+        self.menuview.setObjectName("menuview")
         main.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(main)
         self.statusbar.setObjectName("statusbar")
@@ -177,15 +179,20 @@ class Ui_main(object):
         self.showRecipesAction = QtWidgets.QAction(main)
         self.showRecipesAction.setEnabled(False)
         self.showRecipesAction.setObjectName("showRecipesAction")
+        self.addBrowserAction = QtWidgets.QAction(main)
+        self.addBrowserAction.setEnabled(False)
+        self.addBrowserAction.setObjectName("addBrowserAction")
         self.menu.addAction(self.loadProjectAction)
         self.menu.addAction(self.saveProjectAction)
         self.menu_2.addAction(self.languageAction)
         self.menu_3.addAction(self.reloadAction)
         self.menu_3.addAction(self.recipesAnalysisAction)
-        self.menu_3.addAction(self.showRecipesAction)
-        self.menu_3.addAction(self.helpAction)
+        self.menuview.addAction(self.showRecipesAction)
+        self.menuview.addAction(self.addBrowserAction)
+        self.menuview.addAction(self.helpAction)
         self.menubar.addAction(self.menu.menuAction())
         self.menubar.addAction(self.menu_3.menuAction())
+        self.menubar.addAction(self.menuview.menuAction())
         self.menubar.addAction(self.menu_2.menuAction())
 
         self.retranslateUi(main)
@@ -207,6 +214,7 @@ class Ui_main(object):
         self.recipesAnalysisAction.triggered.connect(main.recipe_analysis) # type: ignore
         self.showRecipesAction.triggered.connect(main.recipe_show) # type: ignore
         self.treeWidget_file.customContextMenuRequested['QPoint'].connect(self.treeWidget_file.open_menu) # type: ignore
+        self.addBrowserAction.triggered.connect(main.browser_show) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(main)
 
     def retranslateUi(self, main):
@@ -219,6 +227,7 @@ class Ui_main(object):
         self.menu.setTitle(_translate("main", "file"))
         self.menu_2.setTitle(_translate("main", "setting"))
         self.menu_3.setTitle(_translate("main", "function"))
+        self.menuview.setTitle(_translate("main", "view"))
         self.newProjectAction.setText(_translate("main", "new project"))
         self.newProjectAction.setToolTip(_translate("main", "new project"))
         self.loadProjectAction.setText(_translate("main", "load project"))
@@ -237,5 +246,6 @@ class Ui_main(object):
         self.helpAction.setShortcut(_translate("main", "F1"))
         self.recipesAnalysisAction.setText(_translate("main", "recipesAnalysis"))
         self.showRecipesAction.setText(_translate("main", "showRecipes"))
+        self.addBrowserAction.setText(_translate("main", "addBrowser"))
 from sourceTree import sourceTree
 from tabEditor import tabEditor
